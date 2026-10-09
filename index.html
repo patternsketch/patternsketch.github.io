@@ -11,7 +11,7 @@ body{display:flex;flex-direction:column;touch-action:none}
 #stage{flex:1;position:relative;min-height:0}.hc span.ty{color:#ffe94d!important;font-weight:600}em.gtag{font-style:normal;font-size:11px;font-weight:600;background:#ffe94d;color:#000;border-radius:8px;padding:2px 8px;margin-left:6px;vertical-align:middle}#gc{position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);padding:16px}#gc .cd{background:#1b1b22;border:1px solid #3a3a46;border-radius:16px;padding:20px;max-width:310px;text-align:center}#gc h2{margin:0 0 8px;color:#ffe94d;font-size:22px}#gc p{margin:0 0 16px;color:#ddd;font-size:15px;line-height:1.4}#gc .cb{display:flex;gap:10px;justify-content:center}#gc .cb button{flex:1;padding:11px 8px;font-size:15px}#gc .cb .pri{background:#ffe94d;color:#000;font-weight:600}#gt{position:absolute;top:14px;left:50%;transform:translateX(-50%);font:800 60px/1 system-ui;color:#fff;text-shadow:0 2px 14px #000;pointer-events:none;z-index:6;display:none}#gt.warm{color:#ffe94d}#gt.hot{color:#ff5a4d;animation:gp .5s ease-in-out infinite alternate}@keyframes gp{to{transform:translateX(-50%) scale(1.25)}}#gm{position:absolute;transform:translate(-50%,-100%);font:700 24px system-ui;color:#ffe94d;text-shadow:0 2px 10px #000;pointer-events:none;transition:opacity .4s;white-space:nowrap;z-index:5;opacity:0}#gb{position:absolute;left:8px;right:8px;bottom:10px;text-align:center;background:rgba(0,0,0,.65);color:#fff;border-radius:10px;padding:7px 10px;font-size:13px;pointer-events:none;display:none;z-index:5}
 canvas{position:absolute;inset:0;width:100%;height:100%}
 #hint{position:absolute;left:56px;right:60px;top:10px;text-align:center;color:var(--mut);pointer-events:none;transition:opacity .4s}
-#bar{display:flex;gap:8px;padding:8px;background:var(--panel)}
+#bar{display:flex;gap:8px;padding:8px;background:var(--panel)}#cbtn{flex:0 0 auto;padding:10px 14px}#cbtn.pl{animation:cpl 1.3s ease-in-out 4}@keyframes cpl{0%,100%{background:inherit;box-shadow:0 0 0 0 rgba(255,233,77,0)}50%{background:#ffe94d;color:#000;box-shadow:0 0 0 7px rgba(255,233,77,.35)}}#cbtn.on{background:#ffe94d;color:#000;font-weight:600}body:not(.simple):not(.ctl) #panel{display:none}body:not(.simple) #tabs{display:none}body.simple:not(.ctl) #sbar{display:none}body.simple.ctl #sp2,body.simple.ctl #sc{display:none}
 button{flex:1;padding:10px;border:0;border-radius:8px;background:#2a2a33;color:var(--fg);font-size:15px}
 #pp{background:var(--acc);color:#000;font-weight:600}
 #panel{background:var(--panel);padding:2px 12px 8px;max-height:34%;overflow-y:auto;touch-action:pan-y}
@@ -61,7 +61,7 @@ button.hc{flex:none;display:block;width:min(360px,100%);background:#1b1b22;borde
 #chips button{flex:none;padding:8px 12px;font-size:14px;white-space:nowrap}#chips .sel{background:var(--acc);color:#000;font-weight:600}
 #sdesc{color:#bbb;font-size:13px;margin:4px 0 8px;min-height:34px}
 #sbtn{display:flex;gap:8px;margin-top:8px}
-body.simple #sbar{display:block}body.simple #bar,body.simple #panel,body.simple #tabs{display:none}
+body.simple #sbar{display:block}body.simple #panel,body.simple #tabs{display:none}
 body.watch #sbar,body.watch #hm{display:none}
 
 button{display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s,background .2s,opacity .2s}
@@ -91,7 +91,7 @@ body.watch #sn{display:none}
 .gc{background:#1b1b22;border-radius:10px;padding:8px}.gc img{width:100%;display:block;background:#000;border-radius:6px}.gc b{display:block;margin-top:6px;color:var(--acc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gc p{margin:2px 0 6px;color:#aaa;font-size:12px}.gb{display:flex;gap:6px}.gb button{flex:1;padding:7px}
 body.big{font-size:17px}body.big button{font-size:17px}body.big .row{grid-template-columns:150px 1fr 56px}body.big .info,body.big .tip,body.big #sdesc{font-size:15px}
 body.calm *{animation:none!important;transition:none!important}
-@media (orientation:landscape) and (min-width:640px){
+@media (orientation:landscape) and (min-width:640px){#cbtn{display:none}body.simple #bar{display:none}body.simple #sbar,body.simple:not(.ctl) #sbar{display:block}body.simple #sp2,body.simple #sc,body.simple.ctl #sp2,body.simple.ctl #sc{display:inline-block}body:not(.simple):not(.ctl) #panel{display:block}body:not(.simple) #tabs{display:flex}
  body{display:grid;grid-template-columns:1fr 340px;grid-template-rows:auto 1fr auto}
  #stage{grid-column:1;grid-row:1/4}#bar{grid-column:2;grid-row:1}#panel{grid-column:2;grid-row:2;max-height:none}#tabs{grid-column:2;grid-row:3}
  #sbar{grid-column:2;grid-row:1/3;overflow-y:auto}
@@ -107,12 +107,12 @@ button.hc:active,button.hc:hover{border-color:rgba(255,233,77,.55)}button.hc:act
 .hf button{background:rgba(14,14,22,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:20px;color:#ccc}
 .asb span{white-space:nowrap}#sas{flex:1.7;min-width:0}.asb{display:inline-flex;align-items:center;gap:8px}.spi{display:inline-flex;align-items:center;padding:6px 8px 6px 2px;margin:-6px 0 -6px -4px;border-right:1px solid rgba(255,255,255,.22)}#sbtn2 button{min-width:0}
 #shp{position:absolute;left:54px;right:56px;top:6px;z-index:5;display:none;flex-direction:column;gap:6px;pointer-events:none}
-body.shp #shp{display:flex}body.shp #hint{opacity:0!important}
+body.shp #shp{display:flex}body.shp #hint,body.ctl #hint{opacity:0!important}
 #shb,#shc{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
 #shp button{pointer-events:auto;flex:none;white-space:nowrap;padding:6px 6px;font-size:11px;border-radius:18px;background:rgba(20,20,28,.92);border:1px solid rgba(255,255,255,.18);color:#eee}
 #shp button.on{background:#ffe94d;color:#000;font-weight:600;border-color:#ffe94d}
 #shc .st{min-width:30px;padding:6px 0;text-align:center;font-size:15px;font-weight:600}#shc span{font-size:12px;color:#ddd;padding:0 2px}
-#shn{font-size:12px;line-height:1.3;color:#ccc;height:2.7em;overflow:hidden;text-shadow:0 0 3px #000}
+#shn:empty{height:0}#shn{font-size:12px;line-height:1.3;color:#ccc;height:2.7em;overflow:hidden;text-shadow:0 0 3px #000}
 #shpb{position:absolute;top:100px;right:8px;z-index:4;flex:none;width:40px;height:40px;padding:0;background:rgba(40,40,50,.75);color:#eee}
 #shpb.on{background:#ffe94d;color:#000}#shpb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
 body:not(.bncm) #shp,body:not(.bncm) #shpb,body.noshp #shp,body.noshp #shpb,body.watch #shpb,body.watch #shp{display:none!important}
@@ -145,7 +145,7 @@ body.shintro #shpb{z-index:3}
 .nt{color:#bbb;font-size:12.5px;margin:6px 0}.ex{margin:8px 0 2px;font-size:14px}.pl{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}.pl button{padding:6px 10px;font-size:13px}.pl button[aria-pressed=true]{background:var(--acc);color:#000;font-weight:600}.ck{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px}.ck input{width:20px;height:20px;accent-color:var(--acc);flex:none}body.m-new #s3{display:none}#sx{margin-top:4px}
 </style></head><body>
 <div id="stage"><canvas id="c" role="img" aria-label="Pattern drawing area"></canvas><div id="hint"></div><div id="ideas"></div><button id="hm" title="Home"></button><button id="fs" title="Full screen"></button><button id="sn" title="Sound on or off"></button><div id="wc"><button id="wr" class="rcb" title="Record"></button><button id="wp" title="Pause or resume"></button><button id="wx" title="Exit full screen"></button></div></div>
-<div id="bar"><button id="pp">Pause</button><button id="cl">Clear</button><button id="sv"></button></div>
+<div id="bar"><button id="pp">Pause</button><button id="cl">Clear</button><button id="sv"></button><button id="cbtn" aria-expanded="false">Controls</button></div>
 <div id="panel"></div>
 <div id="sbar"><div id="chips"></div><div id="sdesc"></div><div id="ssw"></div><div id="sbtn"><button id="sp2">Pause</button><button id="sc">Clear</button><button id="s3"></button></div><div id="sbtn2"><button id="sas" class="asb" style="display:none"><span></span></button><button id="sbv" class="bvb" style="display:none"><span>Ball view: Off</span></button><button id="ssh" class="shb"></button><button id="srec" class="rcb"></button></div><div id="sbtn3"><button id="ssv"></button><button id="smp"></button><button id="sgm" class="gmb" style="display:none"></button></div></div>
 <canvas id="hbg"></canvas>
@@ -268,6 +268,7 @@ modes.bnc={run:true,balls:[],sub:1/240,R:7,M:10,shape:0,topPad:0,su:false,cb:0,_
  startSetup(n){V.bnc.n=n;this.init();this.ph=0;this.lp=null;this.balls.forEach(b=>{b.hide=true});this.run=false;this.su=true;this.pend=false;this.dn=null;this.aimTo=null;this.sel=null;this.sk=-1;this.cb=0;TC.bnc.clearRect(0,0,W,H)},
  fixV(b,i){if(i>=this.cb||!(Math.hypot(b.vx,b.vy)>1)){const an=Math.random()*6.2832,k=Math.floor(Math.random()*3);b.sp=k;b.vx=Math.cos(an)*this.SPD[k];b.vy=Math.sin(an)*this.SPD[k];b.aim=null}else if(b.sp==null){const q=Math.hypot(b.vx,b.vy);b.sp=q<190?0:q<350?1:2}},
  launchRest(){this.balls.forEach((b,i)=>{this.fixV(b,i);b.hide=false;b.p=0});this.su=false;this.sel=null;this.sk=-1;this.pend=true;this.run=true;this.st=this.snap()},
+ clipTrail(){try{const c=TC.bnc,o=this.ol();c.save();c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='destination-in';c.scale(dpr,dpr);c.beginPath();if(o.P){o.P.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath()}else if(o.c){c.arc(o.c.x,o.c.y,o.c.r+1,0,7)}else{c.rect(0,0,W,H)}c.fill();c.restore()}catch(e){}},
  clampIn(b){const E=this.ol().E,R=this.R;for(let k=0;k<4;k++)for(const e of E){const s=e.nx*b.x+e.ny*b.y-(e.d+R);if(s<0){b.x-=e.nx*s;b.y-=e.ny*s}}const o=this.ol();if(o.c){const dx=b.x-o.c.x,dy=b.y-o.c.y,d=Math.hypot(dx,dy)||1,m=o.c.r-R;if(d>m){b.x=o.c.x+dx/d*m;b.y=o.c.y+dy/d*m}}},
  stepP(h){const v=V.bnc,o=this.edges(),E=o.E,R=this.R;predictP(this,v,E,o.c);
   for(const b of this.balls){const px=b.x,py=b.y;b.vy+=v.gr*h;b.x+=b.vx*h;b.y+=b.vy*h;let ht=false;
@@ -379,17 +380,18 @@ function resize(){const r=$('stage').getBoundingClientRect(),nW=r.width,nH=r.hei
  const oW=W,oH=H;dpr=devicePixelRatio||1;W=nW;H=nH;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
  for(const m in TR){const o=TR[m],k=TC[m];let cp=null;if(o.width){cp=document.createElement('canvas');cp.width=o.width;cp.height=o.height;cp.getContext('2d').drawImage(o,0,0)}
   o.width=cv.width;o.height=cv.height;k.setTransform(dpr,0,0,dpr,0,0);k.lineWidth=1.2;k.lineCap='round';
-  if(cp){k.save();k.setTransform(1,0,0,1,0,0);if(m=='bnc')k.drawImage(cp,0,0,o.width,o.height);else{const sd=Math.min(o.width/cp.width,o.height/cp.height);k.drawImage(cp,(o.width-cp.width*sd)/2,(o.height-cp.height*sd)/2,cp.width*sd,cp.height*sd)}k.restore()}}
+  if(cp){k.save();k.setTransform(1,0,0,1,0,0);if(m=='bnc'){const Mb=modes.bnc,a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a);if(oH>0&&isFinite(rr)&&rr>.15&&rr<6&&!T.on)k.drawImage(cp,0,0,cp.width,cp.height,0,dpr*a*(1-rr),o.width,dpr*oH*rr);else k.drawImage(cp,0,0,o.width,o.height)}else{const sd=Math.min(o.width/cp.width,o.height/cp.height);k.drawImage(cp,(o.width-cp.width*sd)/2,(o.height-cp.height*sd)/2,cp.width*sd,cp.height*sd)}k.restore()}}
  if(oW){modes.attr.z*=Math.min(W/oW,H/oH);modes.attr.dirty=true;modes.pend.dirty=true;const Mb=modes.bnc,oS=Math.max(60,(Math.min(oW,oH)-2*Mb.M)*.78),nS=Mb.cubeS(),k=nS/oS;
   Mb.balls.forEach(q=>{if(T.on){q.x=W/2+(q.x-oW/2)*k;q.y=H/2+(q.y-oH/2)*k;q.z*=k;q.vx*=k;q.vy*=k;q.vz*=k;
    q.trs.forEach(pl=>{for(let i=0;i<pl.length;i+=3){pl[i]=W/2+(pl[i]-oW/2)*k;pl[i+1]=H/2+(pl[i+1]-oH/2)*k;pl[i+2]*=k}})}
-   else{q.x*=W/oW;q.y*=H/oH;q.trs=[[]];q.p=0}})}}
+   else{const a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a);q.x*=W/oW;q.y=(isFinite(rr)&&rr>.15&&rr<6)?a+(q.y-a)*rr:q.y*H/oH;q.trs=[[]];q.p=0}});if(!T.on)Mb.clipTrail&&Mb.clipTrail()}}
 const T={on:false,bv:0,o:false,bd:[1,0,0],th:1,ya:.5,dx:null,dy:null,t0:1,y0:.5},K3=.55;
 const IAS={pend:'Choose how the Pendulum sounds. Pendulum hum: a warm hum that rises with speed, with a tick at the end of each swing. Bell swing: a bell at the end of each swing (big swings ring low, small swings ring high) and a soft low note as it passes the middle. Sweeping pad: a smooth musical tone that swells and fades with each swing. Car engine: it revs up as the bob speeds through the middle and idles down at the ends of each swing. Grandfather clock: a tick and a tock at the end of each swing, with a chime every 16 beats. Ocean swell: a soft wash of waves that swells as the bob speeds up. Playground swing: a whoosh through the middle and a little creak at each end. Tap to switch. Sound turns on if it was off.',attr:'Choose how Attractors sounds. Nervous traveler: silent while the ball slows and turns, then swells as it speeds up toward a point, like someone moving out of danger and back towards it. Soft bells: gentle bell notes, faster when the ball is fast. Singing bowl: a calm, ringing strike each time the pitch steps. Breathy flute: a soft airy tone that rises and falls with speed. Car engine: revs up as the ball speeds up and eases down as it slows. Sonar: a ping with echoes, each time the ball passes close to a point. Flyby: a whoosh and a falling tone as the ball sweeps past a point. Whale song: slow gliding calls that sweep up when the ball speeds up and down when it slows. Slingshot zip: a rising zip as the ball whips around a point. Tap to switch. Sound turns on if it was off.',ros:'Choose how Rosette sounds. Chimes: a rising scale as it draws and a chord at the end. Music box: tinkling notes with a winding click at the start. Harp sweep: soft plucks, then a falling sweep across the strings at the end. Gong: quiet taps as it draws and a deep gong when it finishes. Tap to switch. Sound turns on if it was off.',bnc:'Choose how Bounce sounds. Notes: a musical note on each hit. Pinball: bumper dings, with a bonus bell on every ninth hit. Xylophone: bright wooden notes. Ping-pong: a crisp tock. Rubber ball: a soft boing. Billiards: a sharp click and thunk. Retro blips: little 8-bit bleeps. Sounds pan left and right with the ball. Tap to switch. Sound turns on if it was off.'};
 const IBV='Ball view puts a camera on the first ball, looking where it is heading, so you ride along inside the cube. Tap to cycle: Off, Beside (the outside view and the ball view together, so you can see where the ball is) and Only (full screen from the ball).';
 const I3D='3D view tilts the drawing floor like a table seen from an angle. The pendulum hangs above it with a drip line down to the floor, like paint dripping from a swinging can. Drag up or down to tilt the view and left or right to rotate it. In Bounce, the balls bounce around inside a cube and trace their paths in 3D. Placing and throwing are switched off in 3D, so turn it off to set up a new swing.';
-function pj(px,py,z){const u0=(px-W/2)*K3,v0=(py-H/2)*K3,zz=z*K3,cy=Math.cos(T.ya),sy=Math.sin(T.ya),u=u0*cy-v0*sy,v=u0*sy+v0*cy,c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[W/2+u*k,H/2+v2*k+H*.06,k*K3]}
-function pjm(){const cy=Math.cos(T.ya),sy=Math.sin(T.ya),c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,hx=W/2,hy=H/2;return(px,py,z)=>{const u0=(px-hx)*K3,v0=(py-hy)*K3,zz=z*K3,u=u0*cy-v0*sy,v=u0*sy+v0*cy,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[hx+u*k,hy+v2*k+H*.06,k*K3]}}
+const OFF3=()=>cur=='bnc'&&document.body.classList.contains('shp')&&modes.bnc.topPad?modes.bnc.topPad*.4:0;
+function pj(px,py,z){const u0=(px-W/2)*K3,v0=(py-H/2)*K3,zz=z*K3,cy=Math.cos(T.ya),sy=Math.sin(T.ya),u=u0*cy-v0*sy,v=u0*sy+v0*cy,c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[W/2+u*k,H/2+v2*k+H*.06+OFF3(),k*K3]}
+function pjm(){const cy=Math.cos(T.ya),sy=Math.sin(T.ya),c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,hx=W/2,hy=H/2;return(px,py,z)=>{const u0=(px-hx)*K3,v0=(py-hy)*K3,zz=z*K3,u=u0*cy-v0*sy,v=u0*sy+v0*cy,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[hx+u*k,hy+v2*k+H*.06+OFF3(),k*K3]}}
 function tri(img,sx0,sy0,sx1,sy1,sx2,sy2,dx0,dy0,dx1,dy1,dx2,dy2){const dl=sx0*sy1+sy0*sx2+sx1*sy2-sy1*sx2-sy0*sx1-sx0*sy2;if(Math.abs(dl)<1e-6)return;
  ctx.save();ctx.beginPath();ctx.moveTo(dx0,dy0);ctx.lineTo(dx1,dy1);ctx.lineTo(dx2,dy2);ctx.closePath();ctx.clip();
  const da=dx0*sy1+sy0*dx2+dx1*sy2-sy1*dx2-sy0*dx1-dx0*sy2,db=sx0*dx1+dx0*sx2+sx1*dx2-dx1*sx2-dx0*sx1-sx0*dx2,dc=sx0*sy1*dx2+sy0*dx1*sx2+dx0*sx1*sy2-dx0*sy1*sx2-sy0*sx1*dx2-sx0*dx1*sy2,
@@ -657,7 +659,7 @@ function toggleRec(){if(REC){REC.stop();return}
   mr.start();REC=mr;recUI();toast(PF.snd?'Recording with sound. Tap again to stop.':'Recording (sound is off, so the video is silent). Tap again to stop.')}catch(e){REC=null;toast('Recording failed')}}
 function recUI(){document.querySelectorAll('.rcb').forEach(b=>{b.classList.toggle('on',!!REC);b.innerHTML=svg(REC?'stop':'rec')+(b.id=='wr'?'':'<span>'+(REC?'Stop':'Record')+'</span>')})}
 function wireShare(){document.querySelectorAll('.shb').forEach(b=>{b.innerHTML=svg('share')+'<span>Share</span>';b.onclick=shareImage});document.querySelectorAll('.rcb').forEach(b=>b.onclick=toggleRec);recUI()}
-const TOUR=[['Drag the ball','Press and drag to place the pendulum bob, a ball or the starting point anywhere you like.'],['Throw it','Sweep your finger and let go. It keeps your direction and speed, so you can launch it into loops.'],['Make it yours','Try a preset, change the color, save patterns you love, and tap 3D for a tilted view you can rotate.']];
+const TOUR=[['Welcome to Pattern Sketch','Watch moving things draw patterns. Pick a pattern, give it a push, and it leaves a trail behind. Each one works a little differently.'],['Choose how to start','Pattern of the day shows you a new pattern to watch. Simple gives you a few preset ideas to try. Advanced gives you every pattern with full controls.'],['Place, then press Start','Most patterns start paused. Touch the screen to place or drag things, then press Start. In Bounce, tap to place each ball and drag to aim it.'],['The bar at the bottom','Start and Pause run the pattern, Clear wipes it, and Save keeps it. Controls opens the options, such as presets, colors and sliders. Hide controls for more room.'],['Share what you make','Save a pattern to find it again, share a picture or video, or use it as your wallpaper. You can pinch to zoom on a phone, or use the mouse wheel on a computer.']];
 function showTour(i=0){let t=$('tour');if(!t){t=document.createElement('div');t.id='tour';document.body.appendChild(t)}t.style.display='flex';
  t.innerHTML=`<div class="box"><div class="td">${TOUR.map((_,k)=>`<i class="${k==i?'on':''}"></i>`).join('')}</div><b>${TOUR[i][0]}</b><p>${TOUR[i][1]}</p><div><button id="tk">Skip</button><button id="tn" style="background:#ffe94d;color:#000;font-weight:600">${i<TOUR.length-1?'Next':'Got it'}</button></div></div>`;
  $('tk').onclick=endTour;$('tn').onclick=()=>i<TOUR.length-1?showTour(i+1):endTour()}
@@ -736,9 +738,9 @@ function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.cl
   $('hd').onclick=daily;$('hs').onclick=()=>showHome('pick');$('ha').onclick=()=>showHome('pickadv');$('hset').onclick=()=>showHome('settings');$('hhelp').onclick=()=>showTour();if($('hpc'))$('hpc').onclick=()=>showHome('computer')}}
 {const s0=showHome;showHome=function(v){const r=s0.apply(this,arguments);const h=$('home');h.classList.toggle('pk',v!='home');h.classList.toggle('cv',v=='computer');h.insertAdjacentHTML('afterbegin','<i class="sp"></i>');h.insertAdjacentHTML('beforeend','<i class="sp"></i>');return r}}
 function off3(){if(T.on)toggle3();T.bv=0}
-function freshStart(m){const M=modes[m];if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
-function startAdv(){off3();hideHome();document.body.classList.remove('simple');LAST={ui:'adv',m:cur};setMode(cur);resize()}
-function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);resize();buildSimple(kp);if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
+function freshStart(m){const M=modes[m];CFG[m].forEach(q=>V[m][q[0]]=q[5]);if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
+function startAdv(){off3();hideHome();document.body.classList.remove('simple');LAST={ui:'adv',m:cur};setMode(cur);if(window.setCtl)setCtl(false);resize();pulseCtl()}
+function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);if(window.setCtl)setCtl(false);resize();buildSimple(kp);pulseCtl();if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
 function mul(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function daily(){const d=new Date(),seed=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(),m=['pend','attr','ros','bnc','plt','wav'][seed%6];startSimple(m);
  const old=Math.random;let it;Math.random=mul(seed);try{it=RND[m]()}finally{Math.random=old}
@@ -821,9 +823,10 @@ function build(){const pl='';bvS='';
  $('panel').querySelectorAll('.inf').forEach(e=>e.onclick=()=>{const d=$('i_'+e.dataset.k);d.style.display=d.style.display=='block'?'none':'block'});
  $('ideaBtn').onclick=openIdeas;$('b3').onclick=toggle3;$('bvb').onclick=togBV;$('bas').onclick=asNext;document.querySelectorAll('.sw button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus').oninput=e=>setCol(e.target.value);$('spBtn').onclick=openSaved;wireShare();if($('rv'))$('rv').onclick=()=>modes[cur].home();if($('gmb')){$('gmb').onclick=gameToggle;updGM(1)}
  $('panel').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{V.pend.g=+b.dataset.g;const i=$('g');i.value=b.dataset.g;i.nextElementSibling.textContent=b.dataset.g})}
-function setMode(m){if(m!='bnc')gameOff(0,1);cur=m;if(LAST)LAST.m=m;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.m==m));build();const h=$('hint');h.textContent=HINT[m];h.style.opacity=1}
+function setMode(m){if(m!='bnc')gameOff(0,1);cur=m;if(LAST)LAST.m=m;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.m==m));build();const h=$('hint');h.textContent=HINT[m];h.style.opacity=1;clearTimeout(window._hf);window._hf=setTimeout(()=>{if(cur==m&&h.textContent==HINT[m])h.style.opacity=0},9000)}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
 $('pp').onclick=()=>{const M=modes[cur];M.run=!M.run;M.prev=null;if(M.balls)M.balls.forEach(b=>b.p=0)};
+window.pulseCtl=()=>{const b=$('cbtn');b.classList.remove('pl');void b.offsetWidth;b.classList.add('pl');clearTimeout(window._pl);window._pl=setTimeout(()=>b.classList.remove('pl'),5200)};window.setCtl=o=>{document.body.classList.toggle('ctl',o);const b=$('cbtn');b.classList.toggle('on',o);b.textContent=o?'Hide controls':'Controls';b.setAttribute('aria-expanded',o)};$('cbtn').onclick=()=>{$('cbtn').classList.remove('pl');const o=document.body.classList.toggle('ctl'),b=$('cbtn');b.classList.toggle('on',o);b.textContent=o?'Hide controls':'Controls';b.setAttribute('aria-expanded',o)};
 $('fs').onclick=()=>setWatch(true);$('wx').onclick=()=>setWatch(false);$('wp').onclick=()=>$('pp').onclick();
 
 $('cl').onclick=()=>{const m=cur;
@@ -1118,11 +1121,12 @@ requestAnimationFrame(frame);
  const pb=document.createElement('button');pb.id='shpb';pb.title='Shape';pb.setAttribute('aria-label','Choose the bounce shape');pb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 9-5 9H8l-5-9z"/></svg>';st.appendChild(pb);
  let N=1,last='';
  const mk=(box,t,f,cls)=>{const b=document.createElement('button');b.textContent=t;b.onclick=f;if(cls)b.className=cls;box.appendChild(b);return b};
- const note=t=>{if(NT.textContent!==t)NT.textContent=t};
- const desc=()=>M.pend?M.balls.length+(M.balls.length==1?' ball':' balls')+' placed. Tap a ball to change its speed, then press Start.':M.balls.length+(M.balls.length==1?' ball':' balls')+(M.shape?' in a '+SN_[M.shape]:' in the screen box')+'. '+(M.su?'':'Press Start to begin, or tap − or + to place the balls yourself.'+(M.pend?' Tap a ball to change its speed.':''));
+ const STARTEDB=()=>!!(window.STARTED&&window.STARTED.bnc);
+ const note=t=>{if(NT.textContent!==t){const was=!NT.textContent;NT.textContent=t;if(!t!==was){tpad();M.balls.forEach(b=>{if(!b.hide)M.clampIn(b)})}}};
+ const desc=()=>(STARTEDB()&&!M.su&&!M.pend)||T.on?'':M.pend?M.balls.length+(M.balls.length==1?' ball':' balls')+' placed. Tap a ball to change its speed, then press Start.':M.balls.length+(M.balls.length==1?' ball':' balls')+(M.shape?' in a '+SN_[M.shape]:' in the screen box')+'. '+(M.su?'':'Press Start to begin, or tap − or + to place the balls yourself.'+(M.pend?' Tap a ball to change its speed.':''));
  const lab=document.createElement('span');
  const fixM=()=>{M.M=(M.shape||M.scale)?34:10};
- function tpad(){const s=st.getBoundingClientRect();if(s.height<10)return;const was=document.body.classList.contains('shp');if(!was){P.style.visibility='hidden';document.body.classList.add('shp')}const r=P.getBoundingClientRect();M.topPad=Math.round(r.bottom-s.top+6);if(!was){document.body.classList.remove('shp');P.style.visibility=''}}
+ function tpad(){const s=st.getBoundingClientRect();if(s.height<10)return;const was=document.body.classList.contains('shp');if(!was){P.style.visibility='hidden';document.body.classList.add('shp')}const r=P.getBoundingClientRect();const tp0=M.topPad||0;M.topPad=Math.round(r.bottom-s.top+6);if(M.topPad>tp0+2){M.clipTrail();M.balls.forEach(b=>{if(!b.hide)M.clampIn(b)})}if(!was){document.body.classList.remove('shp');P.style.visibility=''}}
  const SPN=['Slow','Medium','Fast'];const mark=()=>{spb.textContent=spl();[...B.children].forEach(b=>b.classList.toggle('on',+b.dataset.k==M.shape));document.body.classList.toggle('noc',M.shape>0&&M.shape!=4);sb.classList.toggle('on',M.scale);sb.textContent='Scale: '+(M.scale?'On':'Off');eb.classList.toggle('on',M.hideE);eb.textContent='Edges: '+(M.hideE?'Hidden':'Shown');pb.classList.toggle('on',M.shape>0)};
  const custom=()=>{if(cur!='bnc')return;if(document.body.classList.contains('simple')){V.bnc.gr=0;V.bnc.e=1;if(EVO.bnc&&EVO.bnc.on)evoSet('bnc',false)}const ch=$('chips');if(!ch)return;ch.classList.add('cust');ch.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));const d=$('sdesc');if(d)d.textContent='Your own balls: place each one yourself and choose its speed, then press Start.'};
  function setup(){if(T.on)toggle3();N=Math.max(1,Math.min(8,N));M.startSetup(N);M.own=true;mark();custom()}
@@ -1144,6 +1148,7 @@ requestAnimationFrame(frame);
  const go=gameOn;gameOn=function(){if(M.shape||M.scale||M.su||M.hideE){M.hideE=false;M.su=false;M.scale=false;M.shape=0;M.M=10;document.body.classList.remove('shp');mark()}return go.apply(this,arguments)};
  window.shapeSet=function(k,he){fresh0=false;M.su=false;M.scale=false;M.hideE=!!he;M.shape=k||0;fixM();if(M.shape)tpad();document.body.classList.remove('shp');mark()};
  addEventListener('resize',()=>setTimeout(()=>{if(M.shape)tpad()},250));
+ try{new ResizeObserver(()=>{if(document.body.classList.contains('shp'))tpad()}).observe(P)}catch(e){}
  const cl0=$('cl').onclick;$('cl').onclick=function(e){cl0.call(this);if(e&&cur=='bnc'&&!G.on&&!T.on){N=Math.max(1,M.balls.length);fixM();if(M.shape)tpad();setup()}};
  $('sc').onclick=function(e){$('cl').onclick(e)};
  const hn=$('hint');let hset=0;
