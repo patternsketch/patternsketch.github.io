@@ -36,6 +36,7 @@ input[type=range]{width:100%}
 .box div{display:flex;gap:8px}
 #dlg .box p{margin:8px 0 4px;color:#bbb;font-size:14px;word-break:break-word}
 .box .err{display:block;color:#ff7a7a;font-size:13px;min-height:16px;margin-bottom:6px}
+#nb{position:fixed;left:50%;top:48%;transform:translate(-50%,-50%);width:min(86vw,420px);box-sizing:border-box;background:rgba(0,0,0,.92);border:2px solid #ffe94d;border-radius:18px;padding:18px 20px;text-align:center;color:#fff;opacity:0;transition:opacity .25s;pointer-events:none;z-index:30;box-shadow:0 8px 40px rgba(0,0,0,.7)}#nb b{display:block;font-size:22px;line-height:1.25;color:#ffe94d;margin-bottom:8px}#nb span{display:block;font-size:16px;line-height:1.4;color:#ddd}
 #toast{position:fixed;left:50%;bottom:150px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:10}
 #fs{position:absolute;top:8px;right:8px;z-index:4;flex:none;width:40px;height:40px;padding:0;background:rgba(40,40,50,.75);font-size:20px}
 #wc{display:none;position:absolute;top:8px;right:8px;z-index:6;gap:8px}
@@ -56,7 +57,7 @@ body.watch #wc{display:flex}body.watch #fs,body.watch #bar,body.watch #panel,bod
 button.hc{flex:none;display:block;width:min(360px,100%);background:#1b1b22;border:1px solid #2c2c36;border-radius:14px;padding:16px;text-align:left;font-size:15px}
 .hc b{display:block;font-size:18px;color:var(--acc);margin-bottom:4px}.hc span{color:#bbb;font-size:13px;font-weight:400}
 #sbar{display:none;background:var(--panel);padding:8px 10px}
-#chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;touch-action:pan-x}
+#pib{display:none;margin:2px 0 8px;padding:8px 16px;border-radius:20px;background:#2a2a34;color:#fff;border:1px solid #444;font-size:14px}body.simple #pib{display:inline-block}body.simple:not(.pre) #chips{display:none}#sbar{min-width:0;width:100%;max-width:100%;box-sizing:border-box}#chips{min-width:0;max-width:100%;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;touch-action:pan-x}
 #chips button{flex:none;padding:8px 12px;font-size:14px;white-space:nowrap}#chips .sel{background:var(--acc);color:#000;font-weight:600}
 #sdesc{color:#bbb;font-size:13px;margin:4px 0 8px;min-height:34px}
 #sbtn{display:flex;gap:8px;margin-top:8px}
@@ -80,7 +81,7 @@ body.watch #sn{display:none}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 #ideas{animation:fade .2s}
 #home.cv .hc{max-width:560px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto}#home.cv .hc b{font-size:22px}#home.cv .hc span{font-size:17px;line-height:1.5}#home.cv p{font-size:18px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.45}
-.hf{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin-top:6px}.hf button{flex:none;background:none;color:#aaa;padding:8px 12px}
+#hpc{flex:0 1 auto;max-width:100%;white-space:normal;text-align:center;line-height:1.3}.hf{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin-top:6px}.hf button{flex:none;background:none;color:#aaa;padding:8px 12px}
 #sbtn2,#sbtn3{display:flex;gap:8px;margin-top:8px}#sbtn2{flex-wrap:wrap}
 #sbar .sw{gap:5px}#sbar .sw button,#sbar .sw .cus{width:31px;height:31px}#sbar .sw .cus{font-size:20px;line-height:27px}#sbtn,#sbtn2,#sbtn3{margin-top:6px}#sdesc{margin:2px 0 6px}
 #toast button{margin-left:10px;padding:4px 12px;background:var(--acc);color:#000;font-size:13px;font-weight:600}
@@ -157,7 +158,7 @@ let W=0,H=0,dpr=1,cur='pend',hist=[],act=false,last=0;
 const TR={},TC={};['pend','attr','ros','bnc','plt','wav'].forEach(m=>{TR[m]=document.createElement('canvas');TC[m]=TR[m].getContext('2d')});
 const CFG={
 pend:[['g','Gravity (m/s²)',1,30,.01,9.81],['L','Length (m)',1,30,.1,10],['lat','Latitude (°)',-90,90,1,40],['om','Earth spin ×',0,3000,1,1500],['dp','Damping',0,.05,.001,0],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,5,.25,1]],
-attr:[['n','Attractors',2,3,1,3],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,4,.25,1]],
+attr:[['n','Attractors',1,3,1,3],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,4,.25,1]],
 ros:[['n','Circles',6,150,1,60],['tw','Turns',1,6,1,1],['off','Spread',.1,1.6,.05,1.1],['sh','Shrink (%)',0,90,1,0],['sp','Draw speed ×',.25,4,.25,1]],
 bnc:[['n','Balls',1,8,1,3],['e','Bounciness',.5,1,.01,1],['gr','Gravity',0,800,10,0],['th','Throw strength',0,3,.05,1],['sp','Speed ×',.25,4,.25,1]],
 plt:[['p','Pitch',0,35,1,3],['n','Amount of sand',1000,9000,500,5000],['sp','Settle speed',.25,3,.25,1],['gs','Grain size',1,3,.25,1.5],['sk','Shake strength',.5,2,.1,1],['p2','Second pitch',0,35,1,8],['bl','Blend',0,1,.05,0],['asp','Sweep speed',.05,1,.05,.25],['br','Brush size',20,120,5,50]],
@@ -179,11 +180,11 @@ modes.pend={run:false,S:{x:3,y:0,vx:0,vy:0},prev:null,t:0,sub:.004,z:1,cx:0,cy:0
  redraw(){const c=TC.pend,T=this.T,bk=new Map();c.clearRect(0,0,W,H);drawBase(c,this,this.sc());for(let i=0;i<T.length;i+=5){const k=T[i+4];let a=bk.get(k);if(!a)bk.set(k,a=[]);a.push(i)}
   bk.forEach((idx,k)=>{c.strokeStyle=this.CA[k];c.beginPath();for(const i of idx){const a=this.toS(T[i],T[i+1]),b=this.toS(T[i+2],T[i+3]);c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1])}c.stroke()})},
  clr(){this.T=[];this.q=null},
- init(){this.S={x:3,y:0,vx:0,vy:0};this.run=false;this.prev=null;this.q=null;this.view(1,0,0);this.st=this.snap()},
- snap(){return{S:{...this.S}}},load(st){this.S={...st.S};this.prev=null;this.t=0;this.T=[];this.q=null;this.view(1,0,0);this.run=true},
+ init(){this.hide=false;this.S={x:3,y:0,vx:0,vy:0};this.run=false;this.prev=null;this.q=null;this.view(1,0,0);this.st=this.snap()},
+ snap(){return{S:{...this.S}}},load(st){this.hide=false;this.S={...st.S};this.prev=null;this.t=0;this.T=[];this.q=null;this.view(1,0,0);this.run=true},
  beginPinch(){if(this.sv){this.S=this.sv.S;this.run=this.sv.run}this.prev=null},
  place(px,py){const mx=V.pend.L*.5;let x=this.wx(px),y=this.wy(py);const m=Math.hypot(x,y);if(m>mx){x*=mx/m;y*=mx/m}this.S.x=x;this.S.y=y;this.S.vx=this.S.vy=0},
- down(px,py){this.sv={S:{...this.S},run:this.run};this.run=false;this.prev=null;this.place(px,py)},move(px,py){this.place(px,py)},
+ down(px,py){this.hide=false;this.sv={S:{...this.S},run:this.run};this.run=false;this.prev=null;this.place(px,py)},move(px,py){this.place(px,py)},
  up(vx,vy){const p=V.pend,s=this.sc()*this.z,S=this.S;let ux=vx/s*p.th,uy=vy/s*p.th;const lim=Math.sqrt(p.g/p.L)*Math.sqrt(Math.max(0,(.6*p.L)**2-(S.x*S.x+S.y*S.y))),m=Math.hypot(ux,uy);if(m>lim){ux*=lim/m;uy*=lim/m}S.vx=ux;S.vy=uy;this.run=true;this.prev=null;this.st=this.snap()},
  step(h){const p=V.pend,S=this.S,w=2*7.292e-5*Math.sin(p.lat*Math.PI/180)*p.om,k=p.g/p.L;
   const a=this.toS(S.x,S.y);
@@ -197,6 +198,7 @@ modes.pend={run:false,S:{x:3,y:0,vx:0,vy:0},prev:null,t:0,sub:.004,z:1,cx:0,cy:0
   else{this.q=[S.x,S.y];this.k=0}
   this.prev=1},
  draw(){if(this.dirty){this.redraw();this.dirty=false}
+  if(this.hide&&this.run)this.hide=false;if(this.hide)return;
   const[bx,by]=this.toS(this.S.x,this.S.y),[cx,cy]=this.toS(0,0);
   ctx.strokeStyle='#444';ctx.beginPath();ctx.moveTo(cx-8,cy);ctx.lineTo(cx+8,cy);ctx.moveTo(cx,cy-8);ctx.lineTo(cx,cy+8);ctx.stroke();
   ctx.strokeStyle='#888';ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(bx,by);ctx.stroke();
@@ -712,12 +714,12 @@ function hideHome(){HO=false;const h=$('home');h.classList.add('out');setTimeout
 function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.classList.remove('out');h.style.display='flex';$('ideas').style.display='none';hbOn();
  const back='<button id="hb" class="hbk" aria-label="Home" title="Home">'+svg('home')+'</button>';
  if(v=='pick'||v=='pickadv'){const ad=v=='pickadv';h.innerHTML=(ad?'<h1>Advanced</h1><p>Choose a pattern and use the advanced controls.</p>':'<h1>Choose a pattern</h1><p>Pick one, then tap a preset.</p>')+['pend','attr','ros','bnc','plt','wav'].map(m=>`<button class="hc" data-m="${m}"><b>${MN[m]}</b><span>${MD[m].replace('Tune in','<span class="ty">Tune in</span>')}</span></button>`).join('')+back;
-  h.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(ad){cur=m;startAdv()}else startSimple(m);if(m=='bnc'&&window.bncFresh&&!(window.STARTED&&window.STARTED.bnc))window.bncFresh()});$('hb').onclick=()=>showHome('home')}
+  h.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;freshStart(m);if(ad){cur=m;startAdv()}else startSimple(m);if(m=='bnc'&&window.bncFresh&&!(window.STARTED&&window.STARTED.bnc))window.bncFresh()});$('hb').onclick=()=>showHome('home')}
  else if(v=='settings'){const L=[['snd','Sound effects'],['hap','Vibration'],['big','Larger text'],['cb','Color-blind-safe colors'],['calm','Reduce motion'],['soft','Calm sound'],['pan','Stereo panning']];
   h.innerHTML='<h1>Settings</h1>'+L.map(([k,t])=>`<button class="hc tg" data-k="${k}"><b>${t}</b><span>${PF[k]?'On':'Off'}</span></button>`).join('')+`<button class="hc" id="hth"><b>Sound theme</b><span>${THN[PF.th|0]}. Tap to change. Sets the sound for every pattern at once.</span></button>`+'<button class="hc" id="ht"><b>Show the tour again</b><span>A quick reminder of how to drag, throw and explore.</span></button><button class="hc" id="hfb"><b>Contact and feedback</b><span>Send us a message or an idea by email.</span></button><p style="max-width:340px;font-size:13px">Sound: tap the speaker on a pattern to turn it on. Pendulum hums and ticks at the end of each swing. Every pattern has several sound styles. Tap the sound button on a pattern to switch, or pick a Sound theme to set them all at once. Stereo panning moves the sound left and right with the ball. Recordings include the sound when it is on. Calm sound keeps only the soft hums and chimes.</p><p style="max-width:340px;font-size:13px">Privacy: your patterns and settings are stored only on this device. The app has no accounts and no tracking, and it works offline. The internet is used only if you choose to send feedback, and an email address is included only if you type one.</p>'+back;
   h.querySelectorAll('.tg').forEach(b=>b.onclick=()=>{PF[b.dataset.k]=!PF[b.dataset.k];applyPF();savePrefs();showHome('settings')});$('hth').onclick=()=>{PF.th=((PF.th|0)+1)%THN.length;if(PF.th){Object.assign(PF,THM[PF.th]);PF.snd=true;applyPF();ac()}savePrefs();showHome('settings')};$('ht').onclick=()=>showTour();$('hfb').onclick=()=>showFeedback();$('hb').onclick=()=>showHome('home')}
  else if(v=='computer'){const st=(t,b)=>`<div class="hc" style="cursor:default"><b>${t}</b><span>${b}</span></div>`;
-  h.innerHTML='<h1>Use on a computer</h1><p>Pattern Sketch also runs on a computer, where you get a much bigger screen.</p>'
+  h.innerHTML='<h1>Also on a computer</h1><p>Pattern Sketch also runs on a computer, where you get a much bigger screen.</p>'
   +(ONWEB?(window.IP?'<button class="hc" id="hin"><b>Install now</b><span>Adds Pattern Sketch to this computer as an app, with its own window.</span></button>':''):
    st('Open this link on your computer',`<span style="color:#ffe94d;font-weight:700;word-break:break-all;user-select:all">${SITE}</span><br><button id="hcp" style="margin-top:10px;padding:8px 16px;border-radius:10px;background:#ffe94d;color:#000;font-weight:700;border:0">Copy link</button>`+(navigator.share?' <button id="hsh" style="margin-top:10px;padding:8px 16px;border-radius:10px;background:#2a2a34;color:#fff;border:0">Share</button>':'')+'<br>Tip: send it to yourself by email or message, then open it on the computer.'))
   +(window.IP&&ONWEB?st('Using Safari or another browser?','Safari on a Mac: File, then Add to Dock. Other browsers: just bookmark this page.'):st('To install it as an app','In Chrome or Edge, open the link, then click the install icon at the right end of the address bar (or menu, then Install Pattern Sketch). It opens in its own window and works offline.')
@@ -729,11 +731,12 @@ function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.cl
   if($('hin'))$('hin').onclick=()=>{const e=window.IP;if(!e)return;e.prompt();e.userChoice.finally(()=>{window.IP=null;showHome('computer')})}}
  else{h.innerHTML='<h1>Pattern Sketch</h1><p>Watch physics draw.</p>'+(LAST?`<button class="hc" id="hc"><b>Continue</b><span>Back to ${LAST.ui=='simple'?'Simple':'Advanced'}: ${MN[LAST.m]}</span></button>`:'')
   +'<button class="hc" id="hd"><b>Pattern of the day</b><span>A new pattern every day. Tap to watch today\'s.</span></button><button class="hc" id="hs"><b>Simple</b><span>Pick a pattern, then tap a preset. No settings to worry about.</span></button><button class="hc" id="ha"><b>Advanced</b><span>All patterns with full controls: gravity, spin, damping, auto-change, colors and saving.</span></button>'
-  +'<div class="hf"><button id="hset">'+svg('gear')+'<span>Settings</span></button><button id="hhelp">'+svg('help')+'<span>How it works</span></button>'+(ISAPP?'':'<button id="hpc"><span>On a computer</span></button>')+'</div>';
+  +'<div class="hf"><button id="hset">'+svg('gear')+'<span>Settings</span></button><button id="hhelp">'+svg('help')+'<span>How it works</span></button>'+(ISAPP?'':'<button id="hpc"><span>Also on a computer</span></button>')+'</div>';
   if(LAST)$('hc').onclick=()=>{if(LAST.ui=='simple')startSimple(LAST.m);else{cur=LAST.m;startAdv()}};
   $('hd').onclick=daily;$('hs').onclick=()=>showHome('pick');$('ha').onclick=()=>showHome('pickadv');$('hset').onclick=()=>showHome('settings');$('hhelp').onclick=()=>showTour();if($('hpc'))$('hpc').onclick=()=>showHome('computer')}}
 {const s0=showHome;showHome=function(v){const r=s0.apply(this,arguments);const h=$('home');h.classList.toggle('pk',v!='home');h.classList.toggle('cv',v=='computer');h.insertAdjacentHTML('afterbegin','<i class="sp"></i>');h.insertAdjacentHTML('beforeend','<i class="sp"></i>');return r}}
 function off3(){if(T.on)toggle3();T.bv=0}
+function freshStart(m){const M=modes[m];if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
 function startAdv(){off3();hideHome();document.body.classList.remove('simple');LAST={ui:'adv',m:cur};setMode(cur);resize()}
 function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);resize();buildSimple(kp);if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
 function mul(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -741,12 +744,12 @@ function daily(){const d=new Date(),seed=d.getFullYear()*10000+(d.getMonth()+1)*
  const old=Math.random;let it;Math.random=mul(seed);try{it=RND[m]()}finally{Math.random=old}
  it[0]='Pattern of the day';IDEAS[m].apply(it);evoSet(m,false);TC[m].clearRect(0,0,W,H);build();
  $('chips').querySelectorAll('button').forEach(b=>b.classList.remove('sel'));$('sdesc').textContent="Today's pattern is a "+MN[m]+" pattern. Come back tomorrow for a new one."}
-function buildSimple(keep){const items=IDEAS[cur].list.filter(q=>q[2]!=='RNDE');
+function buildSimple(keep){$('chips').classList.remove('cust');delete $('sdesc').dataset.pre;const items=IDEAS[cur].list.filter(q=>q[2]!=='RNDE');
  $('chips').innerHTML=items.map((q,i)=>`<button data-i="${i}">${q[0]}</button>`).join('');$('ssw').innerHTML=`<div class="ch">Pattern color: <b class="cn">${colName(COL[cur])}</b> <small style="color:#888">(tap a circle)</small></div><div class="sw">${swHTML('cCus2')}</div>`;
- $('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
- const go=i=>{runIdea(items[i]);$('chips').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('sel',k==i));$('sdesc').textContent=items[i][1]};
+ if(!$('pib')){const pb0=document.createElement('button');pb0.id='pib';pb0.textContent='Try some preset ideas';pb0.onclick=()=>{const o=document.body.classList.toggle('pre');pb0.textContent=o?'Hide preset ideas':'Try some preset ideas';const d=$('sdesc'),pt=d.dataset.pre;if(pt){if(!o&&d.textContent===pt)d.textContent='';else if(o&&d.textContent==='')d.textContent=pt}};$('chips').parentNode.insertBefore(pb0,$('chips'))}document.body.classList.remove('pre');$('pib').textContent='Try some preset ideas';$('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
+ const go=i=>{runIdea(items[i]);$('chips').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('sel',k==i));$('sdesc').textContent=items[i][1];$('sdesc').dataset.pre=items[i][1];if(!document.body.classList.contains('pre'))$('sdesc').textContent=''};
  $('chips').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>go(i));
- $('ssw').querySelectorAll('button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus2').oninput=e=>setCol(e.target.value);if(!keep)go(1)}
+ $('ssw').querySelectorAll('button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus2').oninput=e=>setCol(e.target.value);if(!keep)$('sdesc').textContent='No preset chosen. Press Start, or tap Try some preset ideas.'}
 $('hm').onclick=()=>showHome('home');$('sp2').onclick=()=>$('pp').onclick();$('sc').onclick=()=>$('cl').onclick();$('s3').onclick=toggle3;$('sbv').onclick=togBV;$('sas').onclick=asNext;$('sgm').onclick=gameToggle;
 function evUI(){return EVO[cur].on?'<p style="margin:4px 0;color:#bbb;font-size:12.5px">Auto-change is on. Choose any other idea to turn it off.</p>':''}
 function optsHTML(){const E=EVO[cur];
@@ -766,6 +769,7 @@ window.exitWatch=()=>{const f=$('fb');if(f&&f.style.display=='flex'){f.style.dis
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&WATCH)setWatch(false)});
 let SAVED=[];try{SAVED=JSON.parse(localStorage.getItem('tracelab.saved')||'[]')}catch(e){}
 function persist(){try{localStorage.setItem('tracelab.saved',JSON.stringify(SAVED));return true}catch(e){return false}}
+function nbShow(a,b){let e=$('nb');if(!e){e=document.createElement('div');e.id='nb';document.body.appendChild(e)}e.innerHTML='<b>'+a+'</b><span>'+b+'</span>';e.style.opacity=1;clearTimeout(nbShow.t);nbShow.t=setTimeout(()=>{e.style.opacity=0},3500)}
 function toast(t,act,fn){const e=$('toast');e.textContent=t;if(act){const b=document.createElement('button');b.textContent=act;b.onclick=()=>{fn();e.style.opacity=0;e.style.pointerEvents='none'};e.appendChild(b);e.style.pointerEvents='auto'}else e.style.pointerEvents='none';e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>{e.style.opacity=0;e.style.pointerEvents='none'},act?5000:2200)}
 const MN={pend:'Pendulum',attr:'Attractors',ros:'Rosette',bnc:'Bounce'},esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let dOk=null;
@@ -802,7 +806,8 @@ function doSave(name){const M=modes[cur],t=document.createElement('canvas');t.wi
  let ok=persist(),lite=false;if(!ok&&SAVED[0].hist){delete SAVED[0].hist;delete SAVED[0].vh;ok=persist()}if(!ok&&SAVED[0].rs){delete SAVED[0].rs;lite=true;ok=persist()}
  toast(ok?(lite?'Saved ✓ (starting point only: not enough space for the drawing)':'Saved ✓'):'Saved for this session only')}
 $('sv').onclick=openSave;
-function openSaved(){const d=$('ideas');d.innerHTML='<p class="tip">Your saved patterns. When you load one, you can continue from where you left off, or redraw the whole pattern from the beginning.</p><div class="card" style="background:none;padding:0"><button id="ix" style="background:#2a2a33;color:#eee">Close</button></div>'+(SAVED.length?'<div class="gal">'+SAVED.map((x,i)=>`<div class="gc"><img src="${x.img}" alt="${esc(x.name)}"><b>${esc(x.name)}</b><p>${MN[x.mode]}</p><div class="gb"><button data-l="${i}">Load</button><button data-r="${i}" aria-label="Rename">${svg('edit')}</button><button data-x="${i}" aria-label="Delete">${svg('trash')}</button></div><button class="gw" data-w="${i}">Make this my wallpaper</button></div>`).join('')+'</div>':'<p class="tip">Nothing saved yet. Tap Save when you like a pattern.</p>');
+const PCW=()=>!(window.AndroidBridge&&typeof AndroidBridge.setWallpaper=='function')&&!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
+function openSaved(){const d=$('ideas');d.innerHTML='<p class="tip">Your saved patterns. When you load one, you can continue from where you left off, or redraw the whole pattern from the beginning.</p><div class="card" style="background:none;padding:0"><button id="ix" style="background:#2a2a33;color:#eee">Close</button></div>'+(SAVED.length?'<div class="gal">'+SAVED.map((x,i)=>`<div class="gc"><img src="${x.img}" alt="${esc(x.name)}"><b>${esc(x.name)}</b><p>${MN[x.mode]}</p><div class="gb"><button data-l="${i}">Load</button><button data-r="${i}" aria-label="Rename">${svg('edit')}</button><button data-x="${i}" aria-label="Delete">${svg('trash')}</button></div><button class="gw" data-w="${i}">${PCW()?'Save as a wallpaper picture':'Make this my wallpaper'}</button></div>`).join('')+'</div>':'<p class="tip">Nothing saved yet. Tap Save when you like a pattern.</p>');
  d.style.display='block';$('ix').onclick=()=>d.style.display='none';
  d.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const x=SAVED[b.dataset.l];const go=rd=>{Object.assign(V[x.mode],x.v);setMode(x.mode);const M=modes[x.mode];if(x.mode=='bnc')shapeSet(x.sh||0,x.he);M.load(JSON.parse(JSON.stringify(x.st)));if(x.evs){EVO[x.mode].iv=x.evs.s=='smooth'?0:x.evs.iv}evoSet(x.mode,!!x.evo);if(x.col)COL[x.mode]=x.col;M.st=JSON.parse(JSON.stringify(x.st));TC[x.mode].clearRect(0,0,W,H);M.base=null;const full=rd&&x.hist&&window.startRedraw;if(!rd&&x.rs){applyRs(x);window.markStarted&&window.markStarted(x.mode);if(x.hist&&window.restoreHist)window.restoreHist(x)}if(x.mode=='bnc'&&M.shape&&!full)M.balls.forEach(q=>M.clampIn(q));build();if(full)window.startRedraw(x);const msg=full?'Redrawing "'+x.name+'". Touch the screen to skip to the end.':(!rd&&x.rs)?'Loaded "'+x.name+'" as you left it, and paused. Tap Resume to carry on'+(x.mode=='ros'?'.':', or drag to start from somewhere new.'):'Loaded "'+x.name+'" from its starting point.';
   if(document.body.classList.contains('simple')){buildSimple(true);$('sdesc').textContent=msg}else toast(msg);d.style.display='none'};if(x.rs&&window.loadChoice)window.loadChoice(x,go);else go(0)});
@@ -828,6 +833,7 @@ const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clien
 const ptrs=new Map();let pinch=null,pd=null;
 function commitPd(){if(!pd)return;clearTimeout(pd.t);const{x,y}=pd;pd=null;act=true;$('hint').style.opacity=0;modes[cur].down(x,y)}
 function pinfo(){const p=[...ptrs.values()],r=cv.getBoundingClientRect();return{d:Math.max(1,Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])),x:(p[0][0]+p[1][0])/2-r.left,y:(p[0][1]+p[1][1])/2-r.top}}
+cv.addEventListener('wheel',e=>{if(T.on||G.on||(cur!='attr'&&cur!='pend'))return;e.preventDefault();const M=modes[cur],r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,wx=M.wx(px),wy=M.wy(py),d=e.deltaY*(e.deltaMode==1?16:1),z=Math.min(20,Math.max(.05,M.z*Math.exp(-d*.0015)));M.view(z,wx-(px-W/2)/(z*M.ps()),wy-(py-H/2)/(z*M.ps()))},{passive:false});
 cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);
  if(G.on&&cur=='bnc'&&!T.on){if(ptrs.size==1){const[a,b]=pos(e);gameTap(a,b)}return}
  if(ptrs.size==2&&cur=='bnc'&&!T.on){if(pd){clearTimeout(pd.t);pd=null;modes.bnc.sv=null}modes.bnc.beginPinch();act=false;pinch={none:1};return}
@@ -931,7 +937,7 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
  wipe(){this.src=[];this.sel=null;this.t=0;this.rings=[];this.selUI()},
  clr(){this.wipe()},again(){this.wipe()},ps(){return 1},home(){},onN(){},
  snap(){return{src:this.src.map(s=>({x:Math.round(s.x*10)/10,y:Math.round(s.y*10)/10,lam:Math.round(s.lam*100)/100,ph:s.ph||0,amp:s.amp==null?1:s.amp}))}},
- load(st){this.src=((st&&st.src)||[]).map(s=>({x:s.x,y:s.y,lam:s.lam,ph:s.ph||0,amp:s.amp==null?1:s.amp}));this._g=null;this.src.forEach(s=>this.fit(s));this.sel=this.src.length?0:null;this.t=0;this.rings=[];this.selUI()},
+ load(st){this.src=((st&&st.src)||[]).map(s=>({x:s.x,y:s.y,lam:s.lam,ph:s.ph||0,amp:s.amp==null?1:s.amp}));this._g=null;this.src.forEach(s=>this.fit(s));this.sel=null;this.t=0;this.rings=[];this.selUI()},
  reshape(){this._g=null;this.src.forEach(s=>this.fit(s));this.rings=[];this.t=0;this.run=false},
  geom(){const k=this.eff(),LH=Math.round(this.LH());if(this._g&&this._g.k==k&&this._g.LH==LH)return this._g;let g;const Rm=Math.min(190,LH/2-8);
   if(k=='circle')g={k,LH,circle:true,R:Rm};
@@ -988,7 +994,7 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
   host.innerHTML=`<p class="nt">Source ${this.sel+1} of ${this.src.length}. Drag it to move it.</p>`+rowH('wpi','Pitch',1,10,.5,p,null,inf('wpi'))+(adv?rowH('wph','Phase',0,345,15,Math.round((s.ph||0)/TAU*360),v=>v+'°','wph')+rowH('wam','Strength',.2,1,.1,s.amp==null?1:s.amp,v=>(+v).toFixed(1),'wam'):'')+`<div class="pre"><button id="wrm">Remove this source</button></div>`;
   const bindR=(id,fn,fmt)=>{const e=$(id);if(!e)return;e.oninput=()=>{e.nextElementSibling.textContent=fmt?fmt(+e.value):e.value;fn(+e.value)}};
   bindR('wpi',v=>{s.lam=pl(v)});bindR('wph',v=>{s.ph=v/360*TAU;s.acc=null},v=>v+'°');bindR('wam',v=>{s.amp=v},v=>(+v).toFixed(1));
-  $('wrm').onclick=()=>{this.src.splice(this.sel,1);this.sel=this.src.length?0:null;this.selUI()};wireInf(host)}};
+  $('wrm').onclick=()=>{this.src.splice(this.sel,1);this.sel=null;this.selUI()};wireInf(host)}};
 
 /* ---------- shared data ---------- */
 Object.assign(V.plt,{sh:0,au:0,nd:0,sf:0,vw:0});Object.assign(V.wav,{sp:1,rf:0,hs:0,shp:0,ed:1,mv:0,ov:0});
@@ -1037,7 +1043,7 @@ IDEAS.wav={tip:'Each idea places the sources and sometimes sets Reflect. The rin
  ['Four corners','Four sources with Reflect on. The rings bounce off the edges and cross the middle.',{s:[[-120,-105,5],[120,-105,5],[-120,105,5],[120,105,5]],rf:1}],
  ['Close pair','Two high-pitch sources almost touching. Very fine curved lines.',{s:[[-18,0,8],[18,0,8]]}],
  ['Spiral of six','Six sources winding outward, each at a different pitch.',{s:Array.from({length:6},(_,i)=>[Math.round((25+i*22)*Math.cos(i*1.05)),Math.round((25+i*22)*Math.sin(i*1.05)),3.5+i*.9])}]],
- apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.wav();const o=q[2];Object.assign(V.wav,WBASE,{rf:o.rf?1:0});Wv._g=null;Wv.src=o.s.map(([x,y,p])=>({x,y,lam:pl(p)}));Wv.src.forEach(s=>Wv.fit(s));Wv.sel=0;Wv.t=0;Wv.rings=[];Wv.run=false}};
+ apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.wav();const o=q[2];Object.assign(V.wav,WBASE,{rf:o.rf?1:0});Wv._g=null;Wv.src=o.s.map(([x,y,p])=>({x,y,lam:pl(p)}));Wv.src.forEach(s=>Wv.fit(s));Wv.sel=null;Wv.t=0;Wv.rings=[];Wv.run=false}};
 
 /* ---------- UI ---------- */
 const halt=m=>{modes[m].run=false;if(window.STARTED)window.STARTED[m]=false};
@@ -1119,9 +1125,9 @@ requestAnimationFrame(frame);
  function tpad(){const s=st.getBoundingClientRect();if(s.height<10)return;const was=document.body.classList.contains('shp');if(!was){P.style.visibility='hidden';document.body.classList.add('shp')}const r=P.getBoundingClientRect();M.topPad=Math.round(r.bottom-s.top+6);if(!was){document.body.classList.remove('shp');P.style.visibility=''}}
  const SPN=['Slow','Medium','Fast'];const mark=()=>{spb.textContent=spl();[...B.children].forEach(b=>b.classList.toggle('on',+b.dataset.k==M.shape));document.body.classList.toggle('noc',M.shape>0&&M.shape!=4);sb.classList.toggle('on',M.scale);sb.textContent='Scale: '+(M.scale?'On':'Off');eb.classList.toggle('on',M.hideE);eb.textContent='Edges: '+(M.hideE?'Hidden':'Shown');pb.classList.toggle('on',M.shape>0)};
  const custom=()=>{if(cur!='bnc')return;if(document.body.classList.contains('simple')){V.bnc.gr=0;V.bnc.e=1;if(EVO.bnc&&EVO.bnc.on)evoSet('bnc',false)}const ch=$('chips');if(!ch)return;ch.classList.add('cust');ch.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));const d=$('sdesc');if(d)d.textContent='Your own balls: place each one yourself and choose its speed, then press Start.'};
- function setup(){if(T.on)toggle3();N=Math.max(1,Math.min(8,N));M.startSetup(N);mark();custom()}
- function fresh(){if(T.on&&(M.shape>0&&M.shape!=4||M.scale))toggle3();V.bnc.n=M.balls.length;TC.bnc.clearRect(0,0,W,H);M.init();M.run=true}
- NAMES.forEach(([n,k])=>{const b=mk(B,n,()=>{if(T.on&&k!=0&&k!=4)toggle3();M.shape=k;fixM();tpad();if(M.su)setup();else{fresh();note(desc())}mark();custom()});b.dataset.k=k});
+ function setup(){if(T.on)toggle3();N=Math.max(1,Math.min(8,N));M.startSetup(N);M.own=true;mark();custom()}
+ function fresh(){M.own=false;if(T.on&&(M.shape>0&&M.shape!=4||M.scale))toggle3();V.bnc.n=M.balls.length;TC.bnc.clearRect(0,0,W,H);M.init();M.run=true}
+ NAMES.forEach(([n,k])=>{const b=mk(B,n,()=>{if(T.on&&k!=0&&k!=4)toggle3();M.shape=k;fixM();tpad();const run0=!M.su&&!M.pend&&M.own&&!M.scale;if(run0){N=Math.max(1,M.balls.length)}const keep=!run0&&(M.su&&M.cb>0||M.pend&&M.balls.length>0)&&!M.scale;if(keep){const n=M.su?M.cb:M.balls.length;for(let i=0;i<n;i++){const q=M.balls[i];if(q&&!q.hide){const m=M.M+M.R;if(!M.shape){q.x=Math.min(W-m,Math.max(m,q.x));q.y=Math.min(H-m,Math.max(m+(M.topPad||0),q.y))}else M.clampIn(q)}}if(M.pend)M.st=M.snap();note(desc())}else if(M.su||run0)setup();else if(M.idea&&!M.own&&document.body.classList.contains('simple')){const wr=M.run;runIdea(M.idea);if(wr&&!M.run)$('pp').onclick();note(desc());mark();return}else{fresh();note(desc())}mark();custom()});b.dataset.k=k});
  mk(C,'−',()=>{N=(M.su?N:M.balls.length)-1;setup()},'st');C.appendChild(lab);mk(C,'+',()=>{N=(M.su?N:M.balls.length)+1;setup()},'st');
  const selB=()=>{const k=M.sel;return k!=null&&(M.su||M.pend)&&M.balls[k]&&!M.balls[k].hide?M.balls[k]:null};
  const spl=()=>{const b=selB();return b?'Ball speed: '+SPN[b.sp==null?M.bs:b.sp]:'Speed: '+SPN[M.bs]};
@@ -1132,7 +1138,7 @@ requestAnimationFrame(frame);
  mk(C,'? Help',()=>window.shapeIntro&&window.shapeIntro(true));
  pb.onclick=()=>{const o=document.body.classList.toggle('shp');pb.setAttribute('aria-expanded',o);if(o){tpad();if(!M.shape&&!T.on)M.balls.forEach(b=>M.clampIn(b));note(M.su?'':desc())}};
  cv.addEventListener('pointermove',e=>{if(M.su&&M.scale&&e.pointerType=='mouse'&&e.buttons==0){const r=cv.getBoundingClientRect();M.lp=M.snapT(e.clientX-r.left,e.clientY-r.top)}});cv.addEventListener('pointerleave',()=>{if(M.su&&M.scale)M.lp=null});
- const ri=runIdea;runIdea=function(it){if(T.on&&M.shape>0&&M.shape!=4)toggle3();ri(it);if(M.shape)M.balls.forEach(b=>M.clampIn(b));mark()};
+ const ri=runIdea;runIdea=function(it){M.own=false;M.idea=it;if(T.on&&M.shape>0&&M.shape!=4)toggle3();ri(it);M.balls.forEach(b=>M.clampIn(b));mark()};
  const sm=setMode;setMode=function(m){const pv=cur;sm.apply(this,arguments);document.body.classList.toggle('bncm',m=='bnc');if(m=='bnc'&&pv!='bnc')queueMicrotask(()=>window.shapeEnter&&window.shapeEnter());if(m!='bnc'){document.getElementById('shi')&&document.getElementById('shi').classList.remove('on');document.body.classList.remove('shintro');document.body.classList.remove('shp')}};
  document.body.classList.toggle('bncm',cur=='bnc');
  const go=gameOn;gameOn=function(){if(M.shape||M.scale||M.su||M.hideE){M.hideE=false;M.su=false;M.scale=false;M.shape=0;M.M=10;document.body.classList.remove('shp');mark()}return go.apply(this,arguments)};
@@ -1259,7 +1265,7 @@ requestAnimationFrame(frame);
 })();
 
 (function(){
- const bx=document.createElement('div');bx.id='wpc';bx.innerHTML='<div class="box"><b>Make this my wallpaper</b><img id="wpi" alt=""><small id="wpm">This is how it will look on your screen.</small><div id="wpb"></div></div>';document.body.appendChild(bx);
+ const bx=document.createElement('div');bx.id='wpc';bx.innerHTML='<div class="box"><b id="wpt">Make this my wallpaper</b><img id="wpi" alt=""><small id="wpm">This is how it will look on your screen.</small><div id="wpb"></div></div>';document.body.appendChild(bx);
  const nat=!!(window.AndroidBridge&&typeof AndroidBridge.setWallpaper=='function');
  function compose(x){return new Promise(res=>{const src=(x.rs&&x.rs.im)||x.img,im=new Image();im.onload=()=>{const dp=Math.min(3,window.devicePixelRatio||2);let SW=Math.round((screen.width||393)*dp),SH=Math.round((screen.height||800)*dp);const k=Math.min(1,2600/Math.max(SW,SH));SW=Math.round(SW*k);SH=Math.round(SH*k);
    const c=document.createElement('canvas');c.width=SW;c.height=SH;const g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,SW,SH);g.imageSmoothingQuality='high';
@@ -1268,11 +1274,11 @@ requestAnimationFrame(frame);
    res(c)};im.onerror=()=>res(null);im.src=src})}
  const close=()=>{bx.style.display='none'};
  const bt=(t,f,cls)=>{const b=document.createElement('button');b.textContent=t;b.onclick=f;if(cls)b.className=cls;$('wpb').appendChild(b)};
- window.wallpaperFor=async x=>{const c=await compose(x);if(!c){toast('Could not make the wallpaper');return}
+ window.wallpaperFor=async x=>{const c=await compose(x);if(!c){toast('Could not make the wallpaper');return}$('wpt').textContent=PCW()?'Save as a wallpaper picture':'Make this my wallpaper';
   $('wpi').src=c.toDataURL('image/jpeg',.6);$('wpb').innerHTML='';
   const send=w=>{c.toBlob(b=>{if(!b)return;const r=new FileReader();r.onload=()=>{try{AndroidBridge.setWallpaper(r.result.split(',')[1],w);close()}catch(e){toast('Could not set the wallpaper')}};r.readAsDataURL(b)},'image/jpeg',.93)};
   if(nat){$('wpm').textContent='This is how it will look. Where should it go?';bt('Home screen',()=>send(1),'g');bt('Lock screen',()=>send(2));bt('Home and lock screens',()=>send(3))}
-  else{$('wpm').textContent='Your device cannot set the wallpaper from here. Save the picture, then choose it as your wallpaper from your photos.';bt('Save the picture',()=>{c.toBlob(b=>b&&shareBlob(b,'pattern-sketch-wallpaper.jpg','image/jpeg'),'image/jpeg',.93);close()},'g')}
+  else{$('wpm').textContent=PCW()?'This is how it will look on your screen. Save the picture, then find it in your Downloads folder, right-click it and choose Set as desktop background.':'Your device cannot set the wallpaper from here. Save the picture, then choose it as your wallpaper from your photos.';bt('Save the picture',()=>{c.toBlob(b=>b&&shareBlob(b,'pattern-sketch-wallpaper.jpg','image/jpeg'),'image/jpeg',.93);close()},'g')}
   bt('Cancel',close,'x');bx.style.display='flex';$('ix')&&0}
 })();
 
@@ -1281,13 +1287,13 @@ requestAnimationFrame(frame);
  ['pend','attr','ros','bnc','plt','wav'].forEach(m=>{const M=modes[m];let r=false;Object.defineProperty(M,'run',{configurable:true,enumerable:true,get(){return r},set(v){if(v===true&&!ALLOW.on&&!G.on)return;r=!!v}});
   const i0=M.init;M.init=function(){STARTED[m]=false;const q=i0.apply(this,arguments);r=false;return q};
   const l0=M.load;M.load=function(){STARTED[m]=false;const q=l0.apply(this,arguments);r=false;return q};
-  if(m!='ros'&&m!='plt'&&m!='wav'){const u0=M.up;M.up=function(){const was=!!(this.sv&&this.sv.run),dr=m=='attr'&&this.drag!==null&&this.drag!==undefined;const q=u0.apply(this,arguments);if(was){ALLOW.on=true;this.run=true;ALLOW.on=false}else if(!dr&&!this.su&&!this.pend&&!G.on&&!RDon()){toast('Press Start to let it go')}return q}}});
+  if(m!='ros'&&m!='plt'&&m!='wav'){const u0=M.up;M.up=function(){const was=!!(this.sv&&this.sv.run),dr=m=='attr'&&this.drag!==null&&this.drag!==undefined;const q=u0.apply(this,arguments);if(was){ALLOW.on=true;this.run=true;ALLOW.on=false}else if(m=='pend'&&!G.on&&!RDon()){ALLOW.on=true;this.run=true;ALLOW.on=false;STARTED.pend=true}else if(!dr&&!this.su&&!this.pend&&!G.on&&!RDon()){toast('Press Start to let it go')}return q}}});
  const RDon=()=>window.rdOn&&window.rdOn();
  window.pbl=M=>{const t=M.run?'Pause':(STARTED[cur]?'Resume':'Start'),a=$('pp'),b=$('sp2');if(a.textContent!==t){a.textContent=t}if(b.textContent!==t)b.textContent=t;const on=t=='Start';a.classList.toggle('st',on);b.classList.toggle('st',on)};
  const pp0=$('pp').onclick;
- $('pp').onclick=function(){const m=cur,M=modes[m];if(m=='bnc'&&M.su&&!M.run&&!G.on){toast('Place your balls first, or tap Scatter balls');return}
+ $('pp').onclick=function(){const m=cur,M=modes[m];if(m=='bnc'&&M.su&&!M.run&&!G.on){if(!M.cb&&document.body.classList.contains('simple')&&document.body.classList.contains('pre')&&!document.querySelector('#chips .sel')){nbShow('Please select one of the preset options.','');return}nbShow(M.cb?'You haven\'t placed all of your balls yet.':'You haven\'t placed any balls yet.',M.cb?'You have placed '+M.cb+' of '+M.balls.length+'. Place the rest, or tap Scatter balls.':'Touch the screen to place them, or tap Scatter balls.');return}
   ALLOW.on=true;try{pp0.apply(this,arguments)}finally{ALLOW.on=false}if(M.run)STARTED[m]=true};
- const cl1=$('cl').onclick;$('cl').onclick=function(e){const r=cl1.apply(this,arguments);if(e&&!G.on){const M=modes[cur];M.run=false;STARTED[cur]=false}return r};
+ const cl1=$('cl').onclick;$('cl').onclick=function(e){const r=cl1.apply(this,arguments);if(e&&!G.on){const M=modes[cur];M.run=false;STARTED[cur]=false;if(cur=='pend'){M.hide=true;toast('Cleared');{const h=$('hint');h.textContent='Swipe the screen to start a pendulum swing.';h.style.opacity=1}}}return r};
  const ri=runIdea;runIdea=function(){const r=ri.apply(this,arguments);if(!G.on){modes[cur].run=false;STARTED[cur]=false}return r};
  const pauseCur=()=>{const M=modes[cur];if(M&&M.run&&!G.on&&!RDon())M.run=false};
  const sh=showHome;showHome=function(){pauseCur();return sh.apply(this,arguments)};
