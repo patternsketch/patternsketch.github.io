@@ -79,6 +79,7 @@ body.watch #sn{display:none}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 #ideas{animation:fade .2s}
+#home.cv .hc{max-width:560px;width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto}#home.cv .hc b{font-size:22px}#home.cv .hc span{font-size:17px;line-height:1.5}#home.cv p{font-size:18px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.45}
 .hf{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin-top:6px}.hf button{flex:none;background:none;color:#aaa;padding:8px 12px}
 #sbtn2,#sbtn3{display:flex;gap:8px;margin-top:8px}#sbtn2{flex-wrap:wrap}
 #sbar .sw{gap:5px}#sbar .sw button,#sbar .sw .cus{width:31px;height:31px}#sbar .sw .cus{font-size:20px;line-height:27px}#sbtn,#sbtn2,#sbtn3{margin-top:6px}#sdesc{margin:2px 0 6px}
@@ -731,7 +732,7 @@ function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.cl
   +'<div class="hf"><button id="hset">'+svg('gear')+'<span>Settings</span></button><button id="hhelp">'+svg('help')+'<span>How it works</span></button>'+(ISAPP?'':'<button id="hpc"><span>On a computer</span></button>')+'</div>';
   if(LAST)$('hc').onclick=()=>{if(LAST.ui=='simple')startSimple(LAST.m);else{cur=LAST.m;startAdv()}};
   $('hd').onclick=daily;$('hs').onclick=()=>showHome('pick');$('ha').onclick=()=>showHome('pickadv');$('hset').onclick=()=>showHome('settings');$('hhelp').onclick=()=>showTour();if($('hpc'))$('hpc').onclick=()=>showHome('computer')}}
-{const s0=showHome;showHome=function(v){const r=s0.apply(this,arguments);const h=$('home');h.classList.toggle('pk',v!='home');h.insertAdjacentHTML('afterbegin','<i class="sp"></i>');h.insertAdjacentHTML('beforeend','<i class="sp"></i>');return r}}
+{const s0=showHome;showHome=function(v){const r=s0.apply(this,arguments);const h=$('home');h.classList.toggle('pk',v!='home');h.classList.toggle('cv',v=='computer');h.insertAdjacentHTML('afterbegin','<i class="sp"></i>');h.insertAdjacentHTML('beforeend','<i class="sp"></i>');return r}}
 function off3(){if(T.on)toggle3();T.bv=0}
 function startAdv(){off3();hideHome();document.body.classList.remove('simple');LAST={ui:'adv',m:cur};setMode(cur);resize()}
 function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);resize();buildSimple(kp);if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
