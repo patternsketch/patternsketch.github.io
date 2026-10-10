@@ -57,7 +57,7 @@ body.watch #wc{display:flex}body.watch #fs,body.watch #bar,body.watch #panel,bod
 button.hc{flex:none;display:block;width:min(360px,100%);background:#1b1b22;border:1px solid #2c2c36;border-radius:14px;padding:16px;text-align:left;font-size:15px}
 .hc b{display:block;font-size:18px;color:var(--acc);margin-bottom:4px}.hc span{color:#bbb;font-size:13px;font-weight:400}
 #sbar{display:none;background:var(--panel);padding:8px 10px}
-#pib{display:none;margin:2px 0 8px;padding:8px 16px;border-radius:20px;background:#2a2a34;color:#fff;border:1px solid #444;font-size:14px}body.simple #pib{display:inline-block}body.simple:not(.pre) #chips{display:none}#sbar{min-width:0;width:100%;max-width:100%;box-sizing:border-box}#chips{min-width:0;max-width:100%;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;touch-action:pan-x}
+#pib{display:none;margin:2px 0 8px;padding:8px 16px;border-radius:20px;background:#2a2a34;color:#fff;border:1px solid #444;font-size:14px}body.simple #pib{display:inline-block}#pih{display:none;color:var(--mut);font-size:13px;margin-left:10px;vertical-align:middle}body.simple.pre #pih{display:inline}body.simple:not(.pre) #chips{display:none}#sbar{min-width:0;width:100%;max-width:100%;box-sizing:border-box}#chips{min-width:0;max-width:100%;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;touch-action:pan-x}
 #chips button{flex:none;padding:8px 12px;font-size:14px;white-space:nowrap}#chips .sel{background:var(--acc);color:#000;font-weight:600}
 #sdesc{color:#bbb;font-size:13px;margin:4px 0 8px;min-height:34px}
 #sbtn{display:flex;gap:8px;margin-top:8px}
@@ -158,7 +158,7 @@ let W=0,H=0,dpr=1,cur='pend',hist=[],act=false,last=0;
 const TR={},TC={};['pend','attr','ros','bnc','plt','wav'].forEach(m=>{TR[m]=document.createElement('canvas');TC[m]=TR[m].getContext('2d')});
 const CFG={
 pend:[['g','Gravity (m/s²)',1,30,.01,9.81],['L','Length (m)',1,30,.1,10],['lat','Latitude (°)',-90,90,1,40],['om','Earth spin ×',0,3000,1,1500],['dp','Damping',0,.05,.001,0],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,5,.25,1]],
-attr:[['n','Attractors',1,3,1,3],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,4,.25,1]],
+attr:[['n','Attractors',1,3,1,3],['nb','Balls',1,3,1,1],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,4,.25,1]],
 ros:[['n','Circles',6,150,1,60],['tw','Turns',1,6,1,1],['off','Spread',.1,1.6,.05,1.1],['sh','Shrink (%)',0,90,1,0],['sp','Draw speed ×',.25,4,.25,1]],
 bnc:[['n','Balls',1,8,1,3],['e','Bounciness',.5,1,.01,1],['gr','Gravity',0,800,10,0],['th','Throw strength',0,3,.05,1],['sp','Speed ×',.25,4,.25,1]],
 plt:[['p','Pitch',0,35,1,3],['n','Amount of sand',1000,9000,500,5000],['sp','Settle speed',.25,3,.25,1],['gs','Grain size',1,3,.25,1.5],['sk','Shake strength',.5,2,.1,1],['p2','Second pitch',0,35,1,8],['bl','Blend',0,1,.05,0],['asp','Sweep speed',.05,1,.05,.25],['br','Brush size',20,120,5,50]],
@@ -205,7 +205,7 @@ modes.pend={run:false,S:{x:3,y:0,vx:0,vy:0},prev:null,t:0,sub:.004,z:1,cx:0,cy:0
   const g=ctx.createRadialGradient(bx-3,by-3,1,bx,by,11);g.addColorStop(0,'#fff');g.addColorStop(1,'#d33');
   ctx.fillStyle=g;ctx.beginPath();ctx.arc(bx,by,11,0,7);ctx.fill();
   if(Math.abs(this.z-1)>.01){ctx.fillStyle='#777';ctx.font='12px system-ui';ctx.fillText('zoom '+this.z.toFixed(2)+'×',10,H-10)}}};
-modes.attr={run:true,A:[],B:{},prev:null,t:0,sub:1/300,drag:null,z:1,cx:0,cy:0,T:[],dirty:false,sv:null,
+modes.attr={run:true,A:[],B:{},prev:null,t:0,sub:1/300,drag:null,z:1,cx:0,cy:0,T:[],dirty:false,sv:null,E:[],k:0,pk:0,
  X(x){return W/2+(x-this.cx)*this.z},Y(y){return H/2+(y-this.cy)*this.z},
  wx(px){return this.cx+(px-W/2)/this.z},wy(py){return this.cy+(py-H/2)/this.z},
  view(z,cx,cy){this.z=Math.min(20,Math.max(.05,z));this.cx=cx;this.cy=cy;this.dirty=true},
@@ -214,22 +214,26 @@ modes.attr={run:true,A:[],B:{},prev:null,t:0,sub:1/300,drag:null,z:1,cx:0,cy:0,T
  clr(){this.T=[]},
  ps(){return 1},home(){this.view(1,W/2,H/2)},
  init(){const cx=W/2,cy=H/2,r=Math.min(W,H)*.28;this.view(1,cx,cy);this.A=[0,1,2].map(i=>({x:cx+r*Math.cos(i*2.094-1.57),y:cy+r*Math.sin(i*2.094-1.57)}));
-  this.B={x:cx+r*.25,y:cy-r*.4,vx:70,vy:40};this.run=true;this.prev=null;this.drag=null;this.st=this.snap()},
+  this.B={x:cx+r*.25,y:cy-r*.4,vx:70,vy:40};this.E=this.defE();this.k=0;this.run=true;this.prev=null;this.drag=null;this.st=this.snap()},
  onN(){},
- snap(){const f=p=>({x:p.x/W,y:p.y/H});return{A:this.A.map(f),B:{...f(this.B),vx:this.B.vx,vy:this.B.vy}}},
- load(st){this.T=[];this.view(1,W/2,H/2);this.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));this.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};this.prev=null;this.run=true},
- beginPinch(){if(this.drag===null&&this.sv){this.B=this.sv.B;this.run=this.sv.run;this.prev=null}this.drag=null},
- down(px,py){const n=V.attr.n;this.sv={B:{...this.B},run:this.run};this.drag=null;for(let i=0;i<n;i++)if(Math.hypot(this.X(this.A[i].x)-px,this.Y(this.A[i].y)-py)<34)this.drag=i;
-  if(this.drag===null){this.run=false;this.prev=null;this.B.x=this.wx(px);this.B.y=this.wy(py);this.B.vx=this.B.vy=0}},
- move(px,py){if(this.drag!==null){this.A[this.drag].x=this.wx(px);this.A[this.drag].y=this.wy(py)}else{this.B.x=this.wx(px);this.B.y=this.wy(py)}},
- up(vx,vy){if(this.drag!==null){this.drag=null;if(this.st)this.st.A=this.snap().A;return}const th=V.attr.th,z=this.z;[this.B.vx,this.B.vy]=cap(vx/z*th,vy/z*th,500);this.run=true;this.prev=null;this.st=this.snap()},
- step(h){const v=V.attr,B=this.B,px=B.x,py=B.y;let ax=0,ay=0;
+ defE(){const cx=W/2,cy=H/2,r=Math.min(W,H)*.28;return[{x:cx-r*.35,y:cy+r*.45,vx:-60,vy:50},{x:cx+r*.55,y:cy+r*.1,vx:-30,vy:-70}]},
+ bodies(){return[this.B,...this.E.slice(0,Math.max(0,(V.attr.nb|0||1)-1))]},
+ snap(){const f=p=>({x:p.x/W,y:p.y/H});return{A:this.A.map(f),B:{...f(this.B),vx:this.B.vx,vy:this.B.vy},E:this.E.map(e=>({...f(e),vx:e.vx,vy:e.vy}))}},
+ load(st){this.T=[];this.view(1,W/2,H/2);this.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));this.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};this.E=st.E?st.E.map(e=>({x:e.x*W,y:e.y*H,vx:e.vx,vy:e.vy})):this.defE();this.prev=null;this.run=true},
+ beginPinch(){if(this.drag===null&&this.sv){this.B=this.sv.B;if(this.sv.E)this.E=this.sv.E;this.run=this.sv.run;this.prev=null;this.E.forEach(e=>e.pv=0)}this.drag=null},
+ down(px,py){const n=V.attr.n;this.sv={B:{...this.B},E:this.E.map(e=>({...e})),run:this.run};this.drag=null;for(let i=0;i<n;i++)if(Math.hypot(this.X(this.A[i].x)-px,this.Y(this.A[i].y)-py)<34)this.drag=i;
+  if(this.drag===null){const bs=this.bodies();let k=-1,bd=30;bs.forEach((b,j)=>{const d=Math.hypot(this.X(b.x)-px,this.Y(b.y)-py);if(d<bd){bd=d;k=j}});if(k<0){k=this.k%bs.length;this.k=k+1}this.pk=k;const B=bs[k];this.run=false;this.prev=null;this.E.forEach(e=>e.pv=0);B.x=this.wx(px);B.y=this.wy(py);B.vx=B.vy=0}},
+ move(px,py){if(this.drag!==null){this.A[this.drag].x=this.wx(px);this.A[this.drag].y=this.wy(py)}else{const B=this.bodies()[this.pk]||this.B;B.x=this.wx(px);B.y=this.wy(py)}},
+ up(vx,vy){if(this.drag!==null){this.drag=null;if(this.st)this.st.A=this.snap().A;return}const th=V.attr.th,z=this.z,B=this.bodies()[this.pk]||this.B;[B.vx,B.vy]=cap(vx/z*th,vy/z*th,500);this.run=true;this.prev=null;this.E.forEach(e=>e.pv=0);this.st=this.snap()},
+ step(h){const v=V.attr;this.bodies().forEach((B,j)=>{const px=B.x,py=B.y;let ax=0,ay=0;
   for(let i=0;i<v.n;i++){const dx=this.A[i].x-B.x,dy=this.A[i].y-B.y,r2=dx*dx+dy*dy+v.s*v.s,f=v.G*1e6/(r2*Math.sqrt(r2));ax+=dx*f;ay+=dy*f}
-  B.vx+=ax*h;B.vy+=ay*h;B.x+=B.vx*h;B.y+=B.vy*h;this.t+=h;
-  if(this.prev){const hu=(this.t*25)%360,sv=COL.attr=='auto'?hu:1000+parseInt(COL.attr.slice(1),16);seg('attr',this.X(px),this.Y(py),this.X(B.x),this.Y(B.y),colr('attr',`hsl(${hu},90%,65%)`));this.T.push(px,py,B.x,B.y,sv);if(this.T.length>300000)this.T.splice(0,50000)}this.prev=1},
+  B.vx+=ax*h;B.vy+=ay*h;B.x+=B.vx*h;B.y+=B.vy*h;if(j==0)this.t+=h;
+  const had=j==0?this.prev:B.pv;
+  if(had){const hu=(this.t*25+j*120)%360,sv=COL.attr=='auto'?hu:1000+parseInt(COL.attr.slice(1),16);seg('attr',this.X(px),this.Y(py),this.X(B.x),this.Y(B.y),colr('attr',`hsl(${hu},90%,65%)`));this.T.push(px,py,B.x,B.y,sv);if(this.T.length>300000)this.T.splice(0,50000)}
+  if(j==0)this.prev=1;else B.pv=1})},
  draw(){if(this.dirty){this.redraw();this.dirty=false}
   for(let i=0;i<V.attr.n;i++){const a=this.A[i],x=this.X(a.x),y=this.Y(a.y);ctx.strokeStyle='rgba(255,160,0,.35)';ctx.beginPath();ctx.arc(x,y,16,0,7);ctx.stroke();ctx.fillStyle='#f90';ctx.beginPath();ctx.arc(x,y,8,0,7);ctx.fill()}
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(this.X(this.B.x),this.Y(this.B.y),5,0,7);ctx.fill();
+  this.bodies().forEach((b,j)=>{ctx.fillStyle=['#fff','#8ff','#ff8'][j];ctx.beginPath();ctx.arc(this.X(b.x),this.Y(b.y),5,0,7);ctx.fill()});
   if(Math.abs(this.z-1)>.01){ctx.fillStyle='#777';ctx.font='12px system-ui';ctx.fillText('zoom '+this.z.toFixed(2)+'×',10,H-10)}}};
 modes.ros={run:true,sub:1/600,k:0,a:0,done:false,st:{},
  geo(k){const v=V.ros,n=v.n,m=Math.min(W,H),Rb=m*.46/(1+v.off),f=1-v.sh/100*k/n,an=6.2832*v.tw*k/n,D=v.off*Rb*f;return[W/2+D*Math.cos(an),H/2+D*Math.sin(an),Rb*f]},
@@ -310,7 +314,7 @@ modes.bnc={run:true,balls:[],sub:1/240,R:7,M:10,shape:0,topPad:0,su:false,cb:0,_
 const TH='How much of your finger speed carries over on release. 1 matches your finger; 0 drops it straight; higher values throw it harder.',SP='Playback speed only. It does not change the pattern, just how quickly it is drawn.';
 const INFO={
 pend:{g:'Gravity pulls the bob back to the center. Stronger gravity means a faster swing and tighter, quicker patterns.',L:'String length. Long strings swing slowly and allow wide swings; short strings swing fast and make denser loops.',lat:'Where on Earth the pendulum hangs. The swing turns fastest at the poles (±90°) and not at all at the equator (0°). Negative is southern hemisphere and turns the opposite way.',om:"Multiplies Earth's rotation so you can see it. 1 is real, which is far too slow to notice. 0 means no rotation, so the swing never turns.",dp:'Air friction. Above 0 the swing slowly shrinks and spirals in toward the center.',th:TH,sp:SP},
-attr:{n:'How many attraction points pull on the body. Two give looping orbits around a pair; three give more tangled, chaotic paths.',G:'How hard the points pull. Strong pull means fast, tight orbits; weak pull lets the body drift wide.',s:'Softening. Stops the pull becoming huge up close. Low values give sharp slingshot turns; high values give smooth, rounded orbits.',th:TH,sp:SP},
+attr:{nb:'How many balls travel at once. Each ball draws its own colored path as the attraction points pull on it. Touch the screen to place and throw the next ball, or touch a ball to throw it again.',n:'How many attraction points pull on the body. Two give looping orbits around a pair; three give more tangled, chaotic paths.',G:'How hard the points pull. Strong pull means fast, tight orbits; weak pull lets the body drift wide.',s:'Softening. Stops the pull becoming huge up close. Low values give sharp slingshot turns; high values give smooth, rounded orbits.',th:TH,sp:SP},
 ros:{n:'How many circles are drawn. More circles make a denser, smoother pattern.',tw:'How many times the circles turn around the centre while they are drawn. 1 gives a closed ring. 2 or more weaves the circles together.',off:'How far each circle sits from the centre compared with its own size. Below 1 every circle covers the middle, so it looks like a dense ball. Around 1 every circle passes through the centre, making a bright core. Above 1 they leave a hollow middle.',sh:'Makes each new circle a little smaller and closer to the centre than the last, so the rings spiral inward like a swirl. 0 keeps them all the same size.',sp:SP},
 bnc:{n:'How many balls. Each one traces its own colored path.',e:'Bounciness. 1 keeps all its energy and bounces forever; lower values lose speed on every hit.',gr:'Gravity pulling balls down. 0 gives straight-line woven paths; higher values give arcs, and the balls eventually settle. In 3D it pulls the balls toward the floor of the cube.',th:TH,sp:SP}};
 const BASE={g:9.81,L:10,lat:40,om:1500,dp:0,sp:1},BASER={n:60,tw:1,off:1.1,sh:0,sp:1};
@@ -351,7 +355,7 @@ attr:{tip:'Small softening makes sharp slingshot turns; large softening makes sm
  ['Smooth rosette','High softening gives gentle, rounded petals.',{n:2,G:2,s:50,sp:1},[[.35,.5],[.65,.5]],[.5,.25,120,0]],
  ['Tight binary','Two close points act like one heavy center, and the body circles both.',{n:2,G:2.5,s:15,sp:1},[[.45,.5],[.55,.5]],[.5,.2,110,0]],
  ['Lazy drift','Weak pull makes slow, wide curves that wander across the screen.',{n:3,G:.5,s:40,sp:1},[[.5,.2],[.2,.75],[.8,.75]],[.2,.2,30,40]]],
- apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.attr();const M=modes.attr;M.T=[];M.view(1,W/2,H/2);Object.assign(V.attr,q[2]);q[3].forEach((p,i)=>{M.A[i].x=p[0]*W;M.A[i].y=p[1]*H});const b=q[4];M.B={x:b[0]*W,y:b[1]*H,vx:b[2],vy:b[3]};M.prev=null;M.run=true;M.st=M.snap()}},
+ apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.attr();const M=modes.attr;M.T=[];M.view(1,W/2,H/2);Object.assign(V.attr,{nb:1},q[2]);q[3].forEach((p,i)=>{M.A[i].x=p[0]*W;M.A[i].y=p[1]*H});const b=q[4];M.B={x:b[0]*W,y:b[1]*H,vx:b[2],vy:b[3]};M.E=M.defE();M.prev=null;M.run=true;M.st=M.snap()}},
 ros:{tip:'Each rosette is one circle drawn again and again, turned a little each time. More circles make it denser. Spread decides whether the middle is hollow or bright.',
  list:[
  ['Random pattern','A new rosette each time. Tap it again for another.','RND'],
@@ -414,7 +418,7 @@ pend(){stand();const M=modes.pend,Lp=V.pend.L*M.sc()*M.z,[ox,oy]=M.toS(0,0),hov=
  const rd=11*B[2],g=ctx.createRadialGradient(B[0]-rd/3,B[1]-rd/3,1,B[0],B[1],rd);g.addColorStop(0,'#fff');g.addColorStop(1,'#d33');ctx.fillStyle=g;ctx.beginPath();ctx.arc(B[0],B[1],rd,0,7);ctx.fill()},
 attr(){const M=modes.attr,ch=Math.cos(T.th);for(let i=0;i<V.attr.n;i++){const a=M.A[i],p=pj(M.X(a.x),M.Y(a.y),0),rx=10*p[2];
   ctx.fillStyle='#f90';ctx.beginPath();ctx.ellipse(p[0],p[1],rx,rx*ch,0,0,7);ctx.fill();ctx.strokeStyle='rgba(255,160,0,.4)';ctx.beginPath();ctx.ellipse(p[0],p[1],rx*2,rx*2*ch,0,0,7);ctx.stroke()}
- const b=pj(M.X(M.B.x),M.Y(M.B.y),6);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(b[0],b[1],6*b[2],0,7);ctx.fill()},
+ M.bodies().forEach((q,j)=>{const b=pj(M.X(q.x),M.Y(q.y),6);ctx.fillStyle=['#fff','#8ff','#ff8'][j];ctx.beginPath();ctx.arc(b[0],b[1],6*b[2],0,7);ctx.fill()})},
 bnc(){const M=modes.bnc,S=M.cubeS(),x0=W/2-S/2,y0=H/2-S/2,P=pjm(),ch=Math.cos(T.th);
  const fl=[[x0,y0],[x0+S,y0],[x0+S,y0+S],[x0,y0+S]].map(p=>P(p[0],p[1],0)),tp=[[x0,y0],[x0+S,y0],[x0+S,y0+S],[x0,y0+S]].map(p=>P(p[0],p[1],S));
  ctx.fillStyle='#0b0b14';ctx.beginPath();fl.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fill();
@@ -715,7 +719,7 @@ let HV='home',HO=false;
 function hideHome(){HO=false;const h=$('home');h.classList.add('out');setTimeout(()=>{if(!HO)h.style.display='none'},300);hbOff()}
 function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.classList.remove('out');h.style.display='flex';$('ideas').style.display='none';hbOn();
  const back='<button id="hb" class="hbk" aria-label="Home" title="Home">'+svg('home')+'</button>';
- if(v=='pick'||v=='pickadv'){const ad=v=='pickadv';h.innerHTML=(ad?'<h1>Advanced</h1><p>Choose a pattern and use the advanced controls.</p>':'<h1>Choose a pattern</h1><p>Pick one, then tap a preset.</p>')+['pend','attr','ros','bnc','plt','wav'].map(m=>`<button class="hc" data-m="${m}"><b>${MN[m]}</b><span>${MD[m].replace('Tune in','<span class="ty">Tune in</span>')}</span></button>`).join('')+back;
+ if(v=='pick'||v=='pickadv'){const ad=v=='pickadv';h.innerHTML=(ad?'<h1>Advanced</h1><p>Choose a pattern and use the advanced controls.</p>':'<h1>Simple</h1><p>Choose a pattern with some simple controls and preset patterns.</p>')+['pend','attr','ros','bnc','plt','wav'].map(m=>`<button class="hc" data-m="${m}"><b>${MN[m]}</b><span>${MD[m].replace('Tune in','<span class="ty">Tune in</span>')}</span></button>`).join('')+back;
   h.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;freshStart(m);if(ad){cur=m;startAdv()}else startSimple(m);if(m=='bnc'&&window.bncFresh&&!(window.STARTED&&window.STARTED.bnc))window.bncFresh()});$('hb').onclick=()=>showHome('home')}
  else if(v=='settings'){const L=[['snd','Sound effects'],['hap','Vibration'],['big','Larger text'],['cb','Color-blind-safe colors'],['calm','Reduce motion'],['soft','Calm sound'],['pan','Stereo panning']];
   h.innerHTML='<h1>Settings</h1>'+L.map(([k,t])=>`<button class="hc tg" data-k="${k}"><b>${t}</b><span>${PF[k]?'On':'Off'}</span></button>`).join('')+`<button class="hc" id="hth"><b>Sound theme</b><span>${THN[PF.th|0]}. Tap to change. Sets the sound for every pattern at once.</span></button>`+'<button class="hc" id="ht"><b>Show the tour again</b><span>A quick reminder of how to drag, throw and explore.</span></button><button class="hc" id="hfb"><b>Contact and feedback</b><span>Send us a message or an idea by email.</span></button><p style="max-width:340px;font-size:13px">Sound: tap the speaker on a pattern to turn it on. Pendulum hums and ticks at the end of each swing. Every pattern has several sound styles. Tap the sound button on a pattern to switch, or pick a Sound theme to set them all at once. Stereo panning moves the sound left and right with the ball. Recordings include the sound when it is on. Calm sound keeps only the soft hums and chimes.</p><p style="max-width:340px;font-size:13px">Privacy: your patterns and settings are stored only on this device. The app has no accounts and no tracking, and it works offline. The internet is used only if you choose to send feedback, and an email address is included only if you type one.</p>'+back;
@@ -738,7 +742,7 @@ function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.cl
   $('hd').onclick=daily;$('hs').onclick=()=>showHome('pick');$('ha').onclick=()=>showHome('pickadv');$('hset').onclick=()=>showHome('settings');$('hhelp').onclick=()=>showTour();if($('hpc'))$('hpc').onclick=()=>showHome('computer')}}
 {const s0=showHome;showHome=function(v){const r=s0.apply(this,arguments);const h=$('home');h.classList.toggle('pk',v!='home');h.classList.toggle('cv',v=='computer');h.insertAdjacentHTML('afterbegin','<i class="sp"></i>');h.insertAdjacentHTML('beforeend','<i class="sp"></i>');return r}}
 function off3(){if(T.on)toggle3();T.bv=0}
-function freshStart(m){const M=modes[m];CFG[m].forEach(q=>V[m][q[0]]=q[5]);if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
+function freshStart(m){const M=modes[m];CFG[m].forEach(q=>V[m][q[0]]=q[5]);if(m=='wav'){Object.assign(V.wav,{rf:0,hs:0,shp:0,mv:0,ov:0});try{modes.wav.reshape&&modes.wav.reshape()}catch(e){}}if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
 function startAdv(){off3();hideHome();document.body.classList.remove('simple');LAST={ui:'adv',m:cur};setMode(cur);if(window.setCtl)setCtl(false);resize();pulseCtl()}
 function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);if(window.setCtl)setCtl(false);resize();buildSimple(kp);pulseCtl();if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
 function mul(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -748,7 +752,7 @@ function daily(){const d=new Date(),seed=d.getFullYear()*10000+(d.getMonth()+1)*
  $('chips').querySelectorAll('button').forEach(b=>b.classList.remove('sel'));$('sdesc').textContent="Today's pattern is a "+MN[m]+" pattern. Come back tomorrow for a new one."}
 function buildSimple(keep){$('chips').classList.remove('cust');delete $('sdesc').dataset.pre;const items=IDEAS[cur].list.filter(q=>q[2]!=='RNDE');
  $('chips').innerHTML=items.map((q,i)=>`<button data-i="${i}">${q[0]}</button>`).join('');$('ssw').innerHTML=`<div class="ch">Pattern color: <b class="cn">${colName(COL[cur])}</b> <small style="color:#888">(tap a circle)</small></div><div class="sw">${swHTML('cCus2')}</div>`;
- if(!$('pib')){const pb0=document.createElement('button');pb0.id='pib';pb0.textContent='Try some preset ideas';pb0.onclick=()=>{const o=document.body.classList.toggle('pre');pb0.textContent=o?'Hide preset ideas':'Try some preset ideas';const d=$('sdesc'),pt=d.dataset.pre;if(pt){if(!o&&d.textContent===pt)d.textContent='';else if(o&&d.textContent==='')d.textContent=pt}};$('chips').parentNode.insertBefore(pb0,$('chips'))}document.body.classList.remove('pre');$('pib').textContent='Try some preset ideas';$('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
+ if(!$('pib')){const pb0=document.createElement('button');pb0.id='pib';pb0.textContent='Try some preset ideas';pb0.onclick=()=>{const o=document.body.classList.toggle('pre');pb0.textContent=o?'Hide preset ideas':'Try some preset ideas';const d=$('sdesc'),pt=d.dataset.pre;if(pt){if(!o&&d.textContent===pt)d.textContent='';else if(o&&d.textContent==='')d.textContent=pt}};$('chips').parentNode.insertBefore(pb0,$('chips'));const ph0=document.createElement('span');ph0.id='pih';pb0.after(ph0)}$('pih').textContent=({pend:'Touch the bob and throw it on the screen.',attr:'Drag the ball to change its direction.',bnc:'Touch balls to change their path.',plt:'Swipe the screen to move the sand.',wav:'Tap the screen to place a source.'})[cur]||'';document.body.classList.remove('pre');$('pib').textContent='Try some preset ideas';$('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
  const go=i=>{runIdea(items[i]);$('chips').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('sel',k==i));$('sdesc').textContent=items[i][1];$('sdesc').dataset.pre=items[i][1];if(!document.body.classList.contains('pre'))$('sdesc').textContent=''};
  $('chips').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>go(i));
  $('ssw').querySelectorAll('button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus2').oninput=e=>setCol(e.target.value);if(!keep)$('sdesc').textContent='No preset chosen. Press Start, or tap Try some preset ideas.'}
@@ -788,13 +792,13 @@ function svV(){const v={...V[cur]},E=EVO[cur];if(E.on)for(const id in E.v)v[id]=
 function encImg(o){let w=o.width,h=o.height,c=o,q=.85;for(let i=0;i<3;i++){let u='';try{u=c.toDataURL('image/webp',q)}catch(e){}if(!u)return '';if(u.length<450000||i==2)return u;const f=document.createElement('canvas');f.width=Math.round(w*=.75);f.height=Math.round(h*=.75);f.getContext('2d').drawImage(o,0,0,f.width,f.height);c=f;q=.75}return ''}
 function rsSnap(){if(T.on||G.on)return null;const m=cur,M=modes[m],o=TR[m];if(!o.width)return null;const r={sw:W,sh:H};
  if(m=='pend')Object.assign(r,{S:{...M.S},t:M.t,z:M.z,cx:M.cx,cy:M.cy,sc:M.sc()});
- else if(m=='attr')Object.assign(r,{A:M.A.map(a=>({x:a.x,y:a.y})),B:{...M.B},t:M.t,z:M.z,cx:M.cx,cy:M.cy});
+ else if(m=='attr')Object.assign(r,{A:M.A.map(a=>({x:a.x,y:a.y})),B:{...M.B},E:M.E.map(e=>({...e})),t:M.t,z:M.z,cx:M.cx,cy:M.cy});
  else if(m=='ros')Object.assign(r,{k:M.k,a:M.a,done:M.done});
  else Object.assign(r,{balls:M.balls.map(b=>({x:b.x,y:b.y,vx:b.vx,vy:b.vy,h:b.h}))});
  r.im=encImg(o);return r.im?r:null}
 function applyRs(x){const r=x.rs,m=x.mode,M=modes[m];if(!r)return;
  if(m=='pend'){M.S={...r.S};M.t=r.t;M.view(r.z,r.cx,r.cy);M.prev=null;M.q=null;M.k=0}
- else if(m=='attr'){M.A=r.A.map(a=>({x:a.x,y:a.y}));M.B={...r.B};M.t=r.t;M.view(r.z,r.cx,r.cy);M.prev=null}
+ else if(m=='attr'){M.A=r.A.map(a=>({x:a.x,y:a.y}));M.B={...r.B};M.E=r.E?r.E.map(e=>({...e})):M.defE();M.t=r.t;M.view(r.z,r.cx,r.cy);M.prev=null}
  else if(m=='ros'){M.k=r.k;M.a=r.a;M.done=r.done}
  else M.balls=r.balls.map(b=>({x:b.x*W/r.sw,y:b.y*H/r.sh,vx:b.vx,vy:b.vy,h:b.h,p:0,...M.z3(),trs:[[]],c:0}));
  M.run=false;M.prev=null;const im=new Image();
@@ -820,6 +824,7 @@ function build(){const pl='';bvS='';
  const pr='<div class="pre"><button id="ideaBtn" style="background:#ffe94d;color:#000;font-weight:600">'+svg('bulb')+'<span>Ideas</span></button><button id="spBtn">'+svg('folder')+'<span>My patterns</span></button><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="b3">'+svg('cube')+'<span>3D: '+(T.on?'On':'Off')+'</span></button><i class="inf" data-k="3d">i</i></span><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="bvb" class="bvb" style="display:none"><span>Ball view: Off</span></button><i class="inf" data-k="bv">i</i></span><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="bas" class="asb" style="display:none"><span></span></button><i class="inf" data-k="as">i</i></span><button id="bsh" class="shb"></button><button id="brec" class="rcb"></button>'+pl+(cur=='attr'||cur=='pend'?'<button id="rv">Reset view</button>':'')+(cur=='bnc'?'<button id="gmb" class="gmb"></button>':'')+'</div>';
  $('panel').innerHTML=pr+'<div class="info" id="i_3d">'+I3D+'</div><div class="info" id="i_bv">'+IBV+'</div><div class="info" id="i_as">'+(IAS[cur]||'')+'</div>'+evUI()+colUI()+CFG[cur].map(([id,l,mn,mx,st])=>`<div class="row"><span>${l}<i class="inf" data-k="${id}">i</i></span><input id="${id}" type="range" min="${mn}" max="${mx}" step="${st}" value="${V[cur][id]}"><output>${V[cur][id]}</output></div><div class="info" id="i_${id}">${INFO[cur][id]}</div>`).join('');
  $('panel').querySelectorAll('input').forEach(i=>i.oninput=()=>{V[cur][i.id]=+i.value;i.nextElementSibling.textContent=i.value;{const q=EVO[cur].on&&EVO[cur].v[i.id];if(q){q.c=cur=='bnc'?Math.max(+i.value,q.a):+i.value;q.f=q.to=+i.value}}if(cur=='ros'&&i.id!='sp')modes.ros.again(true);else if(i.id=='n'&&cur!='pend')modes[cur].onN()});
+ if(cur=='attr'){['n','nb'].forEach(id=>{const i=$(id);if(i){i.style.display='none';i.nextElementSibling.style.display='none';const w=document.createElement('div');w.style.cssText='display:flex;gap:8px;margin-left:auto';const paint=()=>w.querySelectorAll('button').forEach(x=>{const on=+x.dataset.k==+i.value;x.style.background=on?'#ffe94d':'';x.style.color=on?'#000':'';x.style.fontWeight=on?'600':''});[1,2,3].forEach(k=>{const b=document.createElement('button');b.textContent=k;b.dataset.k=k;b.style.minWidth='44px';b.onclick=()=>{i.value=k;i.oninput();paint()};w.appendChild(b)});i.parentNode.insertBefore(w,i);paint()}})}
  $('panel').querySelectorAll('.inf').forEach(e=>e.onclick=()=>{const d=$('i_'+e.dataset.k);d.style.display=d.style.display=='block'?'none':'block'});
  $('ideaBtn').onclick=openIdeas;$('b3').onclick=toggle3;$('bvb').onclick=togBV;$('bas').onclick=asNext;document.querySelectorAll('.sw button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus').oninput=e=>setCol(e.target.value);$('spBtn').onclick=openSaved;wireShare();if($('rv'))$('rv').onclick=()=>modes[cur].home();if($('gmb')){$('gmb').onclick=gameToggle;updGM(1)}
  $('panel').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{V.pend.g=+b.dataset.g;const i=$('g');i.value=b.dataset.g;i.nextElementSibling.textContent=b.dataset.g})}
@@ -1231,7 +1236,7 @@ requestAnimationFrame(frame);
  const h0=hit,hs0=hitSnd;hit=function(){if(RD.on)return;return h0.apply(this,arguments)};hitSnd=function(){if(RD.on)return;return hs0.apply(this,arguments)};
  function applyEntry(m,e){const M=modes[m],st=cp(e.st);
   if(m=='pend'){M.S={...st.S};M.prev=null;M.q=null;M.k=0;M.t=e.mt||0}
-  else if(m=='attr'){M.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));M.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};M.prev=null;M.t=e.mt||0}
+  else if(m=='attr'){M.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));M.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};M.E=st.E?st.E.map(q=>({x:q.x*W,y:q.y*H,vx:q.vx,vy:q.vy})):M.defE();M.prev=null;M.t=e.mt||0}
   else{M.balls=st.balls.map(b=>({x:b.x*W,y:b.y*H,vx:b.vx,vy:b.vy,h:b.h,p:0,...M.z3(),trs:[[]],c:0}));M.su=false}}
  window.startRedraw=x=>{const m=x.mode,M=modes[m],H=cp(x.hist),vh=cp(x.vh||[]);if(!H.length)return;
   RD.on=true;RD.m=m;RD.H=H;RD.VH=vh;RD.t0=H[0].t;RD.abs=H[0].t;RD.tend=Math.max(x.tend||0,H[H.length-1].t);RD.i=0;RD.j=0;RD.skip=false;RD.x=x;RD.last=0;
