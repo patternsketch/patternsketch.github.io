@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -157,20 +158,20 @@ const $=id=>document.getElementById(id),cv=$('c'),ctx=cv.getContext('2d');
 let W=0,H=0,dpr=1,cur='pend',hist=[],act=false,last=0;
 const TR={},TC={};['pend','attr','ros','bnc','plt','wav'].forEach(m=>{TR[m]=document.createElement('canvas');TC[m]=TR[m].getContext('2d')});
 const CFG={
-pend:[['g','Gravity (m/s²)',1,30,.01,9.81],['L','Length (m)',1,30,.1,10],['lat','Latitude (°)',-90,90,1,40],['om','Earth spin ×',0,3000,1,1500],['dp','Damping',0,.05,.001,0],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,5,.25,1]],
-attr:[['n','Attractors',1,3,1,3],['nb','Balls',1,3,1,1],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,4,.25,1]],
+pend:[['g','Gravity (m/s²)',1,30,.01,9.81],['L','Length (m)',1,40,.1,10],['lat','Latitude (°)',-90,90,1,40],['om','Earth spin ×',0,3000,1,1500],['dp','Damping',0,.05,.001,0],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,5,.25,1]],
+attr:[['n','Attractors',1,4,1,3],['nb','Balls',1,3,1,1],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['sp','Speed ×',.25,4,.25,1],['dz','Depth spread (3D)',0,1,.05,.6]],
 ros:[['n','Circles',6,150,1,60],['tw','Turns',1,6,1,1],['off','Spread',.1,1.6,.05,1.1],['sh','Shrink (%)',0,90,1,0],['sp','Draw speed ×',.25,4,.25,1]],
-bnc:[['n','Balls',1,8,1,3],['e','Bounciness',.5,1,.01,1],['gr','Gravity',0,800,10,0],['th','Throw strength',0,3,.05,1],['sp','Speed ×',.25,4,.25,1]],
+bnc:[['n','Balls',1,8,1,3],['e','Bounciness',.5,1,.01,1],['gr','Gravity',0,800,10,0],['sp','Speed ×',.25,4,.25,1]],
 plt:[['p','Pitch',0,35,1,3],['n','Amount of sand',1000,9000,500,5000],['sp','Settle speed',.25,3,.25,1],['gs','Grain size',1,3,.25,1.5],['sk','Shake strength',.5,2,.1,1],['p2','Second pitch',0,35,1,8],['bl','Blend',0,1,.05,0],['asp','Sweep speed',.05,1,.05,.25],['br','Brush size',20,120,5,50]],
 wav:[['rv','Ring speed',20,120,5,55],['fd','Fade distance',150,600,25,300],['lw','Line weight',.6,3,.1,1.1],['ms','Move speed',.1,1.5,.1,.5]]};
 const V={};for(const m in CFG){V[m]={};CFG[m].forEach(p=>V[m][p[0]]=p[5])}
-const HINT={pend:'Drag the bob, then release. Hold still to drop it, or sweep to throw it into an orbit. Pinch with two fingers to zoom and pan',attr:'Drag an orange point to move it, or drag empty space to place the body and throw it. Pinch with two fingers to zoom and pan',ros:'Pick a preset or move the sliders to reshape it. Tap Clear to watch it draw again.',bnc:'Tap to place the first ball, or touch and drag the way you want it to go, then let go'};
+const HINT={pend:'Drag the bob, then release. Hold still to drop it, or sweep to throw it into an orbit. Pinch with two fingers to zoom and pan',attr:'Tap a ball, or tap empty space to place one, and set its speed on the slider. Drag empty space to move around, and pinch to zoom. Then press Start',ros:'Pick a preset or move the sliders to reshape it. Tap Clear to watch it draw again.',bnc:'Tap to place the first ball, or touch and drag the way you want it to go, then let go'};
 function seg(m,a,b,c,d,col){const k=TC[m];k.strokeStyle=col;k.beginPath();k.moveTo(a,b);k.lineTo(c,d);k.stroke()}
 const cap=(x,y,m)=>{const q=Math.hypot(x,y);return q>m?[x*m/q,y*m/q]:[x,y]};
 const modes={};
 function drawBase(c,M,sn){const b=M.base;if(!b)return;if(b.T0!==M.T){M.base=null;return}const k=sn*M.z/(b.s0*b.z0),tx=W/2+(b.cx0-M.cx)*sn*M.z-b.W0/2*k,ty=H/2+(b.cy0-M.cy)*sn*M.z-b.H0/2*k;c.save();c.setTransform(dpr*k,0,0,dpr*k,dpr*tx,dpr*ty);c.drawImage(b.c,0,0,b.W0,b.H0);c.restore()}
 modes.pend={run:false,S:{x:3,y:0,vx:0,vy:0},prev:null,t:0,sub:.004,z:1,cx:0,cy:0,T:[],q:null,k:0,dirty:false,sv:null,CM:new Map(),CA:[],
- sc(){return Math.min(W,H)/2*.9/(V.pend.L*.5)},
+ sc(){return Math.min(W,H)/2*.9/(((typeof T!='undefined'&&T.on)?(this.scL||V.pend.L):10)*.5)},
  ps(){return this.sc()},
  toS(x,y){const s=this.sc()*this.z;return[W/2+(x-this.cx)*s,H/2+(y-this.cy)*s]},
  wx(px){return this.cx+(px-W/2)/(this.sc()*this.z)},wy(py){return this.cy+(py-H/2)/(this.sc()*this.z)},
@@ -180,30 +181,30 @@ modes.pend={run:false,S:{x:3,y:0,vx:0,vy:0},prev:null,t:0,sub:.004,z:1,cx:0,cy:0
  redraw(){const c=TC.pend,T=this.T,bk=new Map();c.clearRect(0,0,W,H);drawBase(c,this,this.sc());for(let i=0;i<T.length;i+=5){const k=T[i+4];let a=bk.get(k);if(!a)bk.set(k,a=[]);a.push(i)}
   bk.forEach((idx,k)=>{c.strokeStyle=this.CA[k];c.beginPath();for(const i of idx){const a=this.toS(T[i],T[i+1]),b=this.toS(T[i+2],T[i+3]);c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1])}c.stroke()})},
  clr(){this.T=[];this.q=null},
- init(){this.hide=false;this.S={x:3,y:0,vx:0,vy:0};this.run=false;this.prev=null;this.q=null;this.view(1,0,0);this.st=this.snap()},
- snap(){return{S:{...this.S}}},load(st){this.hide=false;this.S={...st.S};this.prev=null;this.t=0;this.T=[];this.q=null;this.view(1,0,0);this.run=true},
- beginPinch(){if(this.sv){this.S=this.sv.S;this.run=this.sv.run}this.prev=null},
+ init(){this.rel=null;this.hide=false;this.S={x:3,y:0,vx:0,vy:0};this.run=false;this.prev=null;this.q=null;this.view(1,0,0);this.st=this.snap()},
+ snap(){return{S:{...this.S}}},load(st){this.rel=null;this.hide=false;this.S={...st.S};this.prev=null;this.t=0;this.T=[];this.q=null;this.view(1,0,0);this.run=true},
+ beginPinch(){this.pan=null;if(this.sv){this.S=this.sv.S;this.run=this.sv.run}this.prev=null},
  place(px,py){const mx=V.pend.L*.5;let x=this.wx(px),y=this.wy(py);const m=Math.hypot(x,y);if(m>mx){x*=mx/m;y*=mx/m}this.S.x=x;this.S.y=y;this.S.vx=this.S.vy=0},
- down(px,py){this.hide=false;this.sv={S:{...this.S},run:this.run};this.run=false;this.prev=null;this.place(px,py)},move(px,py){this.place(px,py)},
- up(vx,vy){const p=V.pend,s=this.sc()*this.z,S=this.S;let ux=vx/s*p.th,uy=vy/s*p.th;const lim=Math.sqrt(p.g/p.L)*Math.sqrt(Math.max(0,(.6*p.L)**2-(S.x*S.x+S.y*S.y))),m=Math.hypot(ux,uy);if(m>lim){ux*=lim/m;uy*=lim/m}S.vx=ux;S.vy=uy;this.run=true;this.prev=null;this.st=this.snap()},
+ down(px,py){this.hide=false;this.sv={S:{...this.S},run:this.run};this.pan=null;if(!this.run||Math.hypot(...this.toS(this.S.x,this.S.y).map((v,i)=>v-(i?py:px)))<=60)this.rel=null;if(this.run){const b=this.toS(this.S.x,this.S.y);if(Math.hypot(b[0]-px,b[1]-py)>60){this.pan={x0:px,y0:py,cx0:this.cx,cy0:this.cy};return}}this.run=false;this.prev=null;this.place(px,py)},move(px,py){if(this.pan){const a=this.pan,z=this.sc()*this.z;this.view(this.z,a.cx0-(px-a.x0)/z,a.cy0-(py-a.y0)/z);return}this.place(px,py)},
+ up(vx,vy){if(this.pan){this.pan=null;this.run=true;return}const p=V.pend,s=this.sc()*this.z,S=this.S;let ux=vx/s*p.th,uy=vy/s*p.th;const lim=Math.sqrt(p.g/p.L)*Math.sqrt(Math.max(0,(.6*p.L)**2-(S.x*S.x+S.y*S.y))),m=Math.hypot(ux,uy);if(m>lim){ux*=lim/m;uy*=lim/m}S.vx=ux;S.vy=uy;this.run=true;this.prev=null;this.st=this.snap()},
  step(h){const p=V.pend,S=this.S,w=2*7.292e-5*Math.sin(p.lat*Math.PI/180)*p.om,k=p.g/p.L;
   const a=this.toS(S.x,S.y);
   const f=s=>[s[2],s[3],-k*s[0]-2*p.dp*s[2]+w*s[3],-k*s[1]-2*p.dp*s[3]-w*s[2]];
   const s0=[S.x,S.y,S.vx,S.vy],ad=(s,d,q)=>s.map((v,i)=>v+d*q[i]);
   const k1=f(s0),k2=f(ad(s0,h/2,k1)),k3=f(ad(s0,h/2,k2)),k4=f(ad(s0,h,k3));
   [S.x,S.y,S.vx,S.vy]=s0.map((v,i)=>v+h/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));
-  this.t+=h;const b=this.toS(S.x,S.y);
-  if(this.prev){const hu=Math.round(55+Math.sin(this.t*.05)*10),l=Math.round(75+Math.sin(this.t*.1)*10),col=colr('pend',`hsl(${hu},100%,${l}%)`);seg('pend',a[0],a[1],b[0],b[1],col);
+  this.t+=h;if(this.rel&&this.ri<this.rel.length&&this.t>=this.rel[this.ri][0]){const r=this.rel[this.ri++][1];S.x=r[0];S.y=r[1];S.vx=r[2];S.vy=r[3];this.prev=null}const b=this.toS(S.x,S.y);
+  if(this.prev){const hu=Math.round(55+(this.hoff||0)+Math.sin(this.t*.05)*10),l=Math.round(75+Math.sin(this.t*.1)*10),col=colr('pend',`hsl(${hu},100%,${l}%)`);seg('pend',a[0],a[1],b[0],b[1],col);
    if(++this.k>=8){this.k=0;if(this.q)this.T.push(this.q[0],this.q[1],S.x,S.y,this.cid(col));this.q=[S.x,S.y];if(this.T.length>400000)this.T.splice(0,80000)}}
   else{this.q=[S.x,S.y];this.k=0}
   this.prev=1},
  draw(){if(this.dirty){this.redraw();this.dirty=false}
   if(this.hide&&this.run)this.hide=false;if(this.hide)return;
   const[bx,by]=this.toS(this.S.x,this.S.y),[cx,cy]=this.toS(0,0);
-  ctx.strokeStyle='#444';ctx.beginPath();ctx.moveTo(cx-8,cy);ctx.lineTo(cx+8,cy);ctx.moveTo(cx,cy-8);ctx.lineTo(cx,cy+8);ctx.stroke();
+  if(!(V.pend.hb&&this.run)){ctx.strokeStyle='#444';ctx.beginPath();ctx.moveTo(cx-8,cy);ctx.lineTo(cx+8,cy);ctx.moveTo(cx,cy-8);ctx.lineTo(cx,cy+8);ctx.stroke();
   ctx.strokeStyle='#888';ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(bx,by);ctx.stroke();
   const g=ctx.createRadialGradient(bx-3,by-3,1,bx,by,11);g.addColorStop(0,'#fff');g.addColorStop(1,'#d33');
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(bx,by,11,0,7);ctx.fill();
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(bx,by,11,0,7);ctx.fill()}
   if(Math.abs(this.z-1)>.01){ctx.fillStyle='#777';ctx.font='12px system-ui';ctx.fillText('zoom '+this.z.toFixed(2)+'×',10,H-10)}}};
 modes.attr={run:true,A:[],B:{},prev:null,t:0,sub:1/300,drag:null,z:1,cx:0,cy:0,T:[],dirty:false,sv:null,E:[],k:0,pk:0,
  X(x){return W/2+(x-this.cx)*this.z},Y(y){return H/2+(y-this.cy)*this.z},
@@ -213,26 +214,38 @@ modes.attr={run:true,A:[],B:{},prev:null,t:0,sub:1/300,drag:null,z:1,cx:0,cy:0,T
   bk.forEach((idx,k)=>{c.strokeStyle=k>=1000?'#'+(k-1000).toString(16).padStart(6,'0'):`hsl(${k*10},90%,65%)`;c.beginPath();for(const i of idx){c.moveTo(this.X(T[i]),this.Y(T[i+1]));c.lineTo(this.X(T[i+2]),this.Y(T[i+3]))}c.stroke()})},
  clr(){this.T=[]},
  ps(){return 1},home(){this.view(1,W/2,H/2)},
- init(){const cx=W/2,cy=H/2,r=Math.min(W,H)*.28;this.view(1,cx,cy);this.A=[0,1,2].map(i=>({x:cx+r*Math.cos(i*2.094-1.57),y:cy+r*Math.sin(i*2.094-1.57)}));
-  this.B={x:cx+r*.25,y:cy-r*.4,vx:70,vy:40};this.E=this.defE();this.k=0;this.run=true;this.prev=null;this.drag=null;this.st=this.snap()},
+ init(){const cx=W/2,cy=H/2,r=Math.min(W,H)*.28;this.view(1,cx,cy);this.A=[0,1,2,3].map(i=>i<3?{x:cx+r*Math.cos(i*2.094-1.57),y:cy+r*Math.sin(i*2.094-1.57)}:{x:cx,y:cy});
+  this.B={x:cx+r*.25,y:cy-r*.4,vx:70,vy:40};this.E=this.defE();this.k=0;this.np=0;this.sel=null;this.dir=[];this.run=true;this.prev=null;this.drag=null;this.st=this.snap()},
  onN(){},
  defE(){const cx=W/2,cy=H/2,r=Math.min(W,H)*.28;return[{x:cx-r*.35,y:cy+r*.45,vx:-60,vy:50},{x:cx+r*.55,y:cy+r*.1,vx:-30,vy:-70}]},
- bodies(){return[this.B,...this.E.slice(0,Math.max(0,(V.attr.nb|0||1)-1))]},
- snap(){const f=p=>({x:p.x/W,y:p.y/H});return{A:this.A.map(f),B:{...f(this.B),vx:this.B.vx,vy:this.B.vy},E:this.E.map(e=>({...f(e),vx:e.vx,vy:e.vy}))}},
- load(st){this.T=[];this.view(1,W/2,H/2);this.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));this.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};this.E=st.E?st.E.map(e=>({x:e.x*W,y:e.y*H,vx:e.vx,vy:e.vy})):this.defE();this.prev=null;this.run=true},
- beginPinch(){if(this.drag===null&&this.sv){this.B=this.sv.B;if(this.sv.E)this.E=this.sv.E;this.run=this.sv.run;this.prev=null;this.E.forEach(e=>e.pv=0)}this.drag=null},
- down(px,py){const n=V.attr.n;this.sv={B:{...this.B},E:this.E.map(e=>({...e})),run:this.run};this.drag=null;for(let i=0;i<n;i++)if(Math.hypot(this.X(this.A[i].x)-px,this.Y(this.A[i].y)-py)<34)this.drag=i;
-  if(this.drag===null){const bs=this.bodies();let k=-1,bd=30;bs.forEach((b,j)=>{const d=Math.hypot(this.X(b.x)-px,this.Y(b.y)-py);if(d<bd){bd=d;k=j}});if(k<0){k=this.k%bs.length;this.k=k+1}this.pk=k;const B=bs[k];this.run=false;this.prev=null;this.E.forEach(e=>e.pv=0);B.x=this.wx(px);B.y=this.wy(py);B.vx=B.vy=0}},
- move(px,py){if(this.drag!==null){this.A[this.drag].x=this.wx(px);this.A[this.drag].y=this.wy(py)}else{const B=this.bodies()[this.pk]||this.B;B.x=this.wx(px);B.y=this.wy(py)}},
- up(vx,vy){if(this.drag!==null){this.drag=null;if(this.st)this.st.A=this.snap().A;return}const th=V.attr.th,z=this.z,B=this.bodies()[this.pk]||this.B;[B.vx,B.vy]=cap(vx/z*th,vy/z*th,500);this.run=true;this.prev=null;this.E.forEach(e=>e.pv=0);this.st=this.snap()},
+ bodies(){const a=[this.B,...this.E.slice(0,Math.max(0,(V.attr.nb|0||1)-1))];return this.np==null?a:a.slice(0,this.np)},
+ allB(){return[this.B,...this.E.slice(0,Math.max(0,(V.attr.nb|0||1)-1))]},
+ snap(){const f=p=>({x:p.x/W,y:p.y/H});return{A:this.A.map(f),B:{...f(this.B),vx:this.B.vx,vy:this.B.vy},E:this.E.map(e=>({...f(e),vx:e.vx,vy:e.vy})),np:this.np==null?null:this.np}},
+ load(st){this.T=[];this.np=st.np==null?null:st.np;this.view(1,W/2,H/2);this.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));this.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};this.E=st.E?st.E.map(e=>({x:e.x*W,y:e.y*H,vx:e.vx,vy:e.vy})):this.defE();this.prev=null;this.run=true},
+ beginPinch(){clearTimeout(this.ht);if(this.pan){this.pan=null;return}if(this.aim||this.mv){this.aim=null;if(this.mv){const B=this.bodies()[this.mv.k];if(B&&this.sv){const o=this.mv.k?this.sv.E[this.mv.k-1]:this.sv.B;B.x=o.x;B.y=o.y}this.mv=null}return}if(this.drag===null&&this.sv){this.B=this.sv.B;if(this.sv.E)this.E=this.sv.E;this.run=this.sv.run;this.prev=null;this.E.forEach(e=>e.pv=0)}this.drag=null},
+ down(px,py){const n=V.attr.n;this.sv={B:{...this.B},E:this.E.map(e=>({...e})),run:this.run};this.drag=null;this.aim=null;this.mv=null;this.pan=null;let da=34;for(let i=0;i<n;i++){const d=Math.hypot(this.X(this.A[i].x)-px,this.Y(this.A[i].y)-py);if(d<da){da=d;this.drag=i}}
+  if(!this.run){const bs=this.bodies();let k=-1,bd=30;bs.forEach((b,j)=>{const d=Math.hypot(this.X(b.x)-px,this.Y(b.y)-py);if(d<bd){bd=d;k=j}});if(k>=0&&bd<=da){this.drag=null;this.pk=k;this.sel=k;this.aim={k,px,py,x0:px,y0:py,mv:false};clearTimeout(this.ht);this.ht=setTimeout(()=>{const a=this.aim;if(a&&!a.mv){const B=this.bodies()[a.k];this.aim=null;if(B){this.mv={k:a.k,vx:B.vx,vy:B.vy,g:1};this.prev=null;try{buzz(25)}catch(e){}const hn=$('hint');hn.textContent='Got it. Drag to move this ball, then let go.';hn.style.opacity=1}}},380);return}}
+  if(this.drag===null)this.pan={x0:px,y0:py,cx0:this.cx,cy0:this.cy,mv:false}},
+ move(px,py){if(this.pan){const a=this.pan;if(!a.mv&&Math.hypot(px-a.x0,py-a.y0)>10)a.mv=true;if(a.mv)this.view(this.z,a.cx0-(px-a.x0)/this.z,a.cy0-(py-a.y0)/this.z);return}if(this.aim){const a=this.aim,B=this.bodies()[a.k];a.px=px;a.py=py;if(!a.mv&&Math.hypot(px-a.x0,py-a.y0)>10){a.mv=true;clearTimeout(this.ht)}return}if(this.drag!==null){this.A[this.drag].x=this.wx(px);this.A[this.drag].y=this.wy(py)}else{const B=this.bodies()[this.pk]||this.B;B.x=this.wx(px);B.y=this.wy(py)}},
+ up(vx,vy){clearTimeout(this.ht);if(this.pan){const a=this.pan;this.pan=null;if(!a.mv&&!this.run){const all=this.allB();let k,fresh=false;if(this.np!=null&&this.np<all.length){k=this.np;this.np++;fresh=true;if(this.np>=all.length)this.np=null}else{const bs=this.bodies();k=this.k%bs.length;this.k=k+1}this.pk=k;this.sel=k;const B=all[k];B.x=this.wx(a.x0);B.y=this.wy(a.y0);if(fresh){B.vx=B.vy=0;if(this.dir)this.dir[k]=null;this.setSpeed(150)}this.prev=null;this.E.forEach(e=>e.pv=0);this.st=this.snap()}return}if(this.mv&&this.mv.g){const hn=$('hint');hn.textContent=HINT.attr}if(this.aim){const a=this.aim,B=this.bodies()[a.k];this.aim=null;if(!a.mv||!B)return;const dx=a.px-this.X(B.x),dy=a.py-this.Y(B.y),l=Math.hypot(dx,dy);if(l<18)return;let sp=Math.hypot(B.vx,B.vy);if(sp<1)sp=150;B.vx=dx/l*sp;B.vy=dy/l*sp;(this.dir||(this.dir=[]))[a.k]=[dx/l,dy/l];this.prev=null;this.E.forEach(e=>e.pv=0);this.st=this.snap();return}
+  if(this.mv){const B=this.bodies()[this.mv.k];if(B){B.vx=this.mv.vx;B.vy=this.mv.vy}this.mv=null;this.prev=null;this.E.forEach(e=>e.pv=0);this.st=this.snap();return}
+  if(this.drag!==null){this.drag=null;if(this.st)this.st.A=this.snap().A;return}},
  step(h){const v=V.attr;this.bodies().forEach((B,j)=>{const px=B.x,py=B.y;let ax=0,ay=0;
   for(let i=0;i<v.n;i++){const dx=this.A[i].x-B.x,dy=this.A[i].y-B.y,r2=dx*dx+dy*dy+v.s*v.s,f=v.G*1e6/(r2*Math.sqrt(r2));ax+=dx*f;ay+=dy*f}
   B.vx+=ax*h;B.vy+=ay*h;B.x+=B.vx*h;B.y+=B.vy*h;if(j==0)this.t+=h;
   const had=j==0?this.prev:B.pv;
   if(had){const hu=(this.t*25+j*120)%360,sv=COL.attr=='auto'?hu:1000+parseInt(COL.attr.slice(1),16);seg('attr',this.X(px),this.Y(py),this.X(B.x),this.Y(B.y),colr('attr',`hsl(${hu},90%,65%)`));this.T.push(px,py,B.x,B.y,sv);if(this.T.length>300000)this.T.splice(0,50000)}
   if(j==0)this.prev=1;else B.pv=1})},
+ arrow(x,y,ex,ey,col,lw,dash){const l=Math.hypot(ex-x,ey-y);if(l<2)return;const ux=(ex-x)/l,uy=(ey-y)/l,hd=Math.min(12,l*.45);ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=lw;if(dash)ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex-ux*hd*.6,ey-uy*hd*.6);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(ex-ux*hd-uy*hd*.55,ey-uy*hd+ux*hd*.55);ctx.lineTo(ex-ux*hd+uy*hd*.55,ey-uy*hd-ux*hd*.55);ctx.closePath();ctx.fill();ctx.restore()},
+ setSpeed(v){const k=this.sel,B=this.bodies()[k];if(!B)return;const sp=Math.hypot(B.vx,B.vy);let d;if(sp>1)d=[B.vx/sp,B.vy/sp];else if(this.dir&&this.dir[k])d=this.dir[k];else{const n=V.attr.n;let cx=0,cy=0;for(let i=0;i<n;i++){cx+=this.A[i].x/n;cy+=this.A[i].y/n}const rx=B.x-cx,ry=B.y-cy,rl=Math.hypot(rx,ry)||1;d=[-ry/rl,rx/rl]}(this.dir||(this.dir=[]))[k]=d;B.vx=d[0]*v;B.vy=d[1]*v;this.prev=null;this.E.forEach(e=>e.pv=0);this.st=this.snap()},
+ drawAim(){const C=['255,255,255','136,255,255','255,255,136'];this.bodies().forEach((b,j)=>{const x=this.X(b.x),y=this.Y(b.y),c=C[j],a=this.aim&&this.aim.k===j;
+   const gr=this.mv&&this.mv.g&&this.mv.k===j;ctx.save();if(!gr&&this.sel===j){ctx.strokeStyle=`rgb(${c})`;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,15,0,7);ctx.stroke()}else if(gr){ctx.strokeStyle='#ffe94d';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,18,0,7);ctx.stroke()}else{ctx.strokeStyle=`rgba(${c},.45)`;ctx.lineWidth=1.5;ctx.setLineDash([3,4]);ctx.beginPath();ctx.arc(x,y,13,0,7);ctx.stroke()}ctx.restore();
+   if(a&&this.aim.mv){const dx=this.aim.px-x,dy=this.aim.py-y,l=Math.hypot(dx,dy);if(l>=18){let sp=Math.hypot(b.vx,b.vy);if(sp<1)sp=150;const L=Math.max(40,sp*this.z/2),ex=x+dx/l*L,ey=y+dy/l*L;this.arrow(x,y,ex,ey,`rgb(${c})`,3,false);
+    ctx.save();ctx.font='600 14px system-ui';ctx.fillStyle='#ffe94d';ctx.shadowColor='#000';ctx.shadowBlur=4;ctx.fillText('Speed '+Math.round(sp),Math.min(W-100,Math.max(8,ex+10)),Math.max(18,ey-10));ctx.restore()}}
+   else{const sp=Math.hypot(b.vx,b.vy);if(sp>1){const L=sp*this.z/2;this.arrow(x,y,x+b.vx/sp*L,y+b.vy/sp*L,`rgba(${c},.75)`,2,true)}}})},
  draw(){if(this.dirty){this.redraw();this.dirty=false}
   for(let i=0;i<V.attr.n;i++){const a=this.A[i],x=this.X(a.x),y=this.Y(a.y);ctx.strokeStyle='rgba(255,160,0,.35)';ctx.beginPath();ctx.arc(x,y,16,0,7);ctx.stroke();ctx.fillStyle='#f90';ctx.beginPath();ctx.arc(x,y,8,0,7);ctx.fill()}
+  if(!this.run&&!(window.rdOn&&window.rdOn()))this.drawAim();
   this.bodies().forEach((b,j)=>{ctx.fillStyle=['#fff','#8ff','#ff8'][j];ctx.beginPath();ctx.arc(this.X(b.x),this.Y(b.y),5,0,7);ctx.fill()});
   if(Math.abs(this.z-1)>.01){ctx.fillStyle='#777';ctx.font='12px system-ui';ctx.fillText('zoom '+this.z.toFixed(2)+'×',10,H-10)}}};
 modes.ros={run:true,sub:1/600,k:0,a:0,done:false,st:{},
@@ -278,7 +291,7 @@ modes.bnc={run:true,balls:[],sub:1/240,R:7,M:10,shape:0,topPad:0,su:false,cb:0,_
   for(const b of this.balls){const px=b.x,py=b.y;b.vy+=v.gr*h;b.x+=b.vx*h;b.y+=b.vy*h;let ht=false;
    for(let pass=0;pass<3;pass++)for(const e of E){const s=e.nx*b.x+e.ny*b.y-(e.d+R);if(s<0){b.x-=e.nx*s;b.y-=e.ny*s;const vn=b.vx*e.nx+b.vy*e.ny;if(vn<0){b.vx-=(1+v.e)*vn*e.nx;b.vy-=(1+v.e)*vn*e.ny;if(!ht){ht=true;hit(b,0)}}}}
    if(o.c){const dx=b.x-o.c.x,dy=b.y-o.c.y,d=Math.hypot(dx,dy)||1,m=o.c.r-R;if(d>m){const nx=-dx/d,ny=-dy/d;b.x=o.c.x-nx*m;b.y=o.c.y-ny*m;const vn=b.vx*nx+b.vy*ny;if(vn<0){b.vx-=(1+v.e)*vn*nx;b.vy-=(1+v.e)*vn*ny;if(!ht){ht=true;hit(b,0)}}}}
-   if(b.p&&!G.on)seg('bnc',px,py,b.x,b.y,colr('bnc',`hsla(${b.h},90%,65%,.7)`));b.p=1}},
+   if(b.p&&!G.on)seg('bnc',px,py,b.x,b.y,bcl(b));b.p=1}},
  drawScale(){if(!this.scale||T.on)return;ctx.save();ctx.strokeStyle='#888';ctx.lineWidth=1;ctx.beginPath();for(const t of this.ticks()){const L=t.k==0?0:t.k==4?15:t.k%2==0?10:6;if(L){ctx.moveTo(t.x,t.y);ctx.lineTo(t.x+t.nx*L,t.y+t.ny*L)}}ctx.stroke();ctx.fillStyle='#aaa';if(!this.ol().c)for(const q of this.ol().P){ctx.beginPath();ctx.arc(q[0],q[1],2.5,0,7);ctx.fill()}
   if(this.su&&this.lp){const p=this.lp;if(p.o){ctx.save();ctx.strokeStyle='rgba(255,233,77,.55)';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(p.fx,p.fy);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.restore();ctx.fillStyle='rgba(255,233,77,.5)';ctx.beginPath();ctx.arc(p.fx,p.fy,5,0,7);ctx.fill()}ctx.strokeStyle=p.s?'#ffe94d':'#fff';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(p.x,p.y,12,0,7);ctx.stroke();if(this.ph==1){const b=this.balls[this.cb];if(b){ctx.setLineDash([4,5]);ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.setLineDash([])}}}
   ctx.restore()},
@@ -291,10 +304,10 @@ modes.bnc={run:true,balls:[],sub:1/240,R:7,M:10,shape:0,topPad:0,su:false,cb:0,_
  init(){this.su=false;this.pend=false;this.sel=null;this.sk=-1;this.cb=0;this.pk=0;this.ph=0;this.lp=null;const n=V.bnc.n;this.balls=[];for(let i=0;i<n;i++){const an=Math.random()*6.28,sp=100+Math.random()*100;
   const q=this.pt();this.balls.push({x:q[0],y:q[1],vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,h:i*360/n,p:0,...this.z3(),trs:[[]],c:0})}this.run=true;this.st=this.snap()},
  onN(){this.init()},
- snap(){return{balls:this.balls.map(b=>({x:b.x/W,y:b.y/H,vx:b.vx,vy:b.vy,h:b.h}))}},load(st){this.balls=st.balls.map(b=>({x:b.x*W,y:b.y*H,vx:b.vx,vy:b.vy,h:b.h,p:0,...this.z3(),trs:[[]],c:0}));this.run=true},
+ snap(){return{balls:this.balls.map(b=>({x:b.x/W,y:b.y/H,vx:b.vx,vy:b.vy,h:b.h,col:b.col}))}},load(st){this.balls=st.balls.map(b=>({x:b.x*W,y:b.y*H,vx:b.vx,vy:b.vy,h:b.h,col:b.col,p:0,...this.z3(),trs:[[]],c:0}));this.run=true},
  bs:1,SPD:[130,260,450],sel:null,sk:-1,near(px,py,r){let k=-1,bd=r;const n=this.su?this.cb:this.balls.length;for(let i=0;i<n;i++){const q=this.balls[i];if(q.hide)continue;const d=Math.hypot(q.x-px,q.y-py);if(d<bd){bd=d;k=i}}return k},place(px,py){const b=this.cur(),m=this.M+this.R;if(this.shape){b.x=px;b.y=py;this.clampIn(b)}else{b.x=Math.min(W-m,Math.max(m,px));b.y=Math.min(H-m,Math.max(m+(this.topPad||0),py))}b.vx=b.vy=0;b.p=0},
  down(px,py){if(this.su||this.pend){const k=this.near(px,py,26);this.sk=k;this.aimTo=null;if(k>=0){this.dn=[this.balls[k].x,this.balls[k].y];this.sv=null;return}this.sel=null;if(!this.su){this.sv=null;return}}if(this.su&&this.scale){this.sv=null;this.lp=this.snapT(px,py);return}if(!this.su){let bi=0,bd=55;this.balls.forEach((q,i)=>{const d=Math.hypot(q.x-px,q.y-py);if(d<bd){bd=d;bi=i}});this.pk=bi}const b=this.cur();this.sv={b:{x:b.x,y:b.y,vx:b.vx,vy:b.vy,p:b.p,hide:b.hide},i:this.balls.indexOf(b),run:this.run};this.run=false;this.place(px,py);b.hide=false;if(this.su){this.dn=[b.x,b.y];this.aimTo=null}},move(px,py){if(this.sk>=0){this.aimTo=[px,py];return}if(this.pend&&!this.su)return;if(this.su&&this.scale){this.lp=this.snapT(px,py);return}if(this.su){this.aimTo=[px,py];return}this.place(px,py)},beginPinch(){if(this.sv){Object.assign(this.balls[this.sv.i],this.sv.b);this.run=this.sv.run;this.sv=null}},
- up(vx,vy){if(this.sk>=0){const k=this.sk,b=this.balls[k];this.sk=-1;let dx=0,dy=0;if(this.aimTo&&this.dn){dx=this.aimTo[0]-this.dn[0];dy=this.aimTo[1]-this.dn[1]}const l=Math.hypot(dx,dy);if(l<14){this.sel=this.sel===k?null:k}else{const sp=this.SPD[b.sp==null?this.bs:b.sp];b.vx=dx/l*sp;b.vy=dy/l*sp;b.aim=null;this.sel=k}this.aimTo=null;this.dn=null;this.st=this.snap();return}if(this.pend&&!this.su){this.sv=null;return}if(this.su&&this.scale)return this.sup();if(this.su){const b=this.cur();let dx=0,dy=0;if(this.aimTo&&this.dn){dx=this.aimTo[0]-this.dn[0];dy=this.aimTo[1]-this.dn[1]}let l=Math.hypot(dx,dy);if(l<14){const an=Math.random()*6.283;dx=Math.cos(an);dy=Math.sin(an);l=1}const sp=this.SPD[this.bs];b.vx=dx/l*sp;b.vy=dy/l*sp;b.sp=this.bs;this.sel=null;b.aim=null;b.hide=false;this.aimTo=null;this.dn=null;this.sv=null;if(++this.cb>=this.balls.length){this.su=false;this.pend=true;this.run=true}else this.run=false;this.st=this.snap();return}const th=V.bnc.th,b=this.cur();[b.vx,b.vy]=cap(vx*th,vy*th,900);if(this.su&&Math.hypot(b.vx,b.vy)<15&&!V.bnc.gr){const an=Math.random()*6.283;b.vx=Math.cos(an)*120;b.vy=Math.sin(an)*120}b.hide=false;if(this.su){if(++this.cb>=this.balls.length){this.su=false;this.run=true}else this.run=false}else this.run=true;this.st=this.snap()},
+ up(vx,vy){if(this.sk>=0){const k=this.sk,b=this.balls[k];this.sk=-1;let dx=0,dy=0;if(this.aimTo&&this.dn){dx=this.aimTo[0]-this.dn[0];dy=this.aimTo[1]-this.dn[1]}const l=Math.hypot(dx,dy);if(l<14){this.sel=this.sel===k?null:k}else{const sp=this.SPD[b.sp==null?this.bs:b.sp];b.vx=dx/l*sp;b.vy=dy/l*sp;b.aim=null;this.sel=k}this.aimTo=null;this.dn=null;this.st=this.snap();return}if(this.pend&&!this.su){this.sv=null;return}if(this.su&&this.scale)return this.sup();if(this.su){const b=this.cur();let dx=0,dy=0;if(this.aimTo&&this.dn){dx=this.aimTo[0]-this.dn[0];dy=this.aimTo[1]-this.dn[1]}let l=Math.hypot(dx,dy);if(l<14){const an=Math.random()*6.283;dx=Math.cos(an);dy=Math.sin(an);l=1}const sp=this.SPD[this.bs];b.vx=dx/l*sp;b.vy=dy/l*sp;b.sp=this.bs;this.sel=null;b.aim=null;b.hide=false;this.aimTo=null;this.dn=null;this.sv=null;if(++this.cb>=this.balls.length){this.su=false;this.pend=true;this.run=true}else this.run=false;this.st=this.snap();return}const th=1,b=this.cur();[b.vx,b.vy]=cap(vx*th,vy*th,900);if(this.su&&Math.hypot(b.vx,b.vy)<15&&!V.bnc.gr){const an=Math.random()*6.283;b.vx=Math.cos(an)*120;b.vy=Math.sin(an)*120}b.hide=false;if(this.su){if(++this.cb>=this.balls.length){this.su=false;this.run=true}else this.run=false}else this.run=true;this.st=this.snap()},
  step3(h){const v=V.bnc,R=this.R,S=this.cubeS(),x0=W/2-S/2+R,x1=W/2+S/2-R,y0=H/2-S/2+R,y1=H/2+S/2-R,z0=R,z1=S-R,lim=Math.floor(24000/this.balls.length);
   for(const b of this.balls){b.vz-=v.gr*h;b.x+=b.vx*h;b.y+=b.vy*h;b.z+=b.vz*h;
    if(b.x<x0){b.x=x0;b.vx=Math.abs(b.vx)*v.e;hit(b,0)}else if(b.x>x1){b.x=x1;b.vx=-Math.abs(b.vx)*v.e;hit(b,0)}
@@ -306,21 +319,23 @@ modes.bnc={run:true,balls:[],sub:1/240,R:7,M:10,shape:0,topPad:0,su:false,cb:0,_
   for(const b of this.balls){const px=b.x,py=b.y;b.vy+=v.gr*h;b.x+=b.vx*h;b.y+=b.vy*h;
    if(b.x<m){b.x=m;b.vx=Math.abs(b.vx)*v.e;hit(b,0)}else if(b.x>x1){b.x=x1;b.vx=-Math.abs(b.vx)*v.e;hit(b,0)}
    if(b.y<mt){b.y=mt;b.vy=Math.abs(b.vy)*v.e;hit(b,1)}else if(b.y>y1){b.y=y1;b.vy=-Math.abs(b.vy)*v.e;hit(b,1)}
-   if(b.p&&!G.on)seg('bnc',px,py,b.x,b.y,colr('bnc',`hsla(${b.h},90%,65%,.7)`));b.p=1}},
+   if(b.p&&!G.on)seg('bnc',px,py,b.x,b.y,bcl(b));b.p=1}},
  drawAim(){if(!(this.su||this.pend)||!this.dn||!this.aimTo||(this.scale&&this.sk<0))return;ctx.save();ctx.strokeStyle='rgba(255,233,77,.8)';ctx.fillStyle='rgba(255,233,77,.8)';ctx.lineWidth=1.5;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(this.dn[0],this.dn[1]);ctx.lineTo(this.aimTo[0],this.aimTo[1]);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(this.aimTo[0],this.aimTo[1],4,0,7);ctx.fill();ctx.restore()},
  draw(){this.drawScale();this.drawAim();ctx.strokeStyle='#555';if(this.hideE){}else if(this.shape){const P=this.edges().P;ctx.beginPath();P.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.stroke()}else{const tp=this.topPad||0;ctx.strokeRect(this.M,this.M+tp,W-2*this.M,H-2*this.M-tp)}
-  for(let bi=0;bi<this.balls.length;bi++){const b=this.balls[bi];if(b.hide)continue;ctx.fillStyle=`hsl(${b.h},90%,65%)`;ctx.beginPath();ctx.arc(b.x,b.y,this.R,0,7);ctx.fill();if((this.su||this.pend)&&this.sel===bi){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,b.y,this.R+5,0,7);ctx.stroke();ctx.lineWidth=1}if(this.su||this.pend){ctx.strokeStyle=`hsl(${b.h},90%,65%)`;ctx.beginPath();ctx.moveTo(b.x,b.y);if(b.aim){ctx.setLineDash([5,5]);ctx.lineTo(b.aim[0],b.aim[1]);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(b.aim[0],b.aim[1],4,0,7);ctx.stroke()}else{const q=Math.hypot(b.vx,b.vy)||1,l=[22,42,66][b.sp==null?1:b.sp];if(q>2){const ex=b.x+b.vx/q*l,ey=b.y+b.vy/q*l,ux=b.vx/q,uy=b.vy/q;ctx.lineTo(ex,ey);ctx.moveTo(ex-ux*8-uy*5,ey-uy*8+ux*5);ctx.lineTo(ex,ey);ctx.lineTo(ex-ux*8+uy*5,ey-uy*8-ux*5)}ctx.stroke()}}}
+  for(let bi=0;bi<this.balls.length;bi++){const b=this.balls[bi];if(b.hide)continue;if(!b.p||b.cc==null)bres(b,false);ctx.fillStyle=b.cc;ctx.beginPath();ctx.arc(b.x,b.y,this.R,0,7);ctx.fill();if((this.su||this.pend)&&this.sel===bi){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,b.y,this.R+5,0,7);ctx.stroke();ctx.lineWidth=1}if(this.su||this.pend){ctx.strokeStyle=b.cc;ctx.beginPath();ctx.moveTo(b.x,b.y);if(b.aim){ctx.setLineDash([5,5]);ctx.lineTo(b.aim[0],b.aim[1]);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(b.aim[0],b.aim[1],4,0,7);ctx.stroke()}else{const q=Math.hypot(b.vx,b.vy)||1,l=[22,42,66][b.sp==null?1:b.sp];if(q>2){const ex=b.x+b.vx/q*l,ey=b.y+b.vy/q*l,ux=b.vx/q,uy=b.vy/q;ctx.lineTo(ex,ey);ctx.moveTo(ex-ux*8-uy*5,ey-uy*8+ux*5);ctx.lineTo(ex,ey);ctx.lineTo(ex-ux*8+uy*5,ey-uy*8-ux*5)}ctx.stroke()}}}
   if(G.on&&G.rev){const b=gameBall();if(b){ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(b.x,b.y,this.R+9,0,7);ctx.stroke()}}}};
 const TH='How much of your finger speed carries over on release. 1 matches your finger; 0 drops it straight; higher values throw it harder.',SP='Playback speed only. It does not change the pattern, just how quickly it is drawn.';
 const INFO={
 pend:{g:'Gravity pulls the bob back to the center. Stronger gravity means a faster swing and tighter, quicker patterns.',L:'String length. Long strings swing slowly and allow wide swings; short strings swing fast and make denser loops.',lat:'Where on Earth the pendulum hangs. The swing turns fastest at the poles (±90°) and not at all at the equator (0°). Negative is southern hemisphere and turns the opposite way.',om:"Multiplies Earth's rotation so you can see it. 1 is real, which is far too slow to notice. 0 means no rotation, so the swing never turns.",dp:'Air friction. Above 0 the swing slowly shrinks and spirals in toward the center.',th:TH,sp:SP},
-attr:{nb:'How many balls travel at once. Each ball draws its own colored path as the attraction points pull on it. Touch the screen to place and throw the next ball, or touch a ball to throw it again.',n:'How many attraction points pull on the body. Two give looping orbits around a pair; three give more tangled, chaotic paths.',G:'How hard the points pull. Strong pull means fast, tight orbits; weak pull lets the body drift wide.',s:'Softening. Stops the pull becoming huge up close. Low values give sharp slingshot turns; high values give smooth, rounded orbits.',th:TH,sp:SP},
+attr:{dz:'Only used in 3D. How far the attraction points are pushed apart in depth. 0 puts them all on one level, so the paths stay flat. Higher values stack them above and below each other, so the ball loops through space.',nb:'How many balls travel at once. Each ball draws its own colored path as the attraction points pull on it. Before you press Start, tap a ball (or tap empty space to place the next one) and set its speed with the slider that appears. Drag out from the ball to point it, or press and hold it, then drag, to move it. Drag empty space to move around the screen.',n:'How many attraction points pull on the body. Two give looping orbits around a pair; three give more tangled, chaotic paths; four give the busiest, most woven paths.',G:'How hard the points pull. Strong pull means fast, tight orbits; weak pull lets the body drift wide.',s:'Softening. Stops the pull becoming huge up close. Low values give sharp slingshot turns; high values give smooth, rounded orbits.',th:TH,sp:SP},
 ros:{n:'How many circles are drawn. More circles make a denser, smoother pattern.',tw:'How many times the circles turn around the centre while they are drawn. 1 gives a closed ring. 2 or more weaves the circles together.',off:'How far each circle sits from the centre compared with its own size. Below 1 every circle covers the middle, so it looks like a dense ball. Around 1 every circle passes through the centre, making a bright core. Above 1 they leave a hollow middle.',sh:'Makes each new circle a little smaller and closer to the centre than the last, so the rings spiral inward like a swirl. 0 keeps them all the same size.',sp:SP},
-bnc:{n:'How many balls. Each one traces its own colored path.',e:'Bounciness. 1 keeps all its energy and bounces forever; lower values lose speed on every hit.',gr:'Gravity pulling balls down. 0 gives straight-line woven paths; higher values give arcs, and the balls eventually settle. In 3D it pulls the balls toward the floor of the cube.',th:TH,sp:SP}};
+bnc:{n:'How many balls. Each one traces its own colored path.',e:'Bounciness. 1 keeps all its energy and bounces forever; lower values lose speed on every hit.',gr:'Gravity pulling balls down. 0 gives straight-line woven paths; higher values give arcs, and the balls eventually settle. In 3D it pulls the balls toward the floor of the cube.',sp:SP}};
 const BASE={g:9.81,L:10,lat:40,om:1500,dp:0,sp:1},BASER={n:60,tw:1,off:1.1,sh:0,sp:1};
 const RND={
 pend(){const L=+(4+Math.random()*10).toFixed(1),g=+(4+Math.random()*10).toFixed(2),lat=Math.round((20+Math.random()*70)*(Math.random()<.5?1:-1)),om=Math.round(800+Math.random()*2200),w0=Math.sqrt(g/L),x=L*(.3+Math.random()*.15),f=Math.random()*.6,dp=Math.random()<.4?+(.003+Math.random()*.007).toFixed(3):0;
- return['','',{g,L,lat,om,dp,sp:3},[x,0,0,f*w0*x]]},
+ const w=Math.abs(2*7.292e-5*Math.sin(lat*Math.PI/180)*om),iv=Math.min(150,Math.max(40,4/(w||1e-3)));let rel=null;
+ if(Math.random()<.5&&!dp){const n=1+Math.floor(Math.random()*3);rel=[];for(let i=1;i<=n;i++){const xi=x*Math.pow(.68,i),fi=Math.random()<.35?0:.3+Math.random()*.5;rel.push([+(iv*i).toFixed(1),[xi,0,0,fi*w0*xi]])}}
+ return['','',{g,L,lat,om,dp,sp:3},[x,0,0,f*w0*x],rel]},
 attr(){const m=Math.min(W,H),r=Math.random,cl=v=>Math.min(.92,Math.max(.08,v));
  const n=r()<.5?2:3,G=+(.6+r()*1).toFixed(2),s=Math.round(8+r()*12),px=.5+(r()-.5)*.2*m/W,py=.5+(r()-.5)*.2*m/H,a0=r()*6.28,D=m*(.32+r()*.1),P=[[px,py]];
  for(let i=1;i<n;i++){const a=a0+(i-1)*2.4;P.push([cl(px+D*Math.cos(a)/W),cl(py+D*Math.sin(a)/H)])}
@@ -339,12 +354,22 @@ pend:{tip:'The pattern comes from swing speed (gravity ÷ length) against Earth 
  ['Random + auto-change','A random pattern whose settings change by themselves while it draws, so the shape keeps changing. Choose how often below.','RNDE'],
  ['Starburst','Drop from rest. The swing line slowly turns and fills a star.',{sp:3},[3,0,0,0]],
  ['Spirograph ring','Throw sideways for an ellipse that rotates into a ring, like a spirograph.',{lat:50,om:2000,sp:4},[3,0,0,1.2]],
+ ['Ring and star','A wide ring first, then a second swing dropped from rest draws a star inside it.',{lat:50,om:450,sp:5},[4.6,0,0,1.8],[[120,[1.9,0,0,0]]]],
+ ['Nested rings','Four rings, one released after another, each sitting inside the last.',{lat:50,om:450,sp:5},[4.6,0,0,3.2],[[120,[3.2,0,0,2.2]],[240,[2.2,0,0,1.5]],[360,[1.5,0,0,1.05]]]],
+ ['Stars in stars','Drops from rest at three distances, drawing a star inside a star inside a star.',{lat:50,om:450,sp:5},[4.6,0,0,0],[[120,[3.2,0,0,0]],[240,[1.8,0,0,0]]]],
  ['Tight flower','A short string at the pole makes dense, flower-like loops.',{L:3,lat:90,om:3000,sp:3},[1.2,0,0,.9]],
  ['Moon drift','Weak gravity with strong spin gives wide, slow, triangular loops.',{g:1.62,lat:60,om:3000,sp:4},[3,0,0,.8]],
  ['Mirror world','Same as the ring but in the southern hemisphere, so it turns the other way.',{lat:-50,om:2000,sp:4},[3,0,0,1.2]],
  ['Spiral in','Add damping and the loops shrink toward the center.',{dp:.012,sp:4},[4.5,0,0,2]],
- ['No spin','Earth spin at 0: the ellipse never rotates. Compare it with the others.',{om:0,sp:2},[3,0,0,1.5]]],
- apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.pend();const M=modes.pend;M.T=[];M.q=null;M.view(1,0,0);Object.assign(V.pend,BASE,q[2]);M.S={x:q[3][0],y:q[3][1],vx:q[3][2],vy:q[3][3]};M.prev=null;M.t=0;M.run=true;M.st=M.snap()}},
+ ['No spin','Earth spin at 0: the ellipse never rotates. Compare it with the others.',{om:0,sp:2},[3,0,0,1.5]],
+ ['Spiral','One clean spiral winding in, with no overlapping lines.',{om:0,dp:.01,sp:4},[4.5,0,0,4.457]],
+ ['Nested ovals','Stretched ovals that shrink inside each other and never cross.',{om:0,dp:.02,sp:4},[4.5,0,0,2.2]],
+ ['Long spiral','A long, thin oval that spirals in toward the center with no overlapping lines.',{om:0,dp:.02,sp:4},[4.5,0,0,1.1]],
+ ['Two bobs: ring and core','Two bobs on a spring. A big yellow ring draws with a blue rosette inside it as the swing passes between them.',{om:1500,lat:40,sp:6},[4.5,0,0,2.5],null,{lk:.1,p:{L:6},s:[2.7,0,0,1.2]}],
+ ['Two bobs: linked rings','Two bobs thrown in opposite directions, joined by a spring. They weave a wide ring with a hole in the middle.',{om:800,lat:50,sp:6},[3,0,0,1.2],null,{lk:.5,p:{},s:[-3,0,0,-1.2]}],
+ ['Two bobs: crossed bands','No spin. A long and a short string, joined by a spring, draw two bands that cross.',{om:0,lat:40,sp:6},[4,0,0,0],null,{lk:.15,p:{L:6},s:[0,2.4,0,0]}],
+ ['Two bobs: rounded diamond','No spin. Two bobs thrown at right angles on a spring fill out a rounded diamond.',{om:0,lat:40,sp:6},[4,0,0,.9],null,{lk:.2,p:{},s:[0,4,-.9,0]}]],
+ apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.pend();const M=modes.pend;M.T=[];M.q=null;M.view(1,0,0);Object.assign(V.pend,BASE,q[2]);M.S={x:q[3][0],y:q[3][1],vx:q[3][2],vy:q[3][3]};M.rel=q[4]||null;M.ri=0;M.prev=null;M.t=0;M.run=true;M.st=M.snap()}},
 attr:{tip:'Small softening makes sharp slingshot turns; large softening makes smooth rosettes. Try dragging an orange point while it runs.',
  list:[
  ['Random pattern','A new gentle, regular pattern each time, never chaotic. Tap it again for another.','RND'],
@@ -354,8 +379,10 @@ attr:{tip:'Small softening makes sharp slingshot turns; large softening makes sm
  ['Sharp slingshots','Low softening gives hard, sudden turns around each point.',{n:3,G:1.2,s:6,sp:1},[[.5,.2],[.2,.75],[.8,.75]],[.5,.9,0,-120]],
  ['Smooth rosette','High softening gives gentle, rounded petals.',{n:2,G:2,s:50,sp:1},[[.35,.5],[.65,.5]],[.5,.25,120,0]],
  ['Tight binary','Two close points act like one heavy center, and the body circles both.',{n:2,G:2.5,s:15,sp:1},[[.45,.5],[.55,.5]],[.5,.2,110,0]],
+ ['Four corners','Four points at the corners make busy, woven paths.',{n:4,G:1.2,s:20,sp:1},[[.25,.3],[.75,.3],[.25,.7],[.75,.7]],[.5,.12,110,0]],
+ ['Diamond','Four points in a diamond, with the ball starting near the middle.',{n:4,G:1,s:25,sp:1},[[.5,.2],[.8,.5],[.5,.8],[.2,.5]],[.5,.42,60,40]],
  ['Lazy drift','Weak pull makes slow, wide curves that wander across the screen.',{n:3,G:.5,s:40,sp:1},[[.5,.2],[.2,.75],[.8,.75]],[.2,.2,30,40]]],
- apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.attr();const M=modes.attr;M.T=[];M.view(1,W/2,H/2);Object.assign(V.attr,{nb:1},q[2]);q[3].forEach((p,i)=>{M.A[i].x=p[0]*W;M.A[i].y=p[1]*H});const b=q[4];M.B={x:b[0]*W,y:b[1]*H,vx:b[2],vy:b[3]};M.E=M.defE();M.prev=null;M.run=true;M.st=M.snap()}},
+ apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.attr();const M=modes.attr;M.T=[];M.view(1,W/2,H/2);Object.assign(V.attr,{nb:1},q[2]);q[3].forEach((p,i)=>{M.A[i].x=p[0]*W;M.A[i].y=p[1]*H});const b=q[4];M.B={x:b[0]*W,y:b[1]*H,vx:b[2],vy:b[3]};M.E=M.defE();M.np=null;M.sel=null;M.prev=null;M.run=true;M.st=M.snap()}},
 ros:{tip:'Each rosette is one circle drawn again and again, turned a little each time. More circles make it denser. Spread decides whether the middle is hollow or bright.',
  list:[
  ['Random pattern','A new rosette each time. Tap it again for another.','RND'],
@@ -375,7 +402,7 @@ bnc:{tip:'Gravity 0 with full bounciness weaves a lattice that fills the box. Ad
  ['Color storm','Eight balls at random make a dense, colorful web.',{n:8,e:1,gr:0,sp:1},null],
  ['Slow float','Light gravity gives gentle, curving paths.',{n:3,e:1,gr:60,sp:1},null]],
  apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.bnc();const M=modes.bnc;Object.assign(V.bnc,{n:3,e:1,gr:0,sp:1},q[2]);M.init();if(q[3])q[3].forEach((p,i)=>{const b=M.balls[i];if(b){b.x=p[0]*W;b.y=p[1]*H;b.vx=p[2];b.vy=p[3];b.p=0}});M.run=true;M.st=M.snap()}}};
-function openIdeas(){const d=$('ideas'),I=IDEAS[cur];d.innerHTML='<p class="tip">'+I.tip+' Tap Try it to load one, then tweak the sliders.</p><div class="card" style="background:none;padding:0"><button id="ix" style="background:#2a2a33;color:#eee">Close</button></div>'+I.list.map((q,i)=>`<div class="card"><div style="flex:1;min-width:0"><b>${q[0]}</b><p>${q[1]}</p>${q[2]==='RNDE'?optsHTML():''}</div><button data-i="${i}">Try it</button></div>`).join('');
+function openIdeas(){const d=$('ideas'),I=IDEAS[cur];d.innerHTML='<p class="tip">'+I.tip+' Tap Try it to load a preset, then tweak the sliders.</p><div class="card" style="background:none;padding:0"><button id="ix" style="background:#2a2a33;color:#eee">Close</button></div>'+I.list.map((q,i)=>`<div class="card"><div style="flex:1;min-width:0"><b>${q[0]}</b><p>${q[1]}</p>${q[2]==='RNDE'?optsHTML():''}</div><button data-i="${i}">Try it</button></div>`).join('');
  setTimeout(()=>{d.querySelectorAll('.inf').forEach(e=>e.onclick=()=>{const x=$('i_'+e.dataset.k);x.style.display=x.style.display=='block'?'none':'block'});
   if($('iv'))$('iv').oninput=e=>{EVO[cur].iv=+e.target.value;$('ivo').textContent=EVO[cur].iv?EVO[cur].iv+' s':'constant'}},0);
  d.style.display='block';$('ix').onclick=()=>d.style.display='none';
@@ -384,15 +411,15 @@ function resize(){const r=$('stage').getBoundingClientRect(),nW=r.width,nH=r.hei
  const oW=W,oH=H;dpr=devicePixelRatio||1;W=nW;H=nH;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
  for(const m in TR){const o=TR[m],k=TC[m];let cp=null;if(o.width){cp=document.createElement('canvas');cp.width=o.width;cp.height=o.height;cp.getContext('2d').drawImage(o,0,0)}
   o.width=cv.width;o.height=cv.height;k.setTransform(dpr,0,0,dpr,0,0);k.lineWidth=1.2;k.lineCap='round';
-  if(cp){k.save();k.setTransform(1,0,0,1,0,0);if(m=='bnc'){const Mb=modes.bnc,a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a);if(oH>0&&isFinite(rr)&&rr>.15&&rr<6&&!T.on)k.drawImage(cp,0,0,cp.width,cp.height,0,dpr*a*(1-rr),o.width,dpr*oH*rr);else k.drawImage(cp,0,0,o.width,o.height)}else{const sd=Math.min(o.width/cp.width,o.height/cp.height);k.drawImage(cp,(o.width-cp.width*sd)/2,(o.height-cp.height*sd)/2,cp.width*sd,cp.height*sd)}k.restore()}}
+  if(cp){k.save();k.setTransform(1,0,0,1,0,0);if(m=='bnc'){const Mb=modes.bnc,a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a),rx=(W-2*Mb.M)/(oW-2*Mb.M);if(oH>0&&isFinite(rr)&&rr>.15&&rr<6&&isFinite(rx)&&rx>.15&&rx<6&&!T.on)k.drawImage(cp,0,0,cp.width,cp.height,dpr*Mb.M*(1-rx),dpr*a*(1-rr),dpr*oW*rx,dpr*oH*rr);else k.drawImage(cp,0,0,o.width,o.height)}else{const sd=Math.min(o.width/cp.width,o.height/cp.height);k.drawImage(cp,(o.width-cp.width*sd)/2,(o.height-cp.height*sd)/2,cp.width*sd,cp.height*sd)}k.restore()}}
  if(oW){modes.attr.z*=Math.min(W/oW,H/oH);modes.attr.dirty=true;modes.pend.dirty=true;const Mb=modes.bnc,oS=Math.max(60,(Math.min(oW,oH)-2*Mb.M)*.78),nS=Mb.cubeS(),k=nS/oS;
   Mb.balls.forEach(q=>{if(T.on){q.x=W/2+(q.x-oW/2)*k;q.y=H/2+(q.y-oH/2)*k;q.z*=k;q.vx*=k;q.vy*=k;q.vz*=k;
    q.trs.forEach(pl=>{for(let i=0;i<pl.length;i+=3){pl[i]=W/2+(pl[i]-oW/2)*k;pl[i+1]=H/2+(pl[i+1]-oH/2)*k;pl[i+2]*=k}})}
-   else{const a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a);q.x*=W/oW;q.y=(isFinite(rr)&&rr>.15&&rr<6)?a+(q.y-a)*rr:q.y*H/oH;q.trs=[[]];q.p=0}});if(!T.on)Mb.clipTrail&&Mb.clipTrail()}}
+   else{const a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a),rx=(W-2*Mb.M)/(oW-2*Mb.M),okr=isFinite(rr)&&rr>.15&&rr<6,okx=isFinite(rx)&&rx>.15&&rx<6;q.x=okx?Mb.M+(q.x-Mb.M)*rx:q.x*W/oW;q.vx*=okx?rx:W/oW;q.y=okr?a+(q.y-a)*rr:q.y*H/oH;q.vy*=okr?rr:H/oH;q.trs=[[]];q.p=0}});if(!T.on)Mb.clipTrail&&Mb.clipTrail()}}
 const T={on:false,bv:0,o:false,bd:[1,0,0],th:1,ya:.5,dx:null,dy:null,t0:1,y0:.5},K3=.55;
 const IAS={pend:'Choose how the Pendulum sounds. Pendulum hum: a warm hum that rises with speed, with a tick at the end of each swing. Bell swing: a bell at the end of each swing (big swings ring low, small swings ring high) and a soft low note as it passes the middle. Sweeping pad: a smooth musical tone that swells and fades with each swing. Car engine: it revs up as the bob speeds through the middle and idles down at the ends of each swing. Grandfather clock: a tick and a tock at the end of each swing, with a chime every 16 beats. Ocean swell: a soft wash of waves that swells as the bob speeds up. Playground swing: a whoosh through the middle and a little creak at each end. Tap to switch. Sound turns on if it was off.',attr:'Choose how Attractors sounds. Nervous traveler: silent while the ball slows and turns, then swells as it speeds up toward a point, like someone moving out of danger and back towards it. Soft bells: gentle bell notes, faster when the ball is fast. Singing bowl: a calm, ringing strike each time the pitch steps. Breathy flute: a soft airy tone that rises and falls with speed. Car engine: revs up as the ball speeds up and eases down as it slows. Sonar: a ping with echoes, each time the ball passes close to a point. Flyby: a whoosh and a falling tone as the ball sweeps past a point. Whale song: slow gliding calls that sweep up when the ball speeds up and down when it slows. Slingshot zip: a rising zip as the ball whips around a point. Tap to switch. Sound turns on if it was off.',ros:'Choose how Rosette sounds. Chimes: a rising scale as it draws and a chord at the end. Music box: tinkling notes with a winding click at the start. Harp sweep: soft plucks, then a falling sweep across the strings at the end. Gong: quiet taps as it draws and a deep gong when it finishes. Tap to switch. Sound turns on if it was off.',bnc:'Choose how Bounce sounds. Notes: a musical note on each hit. Pinball: bumper dings, with a bonus bell on every ninth hit. Xylophone: bright wooden notes. Ping-pong: a crisp tock. Rubber ball: a soft boing. Billiards: a sharp click and thunk. Retro blips: little 8-bit bleeps. Sounds pan left and right with the ball. Tap to switch. Sound turns on if it was off.'};
 const IBV='Ball view puts a camera on the first ball, looking where it is heading, so you ride along inside the cube. Tap to cycle: Off, Beside (the outside view and the ball view together, so you can see where the ball is) and Only (full screen from the ball).';
-const I3D='3D view tilts the drawing floor like a table seen from an angle. The pendulum hangs above it with a drip line down to the floor, like paint dripping from a swinging can. Drag up or down to tilt the view and left or right to rotate it. In Bounce, the balls bounce around inside a cube and trace their paths in 3D. Placing and throwing are switched off in 3D, so turn it off to set up a new swing.';
+const I3D='In Attractors, 3D is real: the ball and the attraction points move in three dimensions, and Depth spread pushes the points apart in depth. 3D view tilts the drawing floor like a table seen from an angle. The pendulum hangs above it with a drip line down to the floor, like paint dripping from a swinging can. Drag up or down to tilt the view and left or right to rotate it. In Bounce, the balls bounce around inside a cube and trace their paths in 3D. Placing and throwing are switched off in 3D, so turn it off to set up a new swing.';
 const OFF3=()=>cur=='bnc'&&document.body.classList.contains('shp')&&modes.bnc.topPad?modes.bnc.topPad*.4:0;
 function pj(px,py,z){const u0=(px-W/2)*K3,v0=(py-H/2)*K3,zz=z*K3,cy=Math.cos(T.ya),sy=Math.sin(T.ya),u=u0*cy-v0*sy,v=u0*sy+v0*cy,c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[W/2+u*k,H/2+v2*k+H*.06+OFF3(),k*K3]}
 function pjm(){const cy=Math.cos(T.ya),sy=Math.sin(T.ya),c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,hx=W/2,hy=H/2;return(px,py,z)=>{const u0=(px-hx)*K3,v0=(py-hy)*K3,zz=z*K3,u=u0*cy-v0*sy,v=u0*sy+v0*cy,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[hx+u*k,hy+v2*k+H*.06+OFF3(),k*K3]}}
@@ -427,12 +454,12 @@ bnc(){const M=modes.bnc,S=M.cubeS(),x0=W/2-S/2,y0=H/2-S/2,P=pjm(),ch=Math.cos(T.
  [fl,tp].forEach(q=>{q.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.lineTo(q[0][0],q[0][1])});
  for(let i=0;i<4;i++){ctx.moveTo(fl[i][0],fl[i][1]);ctx.lineTo(tp[i][0],tp[i][1])}ctx.stroke();
  ctx.lineWidth=1.2;ctx.lineJoin='round';
- for(const b of M.balls){ctx.strokeStyle=COL.bnc=='auto'?`hsla(${b.h},90%,65%,.8)`:COL.bnc;
+ for(const b of M.balls){ctx.strokeStyle=(b.col!=null?b.col:COL.bnc)=='auto'?`hsla(${b.h},90%,65%,.8)`:(b.col!=null?b.col:COL.bnc);
   for(const pl of b.trs){if(pl.length<6)continue;ctx.beginPath();for(let i=0;i<pl.length;i+=3){const p=P(pl[i],pl[i+1],pl[i+2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])}ctx.stroke()}}
  const L=M.balls.map(b=>({b,p:P(b.x,b.y,b.z),s:P(b.x,b.y,0)})).sort((u,v)=>u.p[2]-v.p[2]);
  for(const{b,p,s:sh}of L){const r=M.R*p[2],hh=1-b.z/S*.6;ctx.fillStyle='rgba(0,0,0,.55)';ctx.beginPath();ctx.ellipse(sh[0],sh[1],r*hh*1.3,r*hh*1.3*ch,0,0,7);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.moveTo(sh[0],sh[1]);ctx.lineTo(p[0],p[1]);ctx.stroke();
-  const g=ctx.createRadialGradient(p[0]-r/3,p[1]-r/3,1,p[0],p[1],r*1.2);g.addColorStop(0,'#fff');g.addColorStop(1,COL.bnc=='auto'?`hsl(${b.h},90%,60%)`:COL.bnc);ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],r*1.2,0,7);ctx.fill();
+  const g=ctx.createRadialGradient(p[0]-r/3,p[1]-r/3,1,p[0],p[1],r*1.2);g.addColorStop(0,'#fff');g.addColorStop(1,(b.col!=null?b.col:COL.bnc)=='auto'?`hsl(${b.h},90%,60%)`:(b.col!=null?b.col:COL.bnc));ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],r*1.2,0,7);ctx.fill();
   if(T.bv&&b===M.balls[0]){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p[0],p[1],r*2.1,0,7);ctx.stroke()}}
  ctx.lineWidth=1}};
 function ballView(gx,gy,gw,gh){const M=modes.bnc,b=M.balls[0];if(!b)return;const S=M.cubeS(),ox=W/2-S/2,oy=H/2-S/2,bd=T.bd,mx=gx+gw/2,my=gy+gh/2;
@@ -457,10 +484,10 @@ function ballView(gx,gy,gw,gh){const M=modes.bnc,b=M.balls[0];if(!b)return;const
  for(const z of[0,S]){poly([C(0,0,z),C(S,0,z),C(S,S,z),C(0,S,z),C(0,0,z)])}
  for(const[x,y]of[[0,0],[S,0],[S,S],[0,S]])poly([C(x,y,0),C(x,y,S)]);ctx.stroke();
  ctx.lineWidth=1.3;ctx.lineJoin='round';
- for(const q of M.balls){ctx.strokeStyle=COL.bnc=='auto'?`hsla(${q.h},90%,65%,.85)`:COL.bnc;
+ for(const q of M.balls){ctx.strokeStyle=(q.col!=null?q.col:COL.bnc)=='auto'?`hsla(${q.h},90%,65%,.85)`:(q.col!=null?q.col:COL.bnc);
   for(const pl of q.trs){if(pl.length<6)continue;const pts=[];for(let i=0;i<pl.length;i+=3)pts.push(C(pl[i]-ox,pl[i+1]-oy,pl[i+2]));ctx.beginPath();poly(pts);ctx.stroke()}}
  const L=[];for(let i=1;i<M.balls.length;i++){const q=M.balls[i],a=C(q.x-ox,q.y-oy,q.z);if(a[2]>NR)L.push({q,a})}L.sort((u,v)=>v.a[2]-u.a[2]);
- for(const{q,a}of L){const p=pr(a),r=Math.max(2,M.R*fl/a[2]),g=ctx.createRadialGradient(p[0]-r/3,p[1]-r/3,1,p[0],p[1],r*1.2),col=COL.bnc=='auto'?`hsl(${q.h},90%,60%)`:COL.bnc;
+ for(const{q,a}of L){const p=pr(a),r=Math.max(2,M.R*fl/a[2]),g=ctx.createRadialGradient(p[0]-r/3,p[1]-r/3,1,p[0],p[1],r*1.2),col=(q.col!=null?q.col:COL.bnc)=='auto'?`hsl(${q.h},90%,60%)`:(q.col!=null?q.col:COL.bnc);
   g.addColorStop(0,'#fff');g.addColorStop(1,col);ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],r*1.2,0,7);ctx.fill()}
  ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(mx-8,my);ctx.lineTo(mx+8,my);ctx.moveTo(mx,my-8);ctx.lineTo(mx,my+8);ctx.stroke();ctx.lineWidth=1}
 function lab(t,x,y){ctx.fillStyle='rgba(255,255,255,.4)';ctx.font='11px system-ui';ctx.fillText(t,x,y)}
@@ -470,7 +497,7 @@ function draw3d(){if(cur=='bnc'&&T.bv==2){ballView(0,0,W,H);return}
   ctx.save();ctx.beginPath();ctx.rect(...r2);ctx.clip();ctx.fillStyle='#000';ctx.fillRect(...r2);ballView(...r2);ctx.restore();
   ctx.strokeStyle='#444';ctx.lineWidth=1;ctx.beginPath();if(wide){ctx.moveTo(W/2,0);ctx.lineTo(W/2,H)}else{ctx.moveTo(0,H/2);ctx.lineTo(W,H/2)}ctx.stroke();
   lab('Outside view',r1[0]+8,r1[1]+r1[3]-8);lab('Ball view',r2[0]+8,r2[1]+r2[3]-8);return}
- if(cur!='bnc')floor3(cur);D3[cur]();ctx.lineWidth=1}
+ if(cur!='bnc'&&cur!='attr')floor3(cur);D3[cur]();ctx.lineWidth=1}
 function bvHint(){const h=$('hint');h.textContent=T.bv==2?'Ball view only: you are riding the first ball. Tap Ball view again to go back to the outside view.':T.bv==1?'Outside view and ball view side by side. The first ball has a ring around it. Drag to rotate or tilt the outside view.':'The balls bounce inside a cube. Drag to rotate and tilt. Drag all the way up or down to see the cube as a flat square.';h.style.opacity=1}
 function togBV(){T.bv=(T.bv+1)%3;bvHint();updBV()}
 let bvS='';function updBV(){const show=T.on&&cur=='bnc',st=show+'|'+T.bv;if(st==bvS)return;bvS=st;document.querySelectorAll('.bvb').forEach(b=>{b.style.display=show?'':'none';if(b.parentElement.tagName=='SPAN')b.parentElement.style.display=show?'inline-flex':'none';const t=b.querySelector('span');if(t)t.textContent='Ball view: '+['Off','Beside','Only'][T.bv]})}
@@ -481,15 +508,16 @@ const mk=()=>({on:false,iv:0,v:{},t:0,next:0,e0:-99});
 const EVO={pend:mk(),attr:mk(),ros:mk(),bnc:mk()};
 const EVS={pend:{g:[.25,1],lat:[15,0],om:[.3,1]},attr:{G:[.25,1],s:[8,0]},ros:{},bnc:{gr:[60,0]}};
 const EVI={iv:'How often the settings change. At 0 (constant) they glide up and down all the time, so shapes blend into each other. At higher values they hold steady, then ease to new values after that many seconds, so each shape has time to build up before the next one.'};
+const TG={bnc:-1,wav:-1};function bres(b,bounce){const c=b.col!=null?b.col:COL.bnc;if(c=='auto'){if(b.h==null)b.h=0;if(bounce)b.h=(b.h+47)%360;b.cc=`hsl(${b.h},90%,65%)`;b.cl=`hsla(${b.h},90%,65%,.7)`}else{b.cc=b.cl=c}}function bcl(b){if(!b.p||b.cl==null)bres(b,false);return b.cl}
 const COL={pend:'auto',attr:'auto',ros:'auto',bnc:'auto'},colr=(m,a)=>COL[m]=='auto'?a:COL[m];
 const SW_D=['#ffe94d','#ffffff','#4de8ff','#ff5fd2','#6dff6d','#ff9a3d','#9b7bff'],SW_CB=['#e69f00','#56b4e9','#009e73','#f0e442','#0072b2','#d55e00','#cc79a7'];let SW=SW_D;
-const COLI='Changing: each tab uses its own shifting colors. Pendulum shimmers yellow, Attractors cycle through the rainbow over time, Rosette shifts hue circle by circle, and Bounce gives every ball its own color. Chladni plates colors the sand and Wave interference gives every source its own ring color. Pick a solid color for a single-color trace, or use the last circle for any color you like. You can change color while it draws: new lines use the new color and earlier lines keep theirs.';
+const COLI='Changing: each tab uses its own shifting colors. Pendulum shimmers yellow, Attractors cycle through the rainbow over time, Rosette shifts hue circle by circle, and Bounce gives every ball its own color that changes at every bounce. Chladni plates colors the sand and Wave interference gives every source its own ring color. Pick a solid color for a single-color trace, or use the last circle for any color you like. You can change color while it draws: earlier lines keep their color, and in Bounce the new color starts at the next bounce. In Bounce and Wave you can choose All or one ball or source under the colors.';
 const CN={auto:'Changing','#ffe94d':'Yellow','#ffffff':'White','#4de8ff':'Cyan','#ff5fd2':'Pink','#6dff6d':'Green','#ff9a3d':'Orange','#9b7bff':'Violet','#e69f00':'Orange','#56b4e9':'Sky blue','#009e73':'Green','#f0e442':'Yellow','#0072b2':'Blue','#d55e00':'Vermilion','#cc79a7':'Pink'},colName=v=>CN[v]||'Custom';
-function setCol(v){COL[cur]=v;document.querySelectorAll('.sw button').forEach(b=>b.classList.toggle('sel',(b.dataset.c||'auto')==v));
+function setCol(v){const tg=TG[cur],its=cur=='bnc'?modes.bnc.balls:cur=='wav'?modes.wav.src:null;if(its&&tg>=0&&its[tg])its[tg].col=v;else{COL[cur]=v;if(its){TG[cur]=-1;its.forEach(i=>{delete i.col})}}try{refreshTg()}catch(e){}document.querySelectorAll('.sw button').forEach(b=>b.classList.toggle('sel',(b.dataset.c||'auto')==v));
  const cu=v!='auto'&&!SW.includes(v);document.querySelectorAll('.cus').forEach(l=>{l.classList.toggle('sel',cu);l.style.background=cu?v:''});
  document.querySelectorAll('.cn').forEach(e=>e.textContent=colName(v))}
 function swHTML(id){const c=COL[cur];return `<button class="${c=='auto'?'sel':''}" title="Changing" aria-label="Changing colors" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)"></button>${SW.map(h=>`<button data-c="${h}" aria-label="${colName(h)}" class="${c==h?'sel':''}" style="background:${h}"></button>`).join('')}<label class="cus${c!='auto'&&!SW.includes(c)?' sel':''}" title="Custom color" style="background:${c!='auto'&&!SW.includes(c)?c:''}">+<input type="color" id="${id}" value="${c!='auto'?c:'#ffe94d'}"></label>`}
-function colUI(){return `<div style="margin:8px 0"><span>Pattern color: <b class="cn">${colName(COL[cur])}</b><i class="inf" data-k="col">i</i></span><div class="sw">${swHTML('cCus')}</div></div><div class="info" id="i_col">${COLI}</div>`}
+function colUI(){return `<div style="margin:8px 0"><span>Pattern color: <b class="cn">${colName(COL[cur])}</b><i class="inf" data-k="col">i</i></span><div class="sw">${swHTML('cCus')}</div><div class="tgw"></div></div><div class="info" id="i_col">${COLI}</div>`}
 function runIdea(it){IDEAS[cur].apply(it);evoSet(cur,it[2]==='RNDE');TC[cur].clearRect(0,0,W,H);build()}
 const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',full:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',play:'<path d="M7 4l13 8-13 8z"/>',x:'<path d="M5 5l14 14M19 5L5 19"/>',share:'<path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/>',rec:'<circle cx="12" cy="12" r="7"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',snd:'<path d="M4 9v6h4l5 4V5L8 9zM16 8a5 5 0 0 1 0 8"/>',mute:'<path d="M4 9v6h4l5 4V5L8 9zM17 9l5 6M22 9l-5 6"/>',cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5"/>',bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',folder:'<path d="M3 6a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',save:'<path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',trash:'<path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/>'};
 const svg=n=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`,setI=(id,n,t)=>{const e=$(id);if(e)e.innerHTML=svg(n)+(t?'<span>'+t+'</span>':'')};
@@ -663,7 +691,7 @@ function toggleRec(){if(REC){REC.stop();return}
   mr.start();REC=mr;recUI();toast(PF.snd?'Recording with sound. Tap again to stop.':'Recording (sound is off, so the video is silent). Tap again to stop.')}catch(e){REC=null;toast('Recording failed')}}
 function recUI(){document.querySelectorAll('.rcb').forEach(b=>{b.classList.toggle('on',!!REC);b.innerHTML=svg(REC?'stop':'rec')+(b.id=='wr'?'':'<span>'+(REC?'Stop':'Record')+'</span>')})}
 function wireShare(){document.querySelectorAll('.shb').forEach(b=>{b.innerHTML=svg('share')+'<span>Share</span>';b.onclick=shareImage});document.querySelectorAll('.rcb').forEach(b=>b.onclick=toggleRec);recUI()}
-const TOUR=[['Welcome to Pattern Sketch','Watch moving things draw patterns. Pick a pattern, give it a push, and it leaves a trail behind. Each one works a little differently.'],['Choose how to start','Pattern of the day shows you a new pattern to watch. Simple gives you a few preset ideas to try. Advanced gives you every pattern with full controls.'],['Place, then press Start','Most patterns start paused. Touch the screen to place or drag things, then press Start. In Bounce, tap to place each ball and drag to aim it.'],['The bar at the bottom','Start and Pause run the pattern, Clear wipes it, and Save keeps it. Controls opens the options, such as presets, colors and sliders. Hide controls for more room.'],['Share what you make','Save a pattern to find it again, share a picture or video, or use it as your wallpaper. You can pinch to zoom on a phone, or use the mouse wheel on a computer.']];
+const TOUR=[['Welcome to Pattern Sketch','Watch moving things draw patterns. Pick a pattern, give it a push, and it leaves a trail behind. Each one works a little differently.'],['Choose how to start','Pattern of the day shows you a new pattern to watch. Simple gives you a few preset examples to try. Advanced gives you every pattern with full controls.'],['Place, then press Start','Most patterns start paused. Touch the screen to place or drag things, then press Start. In Bounce, tap to place each ball and drag to aim it. In Attractors, tap a ball to set its speed, drag out from it to point it, or press and hold it to move it.'],['The bar at the bottom','Start and Pause run the pattern, Clear wipes it, and Save keeps it. Controls opens the options, such as presets, colors and sliders. Hide controls for more room.'],['Share what you make','Save a pattern to find it again, share a picture or video, or use it as your wallpaper. You can pinch to zoom on a phone, or use the mouse wheel on a computer.']];
 function showTour(i=0){let t=$('tour');if(!t){t=document.createElement('div');t.id='tour';document.body.appendChild(t)}t.style.display='flex';
  t.innerHTML=`<div class="box"><div class="td">${TOUR.map((_,k)=>`<i class="${k==i?'on':''}"></i>`).join('')}</div><b>${TOUR[i][0]}</b><p>${TOUR[i][1]}</p><div><button id="tk">Skip</button><button id="tn" style="background:#ffe94d;color:#000;font-weight:600">${i<TOUR.length-1?'Next':'Got it'}</button></div></div>`;
  $('tk').onclick=endTour;$('tn').onclick=()=>i<TOUR.length-1?showTour(i+1):endTour()}
@@ -742,7 +770,7 @@ function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.cl
   $('hd').onclick=daily;$('hs').onclick=()=>showHome('pick');$('ha').onclick=()=>showHome('pickadv');$('hset').onclick=()=>showHome('settings');$('hhelp').onclick=()=>showTour();if($('hpc'))$('hpc').onclick=()=>showHome('computer')}}
 {const s0=showHome;showHome=function(v){const r=s0.apply(this,arguments);const h=$('home');h.classList.toggle('pk',v!='home');h.classList.toggle('cv',v=='computer');h.insertAdjacentHTML('afterbegin','<i class="sp"></i>');h.insertAdjacentHTML('beforeend','<i class="sp"></i>');return r}}
 function off3(){if(T.on)toggle3();T.bv=0}
-function freshStart(m){const M=modes[m];CFG[m].forEach(q=>V[m][q[0]]=q[5]);if(m=='wav'){Object.assign(V.wav,{rf:0,hs:0,shp:0,mv:0,ov:0});try{modes.wav.reshape&&modes.wav.reshape()}catch(e){}}if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
+function freshStart(m){const M=modes[m];CFG[m].forEach(q=>V[m][q[0]]=q[5]);if(m=='pend')V.pend.hb=0;if(m=='wav'){Object.assign(V.wav,{rf:0,hs:0,shp:0,mv:0,ov:0});try{modes.wav.reshape&&modes.wav.reshape()}catch(e){}}if(window.STARTED)window.STARTED[m]=false;M.run=false;try{TC[m].clearRect(0,0,W,H)}catch(e){}if(M.clr)M.clr();if(M.init)M.init();M.run=false;M.dirty=true}
 function startAdv(){off3();hideHome();document.body.classList.remove('simple');LAST={ui:'adv',m:cur};setMode(cur);if(window.setCtl)setCtl(false);resize();pulseCtl()}
 function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);if(window.setCtl)setCtl(false);resize();buildSimple(kp);pulseCtl();if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
 function mul(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -751,13 +779,13 @@ function daily(){const d=new Date(),seed=d.getFullYear()*10000+(d.getMonth()+1)*
  it[0]='Pattern of the day';IDEAS[m].apply(it);evoSet(m,false);TC[m].clearRect(0,0,W,H);build();
  $('chips').querySelectorAll('button').forEach(b=>b.classList.remove('sel'));$('sdesc').textContent="Today's pattern is a "+MN[m]+" pattern. Come back tomorrow for a new one."}
 function buildSimple(keep){$('chips').classList.remove('cust');delete $('sdesc').dataset.pre;const items=IDEAS[cur].list.filter(q=>q[2]!=='RNDE');
- $('chips').innerHTML=items.map((q,i)=>`<button data-i="${i}">${q[0]}</button>`).join('');$('ssw').innerHTML=`<div class="ch">Pattern color: <b class="cn">${colName(COL[cur])}</b> <small style="color:#888">(tap a circle)</small></div><div class="sw">${swHTML('cCus2')}</div>`;
- if(!$('pib')){const pb0=document.createElement('button');pb0.id='pib';pb0.textContent='Try some preset ideas';pb0.onclick=()=>{const o=document.body.classList.toggle('pre');pb0.textContent=o?'Hide preset ideas':'Try some preset ideas';const d=$('sdesc'),pt=d.dataset.pre;if(pt){if(!o&&d.textContent===pt)d.textContent='';else if(o&&d.textContent==='')d.textContent=pt}};$('chips').parentNode.insertBefore(pb0,$('chips'));const ph0=document.createElement('span');ph0.id='pih';pb0.after(ph0)}$('pih').textContent=({pend:'Touch the bob and throw it on the screen.',attr:'Drag the ball to change its direction.',bnc:'Touch balls to change their path.',plt:'Swipe the screen to move the sand.',wav:'Tap the screen to place a source.'})[cur]||'';document.body.classList.remove('pre');$('pib').textContent='Try some preset ideas';$('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
+ $('chips').innerHTML=items.map((q,i)=>`<button data-i="${i}">${q[0]}</button>`).join('');$('ssw').innerHTML=`<div class="ch">Pattern color: <b class="cn">${colName(COL[cur])}</b> <small style="color:#888">(tap a circle)</small></div><div class="sw">${swHTML('cCus2')}</div><div class="tgw"></div>`;
+ if(!$('pib')){const pb0=document.createElement('button');pb0.id='pib';pb0.textContent='Preset examples';pb0.onclick=()=>{const o=document.body.classList.toggle('pre');pb0.textContent=o?'Hide preset examples':'Preset examples';const d=$('sdesc'),pt=d.dataset.pre;if(pt){if(!o&&d.textContent===pt)d.textContent='';else if(o&&d.textContent==='')d.textContent=pt}};$('chips').parentNode.insertBefore(pb0,$('chips'));const ph0=document.createElement('span');ph0.id='pih';pb0.after(ph0)}$('pih').textContent=({pend:'Touch the bob and throw it on the screen.',attr:'Tap a ball to set its speed, drag out to point it, then press Start.',bnc:'Touch balls to change their path.',plt:'Swipe the screen to move the sand.',wav:'Tap the screen to place a source.'})[cur]||'';document.body.classList.remove('pre');$('pib').textContent='Preset examples';$('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
  const go=i=>{runIdea(items[i]);$('chips').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('sel',k==i));$('sdesc').textContent=items[i][1];$('sdesc').dataset.pre=items[i][1];if(!document.body.classList.contains('pre'))$('sdesc').textContent=''};
  $('chips').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>go(i));
- $('ssw').querySelectorAll('button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus2').oninput=e=>setCol(e.target.value);if(!keep)$('sdesc').textContent='No preset chosen. Press Start, or tap Try some preset ideas.'}
-$('hm').onclick=()=>showHome('home');$('sp2').onclick=()=>$('pp').onclick();$('sc').onclick=()=>$('cl').onclick();$('s3').onclick=toggle3;$('sbv').onclick=togBV;$('sas').onclick=asNext;$('sgm').onclick=gameToggle;
-function evUI(){return EVO[cur].on?'<p style="margin:4px 0;color:#bbb;font-size:12.5px">Auto-change is on. Choose any other idea to turn it off.</p>':''}
+ $('ssw').querySelectorAll('button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus2').oninput=e=>setCol(e.target.value);if(!keep)$('sdesc').textContent='No preset chosen. Press Start, or tap Preset examples.'}
+$('hm').onclick=()=>showHome('home');$('sp2').onclick=()=>$('pp').onclick();$('sc').onclick=e=>$('cl').onclick(e);$('s3').onclick=toggle3;$('sbv').onclick=togBV;$('sas').onclick=asNext;$('sgm').onclick=gameToggle;
+function evUI(){return EVO[cur].on?'<p style="margin:4px 0;color:#bbb;font-size:12.5px">Auto-change is on. Choose any other preset to turn it off.</p>':''}
 function optsHTML(){const E=EVO[cur];
  return `<div class="row" style="grid-template-columns:1fr"><span>Vary settings every<i class="inf" data-k="iv">i</i><output id="ivo" style="margin-left:8px">${E.iv?E.iv+' s':'constant'}</output></span><input id="iv" type="range" min="0" max="180" step="5" value="${E.iv}"></div><div class="info" id="i_iv">${EVI.iv}</div>`}
 function evoSet(m,on){const E=EVO[m];E.on=on;E.v={};E.t=0;E.next=E.iv;E.e0=-99;if(!on)return;for(const id in EVS[m]){const[a,rel]=EVS[m][id],c0=V[m][id],cf=CFG[m].find(p=>p[0]==id),amp=rel?Math.abs(c0)*a:a;
@@ -821,10 +849,10 @@ function openSaved(){if(window.setCtl)setCtl(false);const d=$('ideas');d.innerHT
  d.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const x=SAVED[b.dataset.r];ask({title:'Rename pattern',input:1,val:x.name,ok:'Rename',onOk:n=>{const e=chk(n,x.id);if(e)return e;x.name=n;persist();openSaved()}})});
  d.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{const x=SAVED[b.dataset.x];ask({title:'Delete this pattern?',msg:'"'+x.name+'" will be permanently deleted.',ok:'Delete',danger:1,onOk:()=>{const k=SAVED.findIndex(y=>y.id===x.id);if(k>=0)SAVED.splice(k,1);persist();openSaved();return ''}})})}
 function build(){const pl='';bvS='';
- const pr='<div class="pre"><button id="ideaBtn" style="background:#ffe94d;color:#000;font-weight:600">'+svg('bulb')+'<span>Ideas</span></button><button id="spBtn">'+svg('folder')+'<span>My patterns</span></button><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="b3">'+svg('cube')+'<span>3D: '+(T.on?'On':'Off')+'</span></button><i class="inf" data-k="3d">i</i></span><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="bvb" class="bvb" style="display:none"><span>Ball view: Off</span></button><i class="inf" data-k="bv">i</i></span><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="bas" class="asb" style="display:none"><span></span></button><i class="inf" data-k="as">i</i></span><button id="bsh" class="shb"></button><button id="brec" class="rcb"></button>'+pl+(cur=='attr'||cur=='pend'?'<button id="rv">Reset view</button>':'')+(cur=='bnc'?'<button id="gmb" class="gmb"></button>':'')+'</div>';
+ const pr='<div class="pre"><button id="ideaBtn" style="background:#ffe94d;color:#000;font-weight:600">'+svg('bulb')+'<span>Preset examples</span></button><button id="spBtn">'+svg('folder')+'<span>My patterns</span></button><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="b3">'+svg('cube')+'<span>3D: '+(T.on?'On':'Off')+'</span></button><i class="inf" data-k="3d">i</i></span><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="bvb" class="bvb" style="display:none"><span>Ball view: Off</span></button><i class="inf" data-k="bv">i</i></span><span style="display:inline-flex;align-items:center;white-space:nowrap"><button id="bas" class="asb" style="display:none"><span></span></button><i class="inf" data-k="as">i</i></span><button id="bsh" class="shb"></button><button id="brec" class="rcb"></button>'+pl+(cur=='attr'||cur=='pend'?'<button id="rv">Reset view</button>':'')+(cur=='bnc'?'<button id="gmb" class="gmb"></button>':'')+'</div>';
  $('panel').innerHTML=pr+'<div class="info" id="i_3d">'+I3D+'</div><div class="info" id="i_bv">'+IBV+'</div><div class="info" id="i_as">'+(IAS[cur]||'')+'</div>'+evUI()+colUI()+CFG[cur].map(([id,l,mn,mx,st])=>`<div class="row"><span>${l}<i class="inf" data-k="${id}">i</i></span><input id="${id}" type="range" min="${mn}" max="${mx}" step="${st}" value="${V[cur][id]}"><output>${V[cur][id]}</output></div><div class="info" id="i_${id}">${INFO[cur][id]}</div>`).join('');
  $('panel').querySelectorAll('input').forEach(i=>i.oninput=()=>{V[cur][i.id]=+i.value;i.nextElementSibling.textContent=i.value;{const q=EVO[cur].on&&EVO[cur].v[i.id];if(q){q.c=cur=='bnc'?Math.max(+i.value,q.a):+i.value;q.f=q.to=+i.value}}if(cur=='ros'&&i.id!='sp')modes.ros.again(true);else if(i.id=='n'&&cur!='pend')modes[cur].onN()});
- if(cur=='attr'){['n','nb'].forEach(id=>{const i=$(id);if(i){i.style.display='none';i.nextElementSibling.style.display='none';const w=document.createElement('div');w.style.cssText='display:flex;gap:8px;margin-left:auto';const paint=()=>w.querySelectorAll('button').forEach(x=>{const on=+x.dataset.k==+i.value;x.style.background=on?'#ffe94d':'';x.style.color=on?'#000':'';x.style.fontWeight=on?'600':''});[1,2,3].forEach(k=>{const b=document.createElement('button');b.textContent=k;b.dataset.k=k;b.style.minWidth='44px';b.onclick=()=>{i.value=k;i.oninput();paint()};w.appendChild(b)});i.parentNode.insertBefore(w,i);paint()}})}
+ if(cur=='attr'){['n','nb'].forEach(id=>{const i=$(id);if(i){i.style.display='none';i.nextElementSibling.style.display='none';const w=document.createElement('div');w.style.cssText='display:flex;gap:8px;margin-left:auto';const paint=()=>w.querySelectorAll('button').forEach(x=>{const on=+x.dataset.k==+i.value;x.style.background=on?'#ffe94d':'';x.style.color=on?'#000':'';x.style.fontWeight=on?'600':''});(id=='n'?[1,2,3,4]:[1,2,3]).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.dataset.k=k;b.style.minWidth='44px';b.onclick=()=>{i.value=k;i.oninput();paint()};w.appendChild(b)});i.parentNode.insertBefore(w,i);paint()}})}
  $('panel').querySelectorAll('.inf').forEach(e=>e.onclick=()=>{const d=$('i_'+e.dataset.k);d.style.display=d.style.display=='block'?'none':'block'});
  $('ideaBtn').onclick=openIdeas;$('b3').onclick=toggle3;$('bvb').onclick=togBV;$('bas').onclick=asNext;document.querySelectorAll('.sw button').forEach(b=>b.onclick=()=>setCol(b.dataset.c||'auto'));$('cCus').oninput=e=>setCol(e.target.value);$('spBtn').onclick=openSaved;wireShare();if($('rv'))$('rv').onclick=()=>modes[cur].home();if($('gmb')){$('gmb').onclick=gameToggle;updGM(1)}
  $('panel').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{V.pend.g=+b.dataset.g;const i=$('g');i.value=b.dataset.g;i.nextElementSibling.textContent=b.dataset.g})}
@@ -847,7 +875,7 @@ cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.c
  if(ptrs.size==2&&cur=='bnc'&&!T.on){if(pd){clearTimeout(pd.t);pd=null;modes.bnc.sv=null}modes.bnc.beginPinch();act=false;pinch={none:1};return}
  if(ptrs.size==2&&(cur=='attr'||cur=='pend')&&!T.on){if(pd){clearTimeout(pd.t);pd=null;modes[cur].sv=null}const M=modes[cur],i=pinfo();M.beginPinch();act=false;pinch={d:i.d,z:M.z,wx:M.wx(i.x),wy:M.wy(i.y)};return}
  if(T.on){T.dy=e.clientY;T.dx=e.clientX;T.t0=T.th;T.y0=T.ya;return}if(ptrs.size>1)return;
- hist=[];{const[a,b]=pos(e);hist.push([e.timeStamp,a,b]);pd={x:a,y:b,t:setTimeout(commitPd,120)}}};
+ hist=[];{const[a,b]=pos(e);hist.push([e.timeStamp,a,b]);pd={x:a,y:b,t:setTimeout(commitPd,(cur=='pend'||cur=='attr')?220:120)}}};
 cv.onpointermove=e=>{if(ptrs.has(e.pointerId))ptrs.set(e.pointerId,[e.clientX,e.clientY]);
  if(T.on){if(T.dy!=null){const HP=Math.PI/2;let th=Math.min(HP,Math.max(0,T.t0+(e.clientY-T.dy)/160)),ya=T.y0+(e.clientX-T.dx)/110;
    if(th<.09)th=0;else if(th>HP-.09)th=HP;T.o=th==0||th==HP;
@@ -935,7 +963,7 @@ const P=modes.plt={run:false,sub:1/20,P:null,np:0,pf:3,lp:3,acc:0,vib:0,drag:nul
 
 /* ---------- WAVES ---------- */
 const SHS=['screen','triangle','square','pentagon','hexagon','circle'],SHN=['Screen','Triangle','Square','Pentagon','Hexagon','Circle'];
-const pl=p=>64-4.8*p,WC_D=['#ffb347','#5ee0c4','#ff6b9a','#8ab4ff','#d6f26b','#c79bff'],WC_CB=['#e69f00','#56b4e9','#009e73','#f0e442','#0072b2','#d55e00'];
+const pl=p=>p<=10?64-4.8*p:16-(p-10),WC_D=['#ffb347','#5ee0c4','#ff6b9a','#8ab4ff','#d6f26b','#c79bff'],WC_CB=['#e69f00','#56b4e9','#009e73','#f0e442','#0072b2','#d55e00'];
 const WBASE={rv:55,fd:300,lw:1.1,ms:.5,rf:0,hs:0,shp:0,ed:1,mv:0,ov:0};
 const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g:null,
  get st(){return this.snap()},set st(v){},
@@ -944,8 +972,8 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
  init(){this.t=0;this.rings=[]},
  wipe(){this.src=[];this.sel=null;this.t=0;this.rings=[];this.selUI()},
  clr(){this.wipe()},again(){this.wipe()},ps(){return 1},home(){},onN(){},
- snap(){return{src:this.src.map(s=>({x:Math.round(s.x*10)/10,y:Math.round(s.y*10)/10,lam:Math.round(s.lam*100)/100,ph:s.ph||0,amp:s.amp==null?1:s.amp}))}},
- load(st){this.src=((st&&st.src)||[]).map(s=>({x:s.x,y:s.y,lam:s.lam,ph:s.ph||0,amp:s.amp==null?1:s.amp}));this._g=null;this.src.forEach(s=>this.fit(s));this.sel=null;this.t=0;this.rings=[];this.selUI()},
+ snap(){return{src:this.src.map(s=>({x:Math.round(s.x*10)/10,y:Math.round(s.y*10)/10,lam:Math.round(s.lam*100)/100,ph:s.ph||0,amp:s.amp==null?1:s.amp,col:s.col,one:s.one?1:0,nf:s.nf?1:0}))}},
+ load(st){this.src=((st&&st.src)||[]).map(s=>({x:s.x,y:s.y,lam:s.lam,ph:s.ph||0,amp:s.amp==null?1:s.amp,col:s.col,one:s.one?1:0,nf:s.nf?1:0}));this._g=null;this.src.forEach(s=>this.fit(s));this.sel=null;this.t=0;this.rings=[];this.selUI()},
  reshape(){this._g=null;this.src.forEach(s=>this.fit(s));this.rings=[];this.t=0;this.run=false},
  geom(){const k=this.eff(),LH=Math.round(this.LH());if(this._g&&this._g.k==k&&this._g.LH==LH)return this._g;let g;const Rm=Math.min(190,LH/2-8);
   if(k=='circle')g={k,LH,circle:true,R:Rm};
@@ -957,32 +985,32 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
  fit(s){const g=this.geom();let moved=false;if(g.circle){const d=Math.hypot(s.x,s.y);if(d>g.R-10){const f=(g.R-10)/d;s.x*=f;s.y*=f;moved=true}}
   else for(let i=0;i<4;i++)for(const e of g.E){const q=e.nx*s.x+e.ny*s.y-e.c;if(q<10){s.x+=e.nx*(10-q);s.y+=e.ny*(10-q);moved=true}}return moved},
  shapePath(){const g=this.geom();ctx.beginPath();if(g.circle)ctx.arc(0,0,g.R,0,TAU);else{g.pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath()}},
- trace(x,y){const g=this.geom(),L=V.wav.fd*1.4+40,N=180,rays=[];
-  for(let k=0;k<N;k++){const a=k/N*TAU;let dx=Math.cos(a),dy=Math.sin(a),px=x,py=y,tot=0;const P=[px,py],Cm=[0];
-   for(let b=0;b<14&&tot<L;b++){let t=1e9,nx=0,ny=0;
+ trace(x,y,nf,hi){const g=this.geom(),L=nf?60000:V.wav.fd*1.4+40,N=hi?900:180,rays=[];
+  for(let k=0;k<N;k++){const a=k/N*TAU;let dx=Math.cos(a),dy=Math.sin(a),px=x,py=y,tot=0;const P=[px,py],Cm=[0],H=[0];let hs=0;
+   for(let b=0;b<(nf?400:14)&&tot<L;b++){let t=1e9,nx=0,ny=0,wi=-1;
     if(g.circle){const B=px*dx+py*dy,Cc=px*px+py*py-g.R*g.R,D=B*B-Cc;if(D>0){t=-B+Math.sqrt(D);nx=(px+dx*t)/g.R;ny=(py+dy*t)/g.R}}
-    else for(const e of g.E){const nd=e.nx*dx+e.ny*dy;if(nd<-1e-9){const tt=(e.c-(e.nx*px+e.ny*py))/nd;if(tt>1e-6&&tt<t){t=tt;nx=-e.nx;ny=-e.ny}}}
-    if(t>1e8)break;px+=dx*t;py+=dy*t;tot+=t;P.push(px,py);Cm.push(tot);const dn=dx*nx+dy*ny;dx-=2*dn*nx;dy-=2*dn*ny}
-   rays.push({P,C:Cm})}
+    else for(let ei=0;ei<g.E.length;ei++){const e=g.E[ei],nd=e.nx*dx+e.ny*dy;if(nd<-1e-9){const tt=(e.c-(e.nx*px+e.ny*py))/nd;if(tt>1e-6&&tt<t){t=tt;nx=-e.nx;ny=-e.ny;wi=ei}}}
+    if(t>1e8)break;px+=dx*t;py+=dy*t;tot+=t;P.push(px,py);Cm.push(tot);hs=(hs*131+wi+7)%2147483647;H.push(hs);const dn=dx*nx+dy*ny;dx-=2*dn*nx;dy-=2*dn*ny}
+   rays.push({P,C:Cm,H})}
   return rays},
- col(si){return COL.wav=='auto'?(PF.cb?WC_CB:WC_D)[si%6]:COL.wav},
- step(h){const v=V.wav,e=h*Math.min(1,.3+this.t/.5),LH=this.LH(),hx=200-14,hy=LH/2-14;if(this.t<=1e-9)this.rings=[];this.t+=e;
+ col(si){const s=this.src[si],c=s&&s.col!=null?s.col:COL.wav;return c=='auto'?(PF.cb?WC_CB:WC_D)[si%6]:c},
+ step(h){const v=V.wav,e=h*Math.min(1,.3+this.t/.5),LH=this.LH(),hx=200-14,hy=LH/2-14;if(this.t<=1e-9){this.rings=[];this.src.forEach(q=>q.f1=false)}this.t+=e;
   for(const s of this.src){
    if(v.mv==1){if(s.vx==null){const a=rnd()*TAU,sp=30+rnd()*25;s.vx=Math.cos(a)*sp;s.vy=Math.sin(a)*sp}
     s.x+=s.vx*e*v.ms*2;s.y+=s.vy*e*v.ms*2;if(s.x<-hx||s.x>hx){s.vx*=-1;s.x=clamp(s.x,-hx,hx)}if(s.y<-hy||s.y>hy){s.vy*=-1;s.y=clamp(s.y,-hy,hy)}}
    else if(v.mv==2){const a=e*v.ms*.8,c=Math.cos(a),sn=Math.sin(a),dx=s.x,dy=s.y;s.x=dx*c-dy*sn;s.y=dx*sn+dy*c}
    if(this.eff()!='screen'&&this.fit(s)&&s.vx!=null){s.vx*=-1;s.vy*=-1}
    const iv=s.lam/v.rv;if(s.acc==null)s.acc=iv*(1-((s.ph||0)%TAU)/TAU);s.acc+=e;
-   while(s.acc>=iv){s.acc-=iv;this.rings.push({x:s.x,y:s.y,r0:v.rv*s.acc,t0:this.t,si:this.src.indexOf(s),amp:s.amp==null?1:s.amp,rays:v.rf?this.trace(s.x,s.y):null})}}
-  const lim=v.fd*(v.rf?1.4:1)+30;this.rings=this.rings.filter(r=>v.rv*(this.t-r.t0)+r.r0<lim)},
+   while(s.acc>=iv){s.acc-=iv;if(s.one&&s.f1)continue;s.f1=true;this.rings.push({x:s.x,y:s.y,r0:v.rv*s.acc,t0:this.t,si:this.src.indexOf(s),c:this.col(this.src.indexOf(s)),amp:s.amp==null?1:s.amp,nf:!!(s.one&&s.nf&&v.rf),hi:!!s.one,rays:v.rf?this.trace(s.x,s.y,s.one&&s.nf,!!s.one):null})}}
+  const lim=v.fd*(v.rf?1.4:1)+30;this.rings=this.rings.filter(r=>v.rv*(this.t-r.t0)+r.r0<(r.nf?(v.rf?60000:900):lim))},
  toL(x,y){const k=W/400;return[(x-W/2)/k,(y-H/2)/k]},
- down(x,y){if(V.wav.hs){toast('Please untick the Hide sources option to place a source.');return}const[lx,ly]=this.toL(x,y),i=this.src.findIndex(s=>Math.hypot(s.x-lx,s.y-ly)<18);this.drag={i,moved:false,x:lx,y:ly};if(i>=0){this.sel=i;this.selUI()}},
+ down(x,y){if(V.wav.hs){toast('Please untick the Hide sources option to place a source.');return}const[lx,ly]=this.toL(x,y),i=this.src.findIndex(s=>Math.hypot(s.x-lx,s.y-ly)<18);this.drag={i,moved:false,x:lx,y:ly,was:i>=0&&this.sel===i};if(i>=0){this.sel=i;this.selUI()}},
  move(x,y){const d=this.drag;if(!d)return;const[lx,ly]=this.toL(x,y);if(Math.hypot(lx-d.x,ly-d.y)>6)d.moved=true;if(d.i>=0&&d.moved){const s=this.src[d.i];s.x=lx;s.y=ly;this.fit(s)}},
- up(){const d=this.drag;this.drag=null;if(!d)return;if(d.i<0&&!d.moved){if(this.src.length>=6){toast('You can have up to 6 sources. Tap a source to remove it.');return}if(this.inside(d.x,d.y,10)){this.src.push({x:d.x,y:d.y,lam:pl(6)});this.sel=this.src.length-1;this.selUI()}}},
- ring(ix,iy,r,si,amp){const v=V.wav,fd=v.fd*(v.rf?1.4:1),a=Math.max(.06,.95-r/fd)*amp*Math.min(1,r/16)*.85;ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=this.col(si);ctx.beginPath();ctx.arc(ix,iy,r,0,TAU);ctx.stroke()},
- rayRing(rg,r){const R=rg.rays,pts=[];for(const ray of R){const C=ray.C;let i=0;if(r>C[C.length-1]){pts.push(null);continue}while(i<C.length-2&&C[i+1]<r)i++;const t=(r-C[i])/Math.max(1e-6,C[i+1]-C[i]),P=ray.P;pts.push([P[2*i]+(P[2*i+2]-P[2*i])*t,P[2*i+1]+(P[2*i+3]-P[2*i+1])*t])}
-  const fd=V.wav.fd*1.4,a=Math.max(.06,.95-r/fd)*rg.amp*Math.min(1,r/16);ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=this.col(rg.si);const gap=Math.max(14,TAU*r/R.length*3);
-  ctx.beginPath();let pen=false,last=null;for(let i=0;i<=pts.length;i++){const p=pts[i%pts.length];if(!p){pen=false;last=null;continue}if(pen&&last&&Math.hypot(p[0]-last[0],p[1]-last[1])>gap)pen=false;if(!pen){ctx.moveTo(p[0],p[1]);pen=true}else ctx.lineTo(p[0],p[1]);last=p}ctx.stroke()},
+ up(){const d=this.drag;this.drag=null;if(!d)return;if(d.i>=0&&!d.moved&&this.src[d.i]){const sc=this.src[d.i],nw=performance.now();if(this.lt&&this.lt.s===sc&&nw-this.lt.t<700){this.src.splice(d.i,1);this.sel=null;this.lt=null;this.selUI();toast('Source removed');return}this.lt={s:sc,t:nw};return}if(d.i<0&&!d.moved){if(this.src.length>=6){toast('You can have up to 6 sources. Double-tap a source to remove it.');return}if(this.inside(d.x,d.y,10)){const ns={x:d.x,y:d.y,lam:pl(6)};this.src.push(ns);this.sel=this.src.length-1;this.lt={s:ns,t:performance.now()};this.selUI()}}},
+ ring(ix,iy,r,si,amp,cc,nf){const v=V.wav,fd=v.fd*(v.rf?1.4:1),a=(nf?.9:Math.max(.06,.95-r/fd))*amp*Math.min(1,r/16)*.85;ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=cc||this.col(si);ctx.beginPath();ctx.arc(ix,iy,r,0,TAU);ctx.stroke()},
+ rayRing(rg,r){const R=rg.rays,pts=[];for(const ray of R){const C=ray.C;let i=0;if(r>C[C.length-1]){pts.push(null);continue}while(i<C.length-2&&C[i+1]<r)i++;const t=(r-C[i])/Math.max(1e-6,C[i+1]-C[i]),P=ray.P;pts.push([P[2*i]+(P[2*i+2]-P[2*i])*t,P[2*i+1]+(P[2*i+3]-P[2*i+1])*t,ray.H?ray.H[i]:0])}
+  const fd=V.wav.fd*1.4,a=(rg.nf?.9:Math.max(.06,.95-r/fd))*rg.amp*Math.min(1,r/16);ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=rg.c||this.col(rg.si);const gap=Math.max(14,TAU*r/R.length*3);
+  ctx.beginPath();let pen=false,last=null;for(let i=0;i<=pts.length;i++){const p=pts[i%pts.length];if(!p){pen=false;last=null;continue}if(pen&&last&&(rg.hi?(p[2]!==last[2]&&Math.hypot(p[0]-last[0],p[1]-last[1])>6):Math.hypot(p[0]-last[0],p[1]-last[1])>gap))pen=false;if(!pen){ctx.moveTo(p[0],p[1]);pen=true}else ctx.lineTo(p[0],p[1]);last=p}ctx.stroke()},
  cross(LH){const v=V.wav,R=this.rings.map(g=>({x:g.x,y:g.y,r:v.rv*(this.t-g.t0)+g.r0,si:g.si})).filter(g=>g.r>4);ctx.fillStyle='#fff';ctx.globalAlpha=.85;
   for(let a=0;a<R.length;a++)for(let b=a+1;b<R.length;b++){const A=R[a],B=R[b];if(A.si==B.si)continue;const dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy);if(d<1||A.r+B.r<d||Math.abs(A.r-B.r)>d)continue;
    const q=(A.r*A.r-B.r*B.r+d*d)/(2*d),hh=Math.sqrt(Math.max(0,A.r*A.r-q*q)),mx=A.x+dx*q/d,my=A.y+dy*q/d;
@@ -990,16 +1018,16 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
   ctx.globalAlpha=1},
  draw(){const k=W/400,LH=H/k,v=V.wav,clip=this.eff()!='screen';ctx.save();ctx.translate(W/2,H/2);ctx.scale(k,k);ctx.fillStyle='#000';ctx.fillRect(-200,-LH/2,400,LH);ctx.lineWidth=v.lw;
   if(clip){ctx.save();this.shapePath();ctx.clip()}
-  for(const rg of this.rings){const r=v.rv*(this.t-rg.t0)+rg.r0;if(r<1)continue;if(rg.rays)this.rayRing(rg,r);else this.ring(rg.x,rg.y,r,rg.si,rg.amp)}
+  for(const rg of this.rings){const r=v.rv*(this.t-rg.t0)+rg.r0;if(r<1)continue;if(rg.rays)this.rayRing(rg,r);else this.ring(rg.x,rg.y,r,rg.si,rg.amp,rg.c,rg.nf)}
   ctx.globalAlpha=1;if(clip)ctx.restore();
   if(clip&&v.ed){ctx.strokeStyle='#5b6590';ctx.lineWidth=1.5;ctx.globalAlpha=.9;this.shapePath();ctx.stroke();ctx.globalAlpha=1}
-  if(v.ov&&this.rings.length&&!v.rf)this.cross(LH);
+  if(v.ov&&this.rings.length)this.cross(LH);
   if(!v.hs)this.src.forEach((s,i)=>{if(i==this.sel){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(s.x,s.y,11,0,TAU);ctx.stroke()}ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x,s.y,5,0,TAU);ctx.fill();ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke()});
   ctx.restore()},
  selUI(){const simple=document.body.classList.contains('simple'),A=$('wsrcA'),S=$('sxw'),host=simple?S:A;if(A&&A!==host)A.innerHTML='';if(S&&S!==host)S.innerHTML='';if(!host)return;
-  const s=this.src[this.sel];if(!s){host.innerHTML='<p class="nt">Tap empty space to add a source (up to 6). Tap a source to set its pitch.</p>';return}
-  const p=Math.round((64-s.lam)/4.8*2)/2,adv=!simple,inf=k=>adv?k:null;
-  host.innerHTML=`<p class="nt">Source ${this.sel+1} of ${this.src.length}. Drag it to move it.</p>`+rowH('wpi','Pitch',1,10,.5,p,null,inf('wpi'))+(adv?rowH('wph','Phase',0,345,15,Math.round((s.ph||0)/TAU*360),v=>v+'°','wph')+rowH('wam','Strength',.2,1,.1,s.amp==null?1:s.amp,v=>(+v).toFixed(1),'wam'):'')+`<div class="pre"><button id="wrm">Remove this source</button></div>`;
+  const s=this.src[this.sel];if(!s){host.innerHTML='<p class="nt">Tap empty space to add a source (up to 6). Tap a source to set its pitch, and double-tap it to remove it.</p>';return}
+  const p=Math.round((s.lam>=16?(64-s.lam)/4.8:10+(16-s.lam))*2)/2,adv=!simple,inf=k=>adv?k:null;
+  host.innerHTML=`<p class="nt">Source ${this.sel+1} of ${this.src.length}. Drag it to move it.</p>`+rowH('wpi','Pitch',1,20,.5,p,null,inf('wpi'))+(adv?rowH('wph','Phase',0,345,15,Math.round((s.ph||0)/TAU*360),v=>v+'°','wph')+rowH('wam','Strength',.2,1,.1,s.amp==null?1:s.amp,v=>(+v).toFixed(1),'wam'):'')+`<div class="pre"><button id="wrm">Remove this source</button></div>`;
   const bindR=(id,fn,fmt)=>{const e=$(id);if(!e)return;e.oninput=()=>{e.nextElementSibling.textContent=fmt?fmt(+e.value):e.value;fn(+e.value)}};
   bindR('wpi',v=>{s.lam=pl(v)});bindR('wph',v=>{s.ph=v/360*TAU;s.acc=null},v=>v+'°');bindR('wam',v=>{s.amp=v},v=>(+v).toFixed(1));
   $('wrm').onclick=()=>{this.src.splice(this.sel,1);this.sel=null;this.selUI()};wireInf(host)}};
@@ -1011,20 +1039,20 @@ MN.plt='Chladni plates';MN.wav='Wave interference';
 MD.plt='Sand on a vibrating plate jumps away from the moving parts and settles into lines. It includes a sound you can hear.';
 MD.wav='Rings spread out from sources you place. Where they cross they strengthen and cancel, weaving a pattern.';
 HINT.plt='Press Start to shake the plate. Drag a finger across it to sweep the sand aside.';
-HINT.wav='Tap the screen to add a source, or open Ideas. Then press Start. Drag a source to move it.';
+HINT.wav='Tap the screen to add a source, or open Preset examples. Then press Start. Drag a source to move it.';
 const HZ_I='Pitch. The note the plate is shaking at. A low pitch gives a few big lines of sand. A high pitch gives a finer, busier pattern.';
 INFO.plt={p:HZ_I,n:'Amount of sand. Fewer grains give a delicate, dusty pattern. More grains fill the nodal lines in solidly but need more from your device.',sp:'Settle speed. How fast the sand moves toward the nodal lines. Lower is slower, so you can watch the pattern form. It does not change the final pattern.',gs:'Grain size. How big each grain of sand is drawn.',sk:'Shake strength. How hard the sand is thrown about. A strong shake spreads the sand wider around the nodal lines. A gentle shake packs it tightly onto them.',p2:'Second pitch. The pitch that is mixed in when Blend is above zero.',bl:'Blend. Mixes the second pitch into the first. At zero you only get the first pitch. In between you get patterns neither pitch makes on its own.',asp:'Sweep speed. How fast the pitch climbs when Auto sweep is on.',br:'Brush size. How wide an area your finger sweeps clear when you drag across the plate.',
  xsa:'Shake again. Scatters the sand evenly over the plate so you can watch the pattern form again.',xsh:'Plate shape. A square plate and a round plate shake in different patterns, so the Pitch list changes when you switch. The round plate makes rings and spokes, the square plate makes grids and crosses. Changing the shape scatters the sand again.',xau:'Auto sweep. The pitch rises slowly by itself and the pattern changes from one into the next. The Pitch slider follows along.',xsf:'Surface. Flat is a normal plate. Bowl curves up at the edges so the sand drifts toward the middle. Dome curves up in the middle so the sand drifts outward. The shake still pulls the sand to the nodal lines.',xvw:'View. Flat looks straight down at the plate. 3D tilts the plate so you can see its surface, including a bowl or dome, and the sand sitting on it.',xnl:'Show nodal lines. Draws the nodal lines, the parts of the plate that stay still, so you can see where the sand is heading.'};
 INFO.wav={rv:'Ring speed. How fast the rings travel outward.',fd:'Fade distance. How far a ring travels before it fades away. A longer distance gives a busier pattern.',lw:'Line weight. How thick the ring lines are.',ms:'Move speed. How fast the sources move when Move sources is on.',
  wpi:'Pitch. A high pitch gives tight, close rings. A low pitch gives wide rings. Each source has its own pitch.',wph:'Phase. Where in its swing the selected source starts. It shifts when this source sends out rings compared with the others.',wam:'Strength. How bright the selected source\'s rings are. A weak source fades into the background.',
- xrf:'Reflect off the edges. Rings bounce back from the edge of the space instead of leaving it.',xhs:'Hide sources. Removes the dots so you can just watch the pattern. Untick it to place or move a source.',xshp:'Shape. The shape of the space the rings bounce inside. Changing it clears the waves.',xed:'Show edges. Draws the outline of the shape so you can see where the rings will bounce.',xmv:'Move sources. Drift around: sources wander and bounce off the edges. Orbit the centre: sources circle the middle. Tap again to turn it off. Rings already sent out stay where they were made.',xov:'Show where rings cross. Draws a dot where rings from different sources meet. It is not available with Reflect on.'};
+ xrf:'Reflect off the edges. Rings bounce back from the edge of the space instead of leaving it.',xhs:'Hide sources. Removes the dots so you can just watch the pattern. Untick it to place or move a source.',xshp:'Shape. The shape of the space the rings bounce inside. Changing it clears the waves.',xed:'Show edges. Draws the outline of the shape so you can see where the rings will bounce.',xmv:'Move sources. Drift around: sources wander and bounce off the edges. Orbit the centre: sources circle the middle. Tap again to turn it off. Rings already sent out stay where they were made.',xov:'Show where rings cross. Draws a dot where rings from different sources meet.'};
 IAS.plt='';IAS.wav='';
 
 /* ---------- ideas ---------- */
 const ringSrc=(r,n,p,a0)=>Array.from({length:n},(_,i)=>[Math.round(r*Math.cos(a0+i/n*TAU)),Math.round(r*Math.sin(a0+i/n*TAU)),p]);
 RND.plt=()=>{const sh=rnd()<.5?0:1;return['','',{sh,p:sh?Math.floor(rnd()*Math.min(12,MC.length)):Math.floor(rnd()*24)}]};
 RND.wav=()=>{const n=2+Math.floor(rnd()*4),r=40+rnd()*60,a0=rnd()*TAU,p=3+Math.floor(rnd()*6),mixed=rnd()<.4,s=ringSrc(r,n,p,a0);if(mixed)s.forEach(q=>q[2]=3+Math.floor(rnd()*6));return['','',{s,rf:rnd()<.3?1:0}]};
-IDEAS.plt={tip:'Each idea sets a pitch, and the sand stays where it is and moves from there. Changing between the square and the round plate scatters the sand again.',
+IDEAS.plt={tip:'Each preset sets a pitch, and the sand stays where it is and moves from there. Changing between the square and the round plate scatters the sand again.',
  list:[
  ['Random pattern','A new pitch each time on a square or round plate. Tap it again for another.','RND'],
  ['Simple cross','A few big lines of sand. The gentlest pitch.',{sh:0,p:0}],
@@ -1040,7 +1068,7 @@ IDEAS.plt={tip:'Each idea sets a pitch, and the sand stays where it is and moves
  ['Wheel','On the round plate. A ring and six spokes, like a wheel.',{sh:1,m:3,n:2}],
  ['Twelve spokes','On the round plate. A busy star of twelve spokes. A high pitch.',{sh:1,m:6,n:1}]],
  apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.plt();const o=q[2],old=V.plt.sh|0;Object.assign(V.plt,PBASE,{sh:o.sh});P.fixP();V.plt.p=o.p!=null?o.p:P.find(o.m,o.n);V.plt.p2=Math.min(8,P.nm()-1);P.fixP();P.pf=V.plt.p;P.lp=V.plt.p;if(old!==o.sh)P.init();else P.resize(V.plt.n);P.run=false}};
-IDEAS.wav={tip:'Each idea places the sources and sometimes sets Reflect. The rings from every source add together: where two crests meet they strengthen, and where a crest meets a trough they cancel. Then tap the screen to add more sources.',
+IDEAS.wav={tip:'Each preset places the sources and sometimes sets Reflect. The rings from every source add together: where two crests meet they strengthen, and where a crest meets a trough they cancel. Then tap the screen to add more sources.',
  list:[
  ['Random pattern','A new set of sources each time. Tap it again for another.','RND'],
  ['Two sources','Two matching sources. Fans of lines spread out between them, the classic interference picture.',{s:[[-50,0,6],[50,0,6]]}],
@@ -1050,8 +1078,13 @@ IDEAS.wav={tip:'Each idea places the sources and sometimes sets Reflect. The rin
  ['Line of five','Five sources in a row. Their rings merge into a nearly flat wave front.',{s:[0,1,2,3,4].map(i=>[-140+i*70,0,7])}],
  ['Four corners','Four sources with Reflect on. The rings bounce off the edges and cross the middle.',{s:[[-120,-105,5],[120,-105,5],[-120,105,5],[120,105,5]],rf:1}],
  ['Close pair','Two high-pitch sources almost touching. Very fine curved lines.',{s:[[-18,0,8],[18,0,8]]}],
- ['Spiral of six','Six sources winding outward, each at a different pitch.',{s:Array.from({length:6},(_,i)=>[Math.round((25+i*22)*Math.cos(i*1.05)),Math.round((25+i*22)*Math.sin(i*1.05)),3.5+i*.9])}]],
- apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.wav();const o=q[2];Object.assign(V.wav,WBASE,{rf:o.rf?1:0});Wv._g=null;Wv.src=o.s.map(([x,y,p])=>({x,y,lam:pl(p)}));Wv.src.forEach(s=>Wv.fit(s));Wv.sel=null;Wv.t=0;Wv.rings=[];Wv.run=false}};
+ ['Spiral of six','Six sources winding outward, each at a different pitch.',{s:Array.from({length:6},(_,i)=>[Math.round((25+i*22)*Math.cos(i*1.05)),Math.round((25+i*22)*Math.sin(i*1.05)),3.5+i*.9])}],
+ ['Drifting pair','Two sources wander across the screen, leaving a trail of rings that weave together.',{s:[[-60,-30,6],[60,30,6]],mv:1}],
+ ['Drifting trio','Three sources at different pitches drift about. Wide and tight rings cross as they move.',{s:[[0,-60,4],[-60,50,7],[60,50,10]],mv:1}],
+ ['Orbiting pair','Two sources circle the centre. Their rings sweep out a spinning, spiral weave.',{s:[[-70,0,6],[70,0,6]],mv:2}],
+ ['Orbiting five','Five sources circle the centre together and swirl into a flower.',{s:ringSrc(70,5,6,-1.57),mv:2}],
+ ['Drifting in a hexagon','Two sources drift inside a hexagon with Reflect on. The rings bounce off the walls as they move.',{s:[[-40,0,6],[40,0,6]],mv:1,rf:1,shp:4}]],
+ apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.wav();const o=q[2];Object.assign(V.wav,WBASE,{rf:o.rf?1:0,mv:o.mv|0,shp:o.rf?(o.shp|0):0});Wv._g=null;Wv.src=o.s.map(([x,y,p])=>({x,y,lam:pl(p)}));Wv.src.forEach(s=>Wv.fit(s));Wv.sel=null;Wv.t=0;Wv.rings=[];Wv.run=false}};
 
 /* ---------- UI ---------- */
 const halt=m=>{modes[m].run=false;if(window.STARTED)window.STARTED[m]=false};
@@ -1075,21 +1108,21 @@ function extras(){const pn=$('panel'),b3=$('b3');if(b3&&b3.parentElement)b3.pare
   $('xsa').onclick=shakeAgain;$('xau').onchange=e=>{vp.au=e.target.checked?1:0;P.pf=vp.p;P.lp=vp.p};$('xnl').onchange=e=>{vp.nd=e.target.checked?1:0};
   hzFix();['p','p2','bl','sp','gs','sk','asp'].forEach(id=>{const e=$(id);if(e)e.addEventListener('input',hzFix)})}
  else{
-  first.insertAdjacentHTML('beforebegin',ckH('xrf','Reflect off the edges','xrf',vw.rf)+ckH('xhs','Hide sources','xhs',vw.hs)+`<div id="xshw" style="display:${vw.rf?'block':'none'}">${infoH('Bounce the rings inside this shape','xshp')}${pillsH('shp',SHN.map((n,i)=>[i,n]),vw.shp|0)}${infoBox('xshp')}${ckH('xed','Show edges','xed',vw.ed)}</div><div id="wsrcA"></div>`);
-  pn.insertAdjacentHTML('beforeend',infoH('Move sources','xmv')+pillsH('mv',[[0,'Off'],[1,'Drift around'],[2,'Orbit the centre']],vw.mv|0)+infoBox('xmv')+ckH('xov','Show where rings cross (not with Reflect)','xov',vw.ov));
+  first.insertAdjacentHTML('beforebegin',ckH('xhs','Hide sources','xhs',vw.hs)+ckH('xrf','Reflect off the edges','xrf',vw.rf)+`<div id="xshw" style="display:${vw.rf?'block':'none'}">${infoH('Bounce the rings inside this shape','xshp')}${pillsH('shp',SHN.map((n,i)=>[i,n]),vw.shp|0)}${infoBox('xshp')}${ckH('xed','Show edges','xed',vw.ed)}</div><div id="wsrcA"></div>`);
+  pn.insertAdjacentHTML('beforeend',infoH('Move sources','xmv')+pillsH('mv',[[0,'Off'],[1,'Drift around'],[2,'Orbit the centre']],vw.mv|0)+infoBox('xmv')+ckH('xov','Show where rings cross','xov',vw.ov));
   $('xrf').onchange=e=>setRf(e.target.checked);$('xhs').onchange=e=>setHs(e.target.checked);$('xed').onchange=e=>{vw.ed=e.target.checked?1:0};$('xov').onchange=e=>{vw.ov=e.target.checked?1:0};
   hzFix();Wv.selUI()}
  pillsWire(pn);wireInf(pn)}
 function simpleX(){const ssw=$('ssw');if(!ssw)return;let x=$('sx');if(!x){x=document.createElement('div');x.id='sx';ssw.after(x)}
  if(cur=='plt'){const v=V.plt;x.innerHTML=rowH('sxp','Pitch',0,P.nm()-1,1,v.p,i=>P.hzOf(+i)+' Hz')+'<div class="pre"><button id="sxs">Shake again</button></div>';
   $('sxp').oninput=e=>{v.p=+e.target.value;e.target.nextElementSibling.textContent=P.hzOf(v.p)+' Hz';P.pf=v.p;P.lp=v.p};$('sxs').onclick=shakeAgain}
- else if(cur=='wav'){x.innerHTML='<div id="sxw"></div>'+ckH('sxr','Reflect off the edges',null,V.wav.rf)+ckH('sxh','Hide sources',null,V.wav.hs);
-  $('sxr').onchange=e=>setRf(e.target.checked);$('sxh').onchange=e=>setHs(e.target.checked);Wv.selUI()}
+ else if(cur=='wav'){x.innerHTML='<div id="sxw"></div>'+ckH('sxh','Hide sources',null,V.wav.hs);
+  $('sxh').onchange=e=>setHs(e.target.checked);Wv.selUI()}
  else x.innerHTML=''}
 
 /* ---------- hooks into the app ---------- */
-{const b0=build;build=function(){const r=b0.apply(this,arguments);if(NEW[cur])extras();return r}}
-{const s0=buildSimple;buildSimple=function(){const r=s0.apply(this,arguments);simpleX();return r}}
+{const b0=build;build=function(){const r=b0.apply(this,arguments);if(NEW[cur])extras();if(cur=='pend'&&!$('xhb')){const pn=$('panel');pn.insertAdjacentHTML('beforeend',ckH('xhb','Hide the bob while it swings',null,V.pend.hb));$('xhb').onchange=e=>{V.pend.hb=e.target.checked?1:0;const o=$('sxb');if(o)o.checked=!!V.pend.hb}}return r}}
+{const s0=buildSimple;buildSimple=function(){const r=s0.apply(this,arguments);simpleX();if(cur=='pend'){const x=$('sx');if(x){x.innerHTML=ckH('sxb','Hide the bob while it swings',null,V.pend.hb);$('sxb').onchange=e=>{V.pend.hb=e.target.checked?1:0;const o=$('xhb');if(o)o.checked=!!V.pend.hb}}}return r}}
 {const r0=runIdea;runIdea=function(it){const r=r0.apply(this,arguments);if(NEW[cur]){halt(cur);if(document.body.classList.contains('simple'))simpleX();
   hintSet(cur=='plt'?'Pitch set. Press Start to shake the plate. The sand moves from where it is.':'Ready'+(it&&it[0]&&it[0]!='Random pattern'?': "'+it[0]+'"':'')+'. Press Start, or tap the screen to add more sources.')}return r}}
 {const m0=setMode;setMode=function(m){if(NEW[m]&&T.on)off3();document.body.classList.toggle('m-new',!!NEW[m]);return m0.apply(this,arguments)}}
@@ -1236,10 +1269,10 @@ requestAnimationFrame(frame);
  const h0=hit,hs0=hitSnd;hit=function(){if(RD.on)return;return h0.apply(this,arguments)};hitSnd=function(){if(RD.on)return;return hs0.apply(this,arguments)};
  function applyEntry(m,e){const M=modes[m],st=cp(e.st);
   if(m=='pend'){M.S={...st.S};M.prev=null;M.q=null;M.k=0;M.t=e.mt||0}
-  else if(m=='attr'){M.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));M.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};M.E=st.E?st.E.map(q=>({x:q.x*W,y:q.y*H,vx:q.vx,vy:q.vy})):M.defE();M.prev=null;M.t=e.mt||0}
+  else if(m=='attr'){M.A=st.A.map(p=>({x:p.x*W,y:p.y*H}));M.B={x:st.B.x*W,y:st.B.y*H,vx:st.B.vx,vy:st.B.vy};M.E=st.E?st.E.map(q=>({x:q.x*W,y:q.y*H,vx:q.vx,vy:q.vy})):M.defE();M.np=st.np==null?null:st.np;M.prev=null;M.t=e.mt||0}
   else{M.balls=st.balls.map(b=>({x:b.x*W,y:b.y*H,vx:b.vx,vy:b.vy,h:b.h,p:0,...M.z3(),trs:[[]],c:0}));M.su=false}}
  window.startRedraw=x=>{const m=x.mode,M=modes[m],H=cp(x.hist),vh=cp(x.vh||[]);if(!H.length)return;
-  RD.on=true;RD.m=m;RD.H=H;RD.VH=vh;RD.t0=H[0].t;RD.abs=H[0].t;RD.tend=Math.max(x.tend||0,H[H.length-1].t);RD.i=0;RD.j=0;RD.skip=false;RD.x=x;RD.last=0;
+  RD.on=true;RD.m=m;RD.H=H;RD.VH=vh;RD.t0=H[0].t;RD.abs=H[0].t;RD.tend=Math.max(x.tend||0,H[H.length-1].t);RD.i=0;RD.j=0;RD.skip=false;RD.paused=false;RD.x=x;RD.last=0;
   const tot=Math.max(.5,RD.tend-RD.t0),wall=Math.min(12,Math.max(4,tot/4));RD.rate=tot/wall;
   TC[m].clearRect(0,0,W,H0v());M.base=null;if(M.T)M.T=[];
   if(vh[0])Object.assign(V[m],vh[0].v);
@@ -1247,7 +1280,7 @@ requestAnimationFrame(frame);
   applyEntry(m,H[0]);M.run=false;M.dirty=true;
   const hn=$('hint');hn.textContent='Redrawing your pattern. Touch the screen to skip to the end.';hn.style.opacity=1};
  const H0v=()=>H;
- window.rdOn=()=>RD.on;window.__rdinfo=()=>({on:RD.on,abs:RD.abs,tend:RD.tend,i:RD.i,n:RD.H.length,why:window.__why,rate:RD.rate});
+ window.rdOn=()=>RD.on;window.rdPaused=()=>RD.on&&!!RD.paused;window.rdPause=()=>{RD.paused=!RD.paused;RD.last=0;const hn=$('hint');hn.textContent=RD.paused?'Redraw paused. Change the colour or settings, then tap Resume to carry on redrawing.':'Redrawing your pattern. Touch the screen to skip to the end.';hn.style.opacity=1;toast(RD.paused?'Redraw paused':'Redrawing')};window.__rdinfo=()=>({on:RD.on,abs:RD.abs,tend:RD.tend,i:RD.i,n:RD.H.length,why:window.__why,rate:RD.rate});
  function finish(){const m=RD.m,M=modes[m],x=RD.x;RD.on=false;
   if(RD.VH.length)Object.assign(V[m],RD.VH[RD.VH.length-1].v);
   HI[m]=cp(RD.H);VH[m]=cp(RD.VH);ST[m]=RD.tend;lastS=ST[m];lastV='';
@@ -1256,7 +1289,7 @@ requestAnimationFrame(frame);
   const hn=$('hint');hn.textContent=HINT[m];hn.style.opacity=1;try{if(document.body.classList.contains('simple'))buildSimple(true)}catch(e){}
   toast('Finished redrawing "'+x.name+'". It is paused: tap Resume to carry on.')}
  function rdTick(ts){const m=RD.m,M=modes[m];if(cur!=m||T.on){window.__why='abort cur='+cur+' T='+T.on;RD.on=false;return}
-  let dt=RD.last?Math.min((ts-RD.last)/1e3,.05):0;RD.last=ts;let sim=RD.skip?1e9:RD.rate*dt;const tEnd=performance.now()+(RD.skip?4000:12);
+  if(RD.paused){RD.last=0;return}let dt=RD.last?Math.min((ts-RD.last)/1e3,.05):0;RD.last=ts;let sim=RD.skip?1e9:RD.rate*dt;const tEnd=performance.now()+(RD.skip?4000:12);
   while(sim>0&&RD.on){const nx=RD.H[RD.i+1],lim=Math.min(nx?nx.t:RD.tend,RD.tend);let step=Math.min(sim,Math.max(0,lim-RD.abs));
    if(lim-RD.abs<=1e-9){if(nx&&RD.abs>=nx.t-1e-9){RD.i++;applyEntry(m,RD.H[RD.i]);continue}else{finish();return}}
    if(step<=1e-9)break;
@@ -1266,7 +1299,7 @@ requestAnimationFrame(frame);
    if(performance.now()>tEnd)break}
   if(RD.on&&RD.abs>=RD.tend-1e-9)finish()}
  const f0=frame;frame=function(ts){try{if(RD.on)rdTick(ts);else track(ts)}catch(e){console.error('rd '+e.message);RD.on=false}return f0(ts)};
- cv.addEventListener('pointerdown',e=>{if(RD.on){RD.skip=true;e.stopImmediatePropagation();e.preventDefault()}},true);
+ cv.addEventListener('pointerdown',e=>{if(RD.on){if(!RD.paused)RD.skip=true;e.stopImmediatePropagation();e.preventDefault()}},true);
  // load choice
  const bx=document.createElement('div');bx.id='ldc';bx.innerHTML='<div class="box"><b id="ldt"></b><img id="ldi" alt=""><button id="ldA" class="g"><span>Continue from where I left off</span><small>Brings the drawing back as it is, paused, so you can carry on or start from somewhere new.</small></button><button id="ldB"><span>Redraw the whole pattern</span><small id="ldBs"></small></button><button id="ldX">Cancel</button></div>';document.body.appendChild(bx);
  let ldGo=null,ldx=null;
@@ -1298,13 +1331,13 @@ requestAnimationFrame(frame);
  ['pend','attr','ros','bnc','plt','wav'].forEach(m=>{const M=modes[m];let r=false;Object.defineProperty(M,'run',{configurable:true,enumerable:true,get(){return r},set(v){if(v===true&&!ALLOW.on&&!G.on)return;r=!!v}});
   const i0=M.init;M.init=function(){STARTED[m]=false;const q=i0.apply(this,arguments);r=false;return q};
   const l0=M.load;M.load=function(){STARTED[m]=false;const q=l0.apply(this,arguments);r=false;return q};
-  if(m!='ros'&&m!='plt'&&m!='wav'){const u0=M.up;M.up=function(){const was=!!(this.sv&&this.sv.run),dr=m=='attr'&&this.drag!==null&&this.drag!==undefined;const q=u0.apply(this,arguments);if(was){ALLOW.on=true;this.run=true;ALLOW.on=false}else if(m=='pend'&&!G.on&&!RDon()){ALLOW.on=true;this.run=true;ALLOW.on=false;STARTED.pend=true}else if(!dr&&!this.su&&!this.pend&&!G.on&&!RDon()){toast('Press Start to let it go')}return q}}});
+  if(m!='ros'&&m!='plt'&&m!='wav'){const u0=M.up;M.up=function(){const was=!!(this.sv&&this.sv.run),dr=m=='attr';const q=u0.apply(this,arguments);if(was){ALLOW.on=true;this.run=true;ALLOW.on=false}else if(m=='pend'&&!G.on&&!RDon()){ALLOW.on=true;this.run=true;ALLOW.on=false;STARTED.pend=true}else if(!dr&&!this.su&&!this.pend&&!G.on&&!RDon()){toast('Press Start to let it go')}return q}}});
  const RDon=()=>window.rdOn&&window.rdOn();
- window.pbl=M=>{const t=M.run?'Pause':(STARTED[cur]?'Resume':'Start'),a=$('pp'),b=$('sp2');if(a.textContent!==t){a.textContent=t}if(b.textContent!==t)b.textContent=t;const on=t=='Start';a.classList.toggle('st',on);b.classList.toggle('st',on)};
+ window.pbl=M=>{const t=RDon()?(window.rdPaused()?'Resume':'Pause'):M.run?'Pause':(STARTED[cur]?'Resume':'Start'),a=$('pp'),b=$('sp2');if(a.textContent!==t){a.textContent=t}if(b.textContent!==t)b.textContent=t;const on=t=='Start';a.classList.toggle('st',on);b.classList.toggle('st',on)};
  const pp0=$('pp').onclick;
- $('pp').onclick=function(){const m=cur,M=modes[m];if(m=='bnc'&&M.su&&!M.run&&!G.on){if(!M.cb&&document.body.classList.contains('simple')&&document.body.classList.contains('pre')&&!document.querySelector('#chips .sel')){nbShow('Please select one of the preset options.','');return}nbShow(M.cb?'You haven\'t placed all of your balls yet.':'You haven\'t placed any balls yet.',M.cb?'You have placed '+M.cb+' of '+M.balls.length+'. Place the rest, or tap Scatter balls.':'Touch the screen to place them, or tap Scatter balls.');return}
+ $('pp').onclick=function(){const m=cur,M=modes[m];if(RDon()){window.rdPause();return}if(m=='attr'&&!M.run&&M.np===0&&!G.on){nbShow('Place your ball first','Touch the screen to place your ball.');return}if(m=='bnc'&&M.su&&!M.run&&!G.on){if(!M.cb&&document.body.classList.contains('simple')&&document.body.classList.contains('pre')&&!document.querySelector('#chips .sel')){nbShow('Please select one of the preset options.','');return}nbShow(M.cb?'You haven\'t placed all of your balls yet.':'You haven\'t placed any balls yet.',M.cb?'You have placed '+M.cb+' of '+M.balls.length+'. Place the rest, or tap Scatter balls.':'Touch the screen to place them, or tap Scatter balls.');return}
   ALLOW.on=true;try{pp0.apply(this,arguments)}finally{ALLOW.on=false}if(M.run)STARTED[m]=true};
- const cl1=$('cl').onclick;$('cl').onclick=function(e){const r=cl1.apply(this,arguments);if(e&&!G.on){const M=modes[cur];M.run=false;STARTED[cur]=false;if(cur=='pend'){M.hide=true;toast('Cleared');{const h=$('hint');h.textContent='Swipe the screen to start a pendulum swing.';h.style.opacity=1}}}return r};
+ const cl1=$('cl').onclick;$('cl').onclick=function(e){const r=cl1.apply(this,arguments);if(e&&!G.on){const M=modes[cur];M.run=false;STARTED[cur]=false;if(cur=='attr'){M.np=0;M.sel=null;M.k=0;M.dir=[];M.aim=M.mv=M.pan=null;M.prev=null;M.E.forEach(q=>q.pv=0);M.st=M.snap()}if(cur=='pend'){M.hide=true;toast('Cleared');{const h=$('hint');h.textContent='Swipe the screen to start a pendulum swing.';h.style.opacity=1}}}return r};
  const ri=runIdea;runIdea=function(){const r=ri.apply(this,arguments);if(!G.on){modes[cur].run=false;STARTED[cur]=false}return r};
  const pauseCur=()=>{const M=modes[cur];if(M&&M.run&&!G.on&&!RDon())M.run=false};
  const sh=showHome;showHome=function(){pauseCur();return sh.apply(this,arguments)};
@@ -1315,4 +1348,292 @@ requestAnimationFrame(frame);
  window.markStarted=m=>{STARTED[m]=true};
 })();
 (function(){const lc0=window.loadChoice;window.loadChoice=function(x,go){if(window.NEWM&&window.NEWM[x.mode]){go(0);return}return lc0.apply(this,arguments)}})();
-</script></body></html>
+</script><style>
+#asp{position:absolute;left:10px;right:10px;bottom:10px;z-index:6;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:6px 10px;background:rgba(20,20,28,.95);border:1px solid rgba(255,233,77,.45);border-radius:14px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.6);touch-action:none}
+#asp .lb{display:flex;align-items:center;gap:8px;font-size:14px;color:#eee;min-width:0}#asp .lb i{width:12px;height:12px;border-radius:50%;flex:none}
+#asp output{color:#ffe94d;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:4.5em}
+#asp input{grid-column:1/3;width:100%;accent-color:#ffe94d;height:30px}
+#asp button{flex:none;padding:8px 14px;background:#ffe94d;color:#000;font-weight:600;font-size:14px}
+body.watch #asp{display:none!important}
+#asp[hidden],#aplc[hidden]{display:none!important}
+#aplc{position:absolute;left:16px;right:16px;top:70%;transform:translateY(-50%);z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}#aplc b{font:700 26px/1.25 system-ui,sans-serif;color:#ffe94d;text-shadow:0 2px 14px #000,0 0 24px rgba(255,233,77,.35);background:rgba(10,10,16,.72);padding:14px 22px;border-radius:16px;border:1px solid rgba(255,233,77,.4)}#aplc .rg{width:46px;height:46px;border-radius:50%;border:3px solid #ffe94d;animation:aplp 1.6s ease-out infinite}@keyframes aplp{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.8);opacity:0}}body.watch #aplc{display:none!important}
+#asp .tp{grid-column:1/-1;font-size:13px;line-height:1.4;color:#ccc;border-top:1px solid rgba(255,255,255,.12);padding-top:6px}#asp .tp b{color:#ffe94d;font-weight:600}
+</style>
+<script>
+(function(){
+ const st=document.getElementById('stage');if(!st)return;
+ const p=document.createElement('div');p.id='asp';p.hidden=true;
+ p.innerHTML='<span class="lb"><i id="aspC"></i><span id="aspN">Ball speed</span></span><output id="aspO" for="aspR">0</output><span></span><input type="range" id="aspR" min="0" max="500" step="10" value="0" aria-label="Ball speed"><button id="aspD">Done</button><span class="tp"><b>Direction:</b> drag out from the ball the way you want it to go.<br><b>Move:</b> press and hold the ball, then drag it.</span>';
+ st.appendChild(p);
+ const PL=document.createElement('div');PL.id='aplc';PL.hidden=true;PL.innerHTML='<div class="rg"></div><b>Touch the screen<br>to place your ball</b>';st.appendChild(PL);
+ const R=document.getElementById('aspR'),O=document.getElementById('aspO'),NM=['White','Blue','Yellow'],CC=['#fff','#8ff','#ff8'];
+ let held=false;R.addEventListener('pointerdown',()=>held=true);addEventListener('pointerup',()=>held=false);addEventListener('pointercancel',()=>held=false);
+ const show=v=>O.textContent=v>0?'Speed '+v:'At rest';
+ R.oninput=()=>{const v=+R.value;modes.attr.setSpeed(v);show(v)};
+ document.getElementById('aspD').onclick=()=>{modes.attr.sel=null};
+ let lk=-2;
+ function sync(){try{const M=modes.attr;if(M.run)M.sel=null;const on=cur=='attr'&&!M.run&&M.sel!=null&&M.sel<M.bodies().length&&!(window.rdOn&&window.rdOn())&&!(typeof T!='undefined'&&T.on);
+  if(p.hidden===on)p.hidden=!on;
+  {const need=cur=='attr'&&!M.run&&M.np===0&&!(window.rdOn&&window.rdOn())&&!(typeof T!='undefined'&&T.on),hn=document.getElementById('hint');if(PL.hidden===need)PL.hidden=!need;if(need&&!hn.dataset.np){hn.dataset.np='1';hn.style.visibility='hidden'}else if(!need&&hn.dataset.np){delete hn.dataset.np;hn.style.visibility='';if(cur=='attr')hn.textContent=HINT.attr}}
+  if(on){const k=M.sel,B=M.bodies()[k],sp=Math.round(Math.hypot(B.vx,B.vy));if(k!==lk){lk=k;document.getElementById('aspN').textContent=NM[k]+' ball';document.getElementById('aspC').style.background=CC[k]}
+   if(!held&&Math.abs(+R.value-sp)>5)R.value=Math.round(sp/10)*10;show(held?+R.value:sp)}else lk=-2}catch(e){}requestAnimationFrame(sync)}
+ requestAnimationFrame(sync);
+})();
+</script>
+</body></html>
+
+<style>input[type=range]{touch-action:pan-y}</style>
+<script>
+(function(){
+ const st={el:null,ok:false,far:false,moved:false,x0:0,y0:0,t0:0,x:0,v0:0};
+ const isR=el=>el&&el.matches&&el.matches('input[type=range]');
+ const thumbX=el=>{const r=el.getBoundingClientRect(),mn=+el.min||0,mx=+el.max||100,f=(el.value-mn)/((mx-mn)||1);return r.left+12+f*(r.width-24)};
+ document.addEventListener('pointerdown',e=>{const el=e.target;if(!isR(el)){st.el=null;return}
+  st.el=el;st.ok=false;st.moved=false;st.x0=st.x=e.clientX;st.y0=e.clientY;st.t0=e.timeStamp;st.v0=el.value;st.far=Math.abs(thumbX(el)-e.clientX)>26},true);
+ document.addEventListener('pointermove',e=>{if(!st.el)return;st.x=e.clientX;if(Math.hypot(e.clientX-st.x0,e.clientY-st.y0)>8)st.moved=true;
+  if(!st.far&&Math.abs(e.clientX-st.x0)>=6&&Math.abs(e.clientX-st.x0)>Math.abs(e.clientY-st.y0))st.ok=true},true);
+ const guard=e=>{if(st.el&&e.target===st.el&&!st.ok){st.el.value=st.v0;e.stopImmediatePropagation()}};
+ document.addEventListener('input',guard,true);document.addEventListener('change',guard,true);
+ document.addEventListener('pointercancel',()=>{if(st.el&&!st.ok)st.el.value=st.v0;st.el=null},true);
+ document.addEventListener('pointerup',e=>{const el=st.el;if(!el)return;st.el=null;
+  if(!st.ok&&st.far&&!st.moved&&e.timeStamp-st.t0<500){const r=el.getBoundingClientRect(),mn=+el.min||0,mx=+el.max||100,sp=+el.step||1;
+   const f=Math.min(1,Math.max(0,(e.clientX-r.left-12)/((r.width-24)||1)));let v=mn+f*(mx-mn);v=Math.round((v-mn)/sp)*sp+mn;v=Math.min(mx,Math.max(mn,+v.toFixed(6)));
+   el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))}},true);
+})();
+</script>
+<script>
+(function(){const M=modes.bnc;let tp=+M.topPad||0;
+ M.padMap=function(old,v){if(typeof W=='undefined'||!W||!H)return;const oA=old+M.M,nA=v+M.M,rr=(H-M.M-nA)/(H-M.M-oA);if(!isFinite(rr)||rr<.15||rr>6)return;
+  try{const o=TR.bnc,k=TC.bnc;if(o&&o.width){const cp=document.createElement('canvas');cp.width=o.width;cp.height=o.height;cp.getContext('2d').drawImage(o,0,0);k.save();k.setTransform(1,0,0,1,0,0);k.clearRect(0,0,o.width,o.height);if(!T.on)k.drawImage(cp,0,0,cp.width,cp.height,0,dpr*(nA-oA*rr),o.width,dpr*H*rr);k.restore()}}catch(e){}
+  if(!T.on)M.balls.forEach(q=>{q.y=nA+(q.y-oA)*rr;q.vy*=rr;q.trs=[[]];q.p=0})};
+ Object.defineProperty(M,'topPad',{get(){return tp},set(v){v=+v||0;if(v===tp)return;const old=tp;tp=v;try{M.padMap(old,v)}catch(e){}},configurable:true,enumerable:true});
+})();
+</script>
+<style>.tgw{display:none;margin:8px 0 2px;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:#bbb}.tgw.on{display:flex}.tgw button{padding:5px 10px;min-height:0;display:inline-flex;align-items:center;gap:5px;border-radius:14px}.tgw button i{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid #fff6}.tgw button.sel{background:#ffe94d;color:#000}</style>
+<script>
+(function(){
+ const key=()=>{const its=cur=='bnc'?modes.bnc.balls:cur=='wav'?modes.wav.src:null;return its?cur+'|'+its.length+'|'+TG[cur]+'|'+its.map(i=>i.col||'').join(','):''};
+ let last='';
+ window.refreshTg=function(){const k=key();document.querySelectorAll('.tgw').forEach(w=>{const its=cur=='bnc'?modes.bnc.balls:cur=='wav'?modes.wav.src:null;
+  w.dataset.k=k;if(!its||its.length<2){w.classList.remove('on');w.innerHTML='';return}
+  if(TG[cur]>=its.length)TG[cur]=-1;
+  const dot=(i,j)=>{if(cur=='wav')return modes.wav.col(j);const c=i.col!=null?i.col:COL[cur];return c=='auto'?`hsl(${i.h||0},90%,65%)`:c};
+  w.innerHTML='Apply to: <button data-t="-1" class="'+(TG[cur]<0?'sel':'')+'">All</button>'+its.map((i,j)=>`<button data-t="${j}" class="${TG[cur]==j?'sel':''}"><i style="background:${dot(i,j)}"></i>${cur=='bnc'?'Ball ':'Source '}${j+1}</button>`).join('');
+  w.dataset.k=k;w.classList.add('on');w.querySelectorAll('button').forEach(b=>b.onclick=()=>{TG[cur]=+b.dataset.t;if(cur=='wav'&&TG.wav>=0){modes.wav.sel=TG.wav;try{modes.wav.selUI()}catch(e){}}refreshTg()})});last=k};
+ setInterval(()=>{try{const k=key();if(k!==last||[...document.querySelectorAll('.tgw')].some(w=>w.dataset.k!==k))refreshTg()}catch(e){}},400);
+ const h1=hit;hit=function(b){const r=h1.apply(this,arguments);try{if(b&&!G.on&&!(window.rdOn&&window.rdOn())&&b.p)bres(b,true)}catch(e){}return r};
+})();
+</script>
+<style>#ffb{position:absolute;top:100px;right:8px;z-index:4;flex:none;width:40px;height:40px;padding:0;background:rgba(40,40,50,.75);color:#eee;display:none}body.bncm #ffb{top:146px}#ffb svg{width:22px;height:22px;fill:currentColor}#ffb.on{background:#ffe94d;color:#000}#ffb b{position:absolute;left:0;right:0;bottom:-15px;font:600 11px system-ui;color:#ffe94d;text-shadow:0 1px 3px #000;text-align:center}body.watch #ffb{display:none!important}</style>
+<script>
+(function(){
+ const st=document.getElementById('stage');if(!st)return;
+ const bt=document.createElement('button');bt.id='ffb';bt.title='Fast-forward';bt.setAttribute('aria-label','Fast-forward the pattern');bt.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5l9 7-9 7zM12 5l9 7-9 7z"/></svg><b></b>';st.appendChild(bt);
+ const FF={left:0};window.FF=FF;const STEP=60,MAXQ=600;
+ const ok=()=>{const M=modes[cur];return(cur=='pend'||cur=='attr'||cur=='bnc')&&M&&(!T.on||cur=='attr')&&!G.on&&!(window.rdOn&&window.rdOn())};
+ bt.onclick=()=>{const M=modes[cur];if(!ok())return;if(!M.run){toast('Press Start first, then fast-forward');return}if(M.su||M.pend){toast('Press Start first, then fast-forward');return}FF.left=Math.min(MAXQ,FF.left+STEP);toast('Fast-forwarding. Tap again to add more.')};
+ setInterval(()=>{const show=ok()&&!document.body.classList.contains('watch');bt.style.display=show?'flex':'none';bt.classList.toggle('on',FF.left>0);bt.querySelector('b').textContent=FF.left>0?Math.ceil(FF.left)+'s':''},250);
+ const f1=frame;frame=function(ts){try{const M=modes[cur];if(FF.left>0){if(!ok()||!M.run||M.su){FF.left=0}else{const sn=PF.snd;PF.snd=false;window.FFING=true;try{const t0=performance.now(),h=M.sub;while(FF.left>0&&performance.now()-t0<12){for(let i=0;i<100&&FF.left>0;i++){M.step(h);FF.left-=h}}}finally{PF.snd=sn;window.FFING=false}if(FF.left<=0)FF.left=0}}}catch(e){FF.left=0;console.error('ff '+e.message)}return f1(ts)};
+ const cm=setMode;setMode=function(){FF.left=0;return cm.apply(this,arguments)};
+})();
+</script>
+<style>#upm{position:absolute;left:16px;right:16px;top:70%;transform:translateY(-50%);z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}#upm[hidden]{display:none!important}#upm b{font:700 26px/1.25 system-ui,sans-serif;color:#ffe94d;text-shadow:0 2px 14px #000,0 0 24px rgba(255,233,77,.35);background:rgba(10,10,16,.72);padding:14px 22px;border-radius:16px;border:1px solid rgba(255,233,77,.4)}#upm small{display:block;margin-top:6px;font:500 15px/1.3 system-ui,sans-serif;color:#fff}#upm .rg{width:46px;height:46px;border-radius:50%;border:3px solid #ffe94d;animation:upmp 1.6s ease-out infinite}@keyframes upmp{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.8);opacity:0}}body.watch #upm{display:none!important}</style>
+<script>
+(function(){
+ const st=document.getElementById('stage');if(!st)return;
+ const el=document.createElement('div');el.id='upm';el.hidden=true;el.innerHTML='<div class="rg"></div><b></b>';st.appendChild(el);const tx=el.querySelector('b');let cur0='';
+ function want(){if(T.on||G.on||(window.rdOn&&window.rdOn()))return '';
+  if(cur=='wav'){const M=modes.wav;if(!M.run&&M.src.length==0&&!V.wav.hs)return 'Tap the screen<br>to place a source'}
+  else if(cur=='bnc'){const M=modes.bnc;if(M.su&&M.cb<M.balls.length){const n=M.balls.length;return n>1?`Touch the screen to place ball ${M.cb+1} of ${n}<small>Drag to aim it, then let go</small>`:'Touch the screen to place your ball<small>Drag to aim it, then let go</small>'}}
+  else if(cur=='pend'){const M=modes.pend;if(window.b2Want&&window.b2Want())return window.b2Want();if(M.hide&&!M.run)return 'Swipe the screen<br>to start a swing'}
+  return ''}
+ function sync(){try{const m=want(),hn=document.getElementById('hint');
+  if(m!==cur0){cur0=m;if(m)tx.innerHTML=m}
+  if(el.hidden===!!m)el.hidden=!m;
+  if(m&&!hn.dataset.pm){hn.dataset.pm='1';hn.style.visibility='hidden'}else if(!m&&hn.dataset.pm){delete hn.dataset.pm;if(!hn.dataset.np)hn.style.visibility=''}}catch(e){}
+  requestAnimationFrame(sync)}
+ requestAnimationFrame(sync);
+})();
+</script>
+<script>
+(function(){
+ const M=modes.attr;
+ let _A=M.A||[];const pad=()=>{while(_A.length<4)_A.push({x:W/2,y:H/2})};
+ Object.defineProperty(M,'A',{get(){return _A},set(v){_A=v;pad()},configurable:true,enumerable:true});pad();
+ const ZP=[1,-1,.6,-.6],sm=k=>k*k*(3-2*k);
+ M.zApply=function(){const m=Math.min(W,H)*.3*(V.attr.dz==null?.6:V.attr.dz)*sm(Math.min(1,this.zr||0));for(let i=0;i<4;i++)this.A[i].z=ZP[i]*m;this.dz0=V.attr.dz};
+ M.enter3=function(){if(this.np===0)this.np=null;this.zr=0;this.zApply();this.allB().forEach(b=>{b.z=0;b.vz=0});
+  this.h3=this.T.length>75000?this.T.slice(-75000):this.T.slice();
+  this.t3=[[],[],[]];this.c3=[0,0,0];this.bodies().forEach((b,j)=>this.t3[j].push(b.x,b.y,0,this.t));
+  this.in3=true;this.e0=performance.now();this.prev=null};
+ M.leave3=function(){if(this.in3){try{this.bodies().forEach((b,j)=>{const tr=this.t3[j]||[];for(let i=4;i<tr.length;i+=4){const hu=(tr[i+3]*25+j*120)%360,sv=COL.attr=='auto'?hu:1000+parseInt(COL.attr.slice(1),16);
+    seg('attr',this.X(tr[i-4]),this.Y(tr[i-3]),this.X(tr[i]),this.Y(tr[i+1]),colr('attr',`hsl(${hu},90%,65%)`));this.T.push(tr[i-4],tr[i-3],tr[i],tr[i+1],sv)}})}catch(e){}}
+  this.A.forEach(a=>a.z=0);this.t3=[[],[],[]];this.h3=[];this.in3=false;this.prev=null;this.allB().forEach(b=>{b.z=0;b.vz=0})};
+ M.step3=function(h){if(!this.in3)this.enter3();const v=V.attr,A=this.A;if(this.zr<1){this.zr=Math.min(1,this.zr+h/2.5);this.zApply()}else if(v.dz!==this.dz0)this.zApply();
+  this.bodies().forEach((B,j)=>{let ax=0,ay=0,az=0;
+   for(let i=0;i<v.n;i++){const dx=A[i].x-B.x,dy=A[i].y-B.y,dz=(A[i].z||0)-(B.z||0),r2=dx*dx+dy*dy+dz*dz+v.s*v.s,f=v.G*1e6/(r2*Math.sqrt(r2));ax+=dx*f;ay+=dy*f;az+=dz*f}
+   B.vx+=ax*h;B.vy+=ay*h;B.vz=(B.vz||0)+az*h;B.x+=B.vx*h;B.y+=B.vy*h;B.z=(B.z||0)+B.vz*h;if(j==0)this.t+=h;
+   const tr=this.t3[j]||(this.t3[j]=[]);this.c3[j]=(this.c3[j]||0)+1;if(this.c3[j]%3==0){tr.push(B.x,B.y,B.z,this.t);if(tr.length>4*20000)tr.splice(0,4*3000)}})};
+ const s0=M.step;M.step=function(h){if(T.on)return M.step3(h);return s0.apply(this,arguments)};
+ const c0=M.clr;M.clr=function(){this.t3=[[],[],[]];this.c3=[0,0,0];this.h3=[];return c0.apply(this,arguments)};
+ D3.attr=function(){if(!M.in3)M.enter3();
+  const e=sm(Math.min(1,(performance.now()-(M.e0||0))/1100)),th0=T.th,ya0=T.ya;T.th=th0*e;T.ya=ya0*e;
+  try{
+  const P0=pjm(),F=1/K3+(.9-1/K3)*e,Q=(x,y,z)=>P0(W/2+(M.X(x)-W/2)*F,H/2+(M.Y(y)-H/2)*F,z*M.z*F),S=Math.min(W,H)*.9,Zo=Math.min(W,H)*.3,ch=Math.cos(T.th),n=V.attr.n,auto=COL.attr=='auto';
+  const wx0=M.wx(W/2-S/2),wx1=M.wx(W/2+S/2),wy0=M.wy(H/2-S/2),wy1=M.wy(H/2+S/2);
+  const fl=[[wx0,wy0],[wx1,wy0],[wx1,wy1],[wx0,wy1]].map(q=>Q(q[0],q[1],0));
+  ctx.globalAlpha=e;ctx.fillStyle='#0b0b14';ctx.beginPath();fl.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#1f1f2c';ctx.lineWidth=1;ctx.beginPath();for(let i=1;i<6;i++){const a=Q(wx0+(wx1-wx0)*i/6,wy0,0),b=Q(wx0+(wx1-wx0)*i/6,wy1,0),c=Q(wx0,wy0+(wy1-wy0)*i/6,0),d=Q(wx1,wy0+(wy1-wy0)*i/6,0);ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.moveTo(c[0],c[1]);ctx.lineTo(d[0],d[1])}ctx.stroke();
+  ctx.strokeStyle='#6b6b80';ctx.lineWidth=1.5;ctx.beginPath();fl.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.stroke();ctx.globalAlpha=1;
+  // the flat drawing made so far, lying in the middle plane
+  const H3=M.h3||[],bk=new Map();for(let i=0;i<H3.length;i+=5){const v=H3[i+4],k=v>=1000?v:Math.round(v/10)%36;let a=bk.get(k);if(!a)bk.set(k,a=[]);a.push(i)}
+  ctx.lineWidth=1.2;bk.forEach((idx,k)=>{ctx.strokeStyle=k>=1000?'#'+(k-1000).toString(16).padStart(6,'0'):`hsl(${k*10},90%,65%)`;ctx.beginPath();for(const i of idx){const a=Q(H3[i],H3[i+1],Zo),b=Q(H3[i+2],H3[i+3],Zo);ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1])}ctx.stroke()});
+  const bs=M.bodies(),items=[];
+  for(let i=0;i<n;i++){const a=M.A[i];items.push({x:a.x,y:a.y,z:(a.z||0)+Zo,r:10,col:'#f90',ring:1})}
+  bs.forEach((b,j)=>items.push({x:b.x,y:b.y,z:(b.z||0)+Zo,r:6,col:['#fff','#8ff','#ff8'][j]}));
+  ctx.lineWidth=1;
+  for(const it of items){const f=Q(it.x,it.y,0),p=Q(it.x,it.y,it.z);ctx.strokeStyle=it.ring?'rgba(255,160,0,.25)':'rgba(255,255,255,.14)';ctx.beginPath();ctx.moveTo(f[0],f[1]);ctx.lineTo(p[0],p[1]);ctx.stroke();ctx.fillStyle=it.ring?'rgba(255,160,0,.35)':'rgba(0,0,0,.5)';ctx.beginPath();ctx.ellipse(f[0],f[1],it.r*f[2]*1.2,it.r*f[2]*1.2*ch,0,0,7);ctx.fill()}
+  ctx.lineWidth=1.2;ctx.lineJoin='round';
+  (M.t3||[]).forEach((tr,j)=>{if(!tr||tr.length<8||j>=bs.length)return;const CH=160;for(let s1=0;s1<tr.length-4;s1+=CH){ctx.strokeStyle=auto?`hsl(${(tr[s1+3]*25+j*120)%360},90%,65%)`:COL.attr;ctx.beginPath();const en2=Math.min(s1+CH+4,tr.length);for(let i=s1;i<en2;i+=4){const q=Q(tr[i],tr[i+1],tr[i+2]+Zo);i==s1?ctx.moveTo(q[0],q[1]):ctx.lineTo(q[0],q[1])}ctx.stroke()}});
+  items.map(it=>({it,p:Q(it.x,it.y,it.z)})).sort((u,v)=>u.p[2]-v.p[2]).forEach(({it,p})=>{const r=it.r*p[2];
+   if(it.ring){ctx.strokeStyle='rgba(255,160,0,.4)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(p[0],p[1],r*2,0,7);ctx.stroke()}
+   const g=ctx.createRadialGradient(p[0]-r/3,p[1]-r/3,1,p[0],p[1],r*1.2);g.addColorStop(0,'#fff');g.addColorStop(1,it.col);ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],r*1.2,0,7);ctx.fill()});
+  ctx.lineWidth=1}finally{T.th=th0;T.ya=ya0}};
+ {const t0=toggle3;toggle3=function(){const was=T.on;const r=t0.apply(this,arguments);if(cur=='attr'){if(T.on&&!was)M.enter3();else if(!T.on&&was)M.leave3()}return r}}
+ {const b0=build;build=function(){const r=b0.apply(this,arguments);try{const i=$('dz');if(i){const row=i.closest('.row'),inf=$('i_dz');if(row)row.style.display=(T.on&&cur=='attr')?'':'none';if(inf&&!(T.on&&cur=='attr'))inf.style.display='none'}}catch(e){}return r}}
+ {const m0=setMode;setMode=function(){M.in3=false;return m0.apply(this,arguments)}}
+ {const s3=document.getElementById('s3');if(s3)s3.onclick=()=>toggle3()}
+})();
+</script>
+<style>.b2row{display:flex;margin:6px 0;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:#bbb}.b2row button{padding:5px 10px;min-height:0;border-radius:14px}</style>
+<script>
+(function(){
+const M=modes.pend,B2=M.B2={S:{x:0,y:0,vx:0,vy:0},prev:null,q:null,k:0,on:false,held:false,mir:false,wait:false,hold:false,sv:null};
+V.pend.b2=0;V.pend.s2=1;V.pend.lk=0;V.p2={g:9.81,L:6,lat:40,om:1500,dp:0,th:1,sp:1};
+const KS=['g','L','lat','om','dp'],SL=['g','L','lat','om','dp','th','sp'];
+INFO.pend.b2='Adds a second bob on its own string. Both swing at once and draw their own trail, so two patterns, such as a ring and a star, build up together. They do not touch each other. Choose Bob 1, Bob 2 or Both: that decides which bob your touch places and throws, and which bob the sliders change, including speed. Both places the two bobs together at the same spot with the same throw, so you can compare different settings.';
+INFO.pend.lk='An invisible spring joining the two bobs. At 0 they ignore each other. A small amount makes the swing pass slowly from one bob to the other and back, so each pattern swells and shrinks. A large amount pulls them together hard and the pattern gets messy.';
+const on2=()=>V.pend.b2&&(B2.pre||!document.body.classList.contains('simple'));
+const ed=()=>on2()?V.pend.s2:1;
+M.place2=function(px,py){const mx=V.p2.L*.5;let x=this.wx(px),y=this.wy(py);const m=Math.hypot(x,y);if(m>mx){x*=mx/m;y*=mx/m}B2.S.x=x;B2.S.y=y;B2.S.vx=B2.S.vy=0};
+const lim2=S=>{const p=V.p2,L=p.L;return Math.sqrt(p.g/L)*Math.sqrt(Math.max(0,(.6*L)**2-(S.x*S.x+S.y*S.y)))};
+function mirror(M){const L=V.p2.L*.5,S=M.S;let x=S.x,y=S.y;const m=Math.hypot(x,y);if(m>L){x*=L/m;y*=L/m}B2.S.x=x;B2.S.y=y;B2.S.vx=B2.S.vy=0;B2.prev=null;B2.q=null}
+const d0=M.down,m0=M.move,u0=M.up,s0=M.step,dr0=M.draw,c0=M.clr,i0=M.init,l0=M.load,bp0=M.beginPinch;
+M.down=function(px,py){const e=ed();if(e==3){B2.sv={on:B2.on,S:{...B2.S}};const r=d0.call(this,px,py);if(!this.pan){B2.wait=false;B2.on=true;B2.mir=true;mirror(this)}return r}
+ if(e!=2)return d0.call(this,px,py);this.hide=false;this.pan=null;B2.sv={on:B2.on,S:{...B2.S}};B2.wait=false;B2.held=true;B2.on=true;B2.prev=null;B2.q=null;this.place2(px,py)};
+M.move=function(px,py){if(B2.held){this.place2(px,py);return}const r=m0.call(this,px,py);if(B2.mir&&!this.pan)mirror(this);return r};
+const hold=was=>{if(!was){M.run=false;if(window.STARTED)STARTED.pend=false}};
+M.up=function(vx,vy){if(B2.mir){B2.mir=false;const was=!!(this.sv&&this.sv.run);const r=u0.call(this,vx,vy);hold(was);if(B2.on){mirror(this);const S=this.S,l=lim2(B2.S);let ux=S.vx,uy=S.vy;const m=Math.hypot(ux,uy);if(m>l&&m>0){ux*=l/m;uy*=l/m}B2.S.vx=ux;B2.S.vy=uy}return r}
+ if(!B2.held){if(!on2())return u0.call(this,vx,vy);const was=!!(this.sv&&this.sv.run),r=u0.call(this,vx,vy);hold(was);return r}B2.held=false;const p=V.p2,s=this.sc()*this.z,S=B2.S;let ux=vx/s*p.th,uy=vy/s*p.th;const l=lim2(S),m=Math.hypot(ux,uy);if(m>l){ux*=l/m;uy*=l/m}S.vx=ux;S.vy=uy;B2.prev=null;B2.q=null;if(!this.run){const h=$('hint');if(h){h.textContent='Bob 2 is set. Press Start to release the bobs.';h.style.opacity=1;clearTimeout(window._hf);window._hf=setTimeout(()=>{h.style.opacity=0},6000)}}};
+M.beginPinch=function(){if(B2.held||B2.mir){B2.held=false;B2.mir=false;if(B2.sv){B2.on=B2.sv.on;B2.S=B2.sv.S}B2.prev=null}return bp0.call(this)};
+M.step=function(h){if(B2.wait&&!B2.hold)B2.wait=false;if(on2()&&!B2.on&&!B2.held){const p=V.pend,q=V.p2,r=q.L/p.L,S=this.S,vk=r*Math.sqrt((q.g/q.L)/(p.g/p.L));B2.S={x:S.x*r,y:S.y*r,vx:S.vx*vk,vy:S.vy*vk};B2.on=true;B2.prev=null;B2.q=null}
+ s0.call(this,h);if(!B2.on||B2.held||B2.wait||!on2())return;
+ const o={S:this.S,prev:this.prev,q:this.q,k:this.k,t:this.t,rel:this.rel,h:this.hoff},P=V.pend,sv={};
+ this.scL=P.L;KS.forEach(k=>{sv[k]=P[k];P[k]=V.p2[k]});
+ this.S=B2.S;this.prev=B2.prev;this.q=B2.q;this.k=B2.k;this.rel=null;this.hoff=140;
+ try{s0.call(this,h*(V.p2.sp/(V.pend.sp||1)))}finally{KS.forEach(k=>P[k]=sv[k]);this.scL=0;B2.prev=this.prev;B2.q=this.q;B2.k=this.k;this.S=o.S;this.prev=o.prev;this.q=o.q;this.k=o.k;this.t=o.t;this.rel=o.rel;this.hoff=o.h}
+ const c=V.pend.lk;if(c>0&&!B2.wait){const A=this.S,Q=B2.S,dx=Q.x-A.x,dy=Q.y-A.y,r=V.p2.sp/(V.pend.sp||1);A.vx+=c*dx*h;A.vy+=c*dy*h;Q.vx-=c*dx*h*r;Q.vy-=c*dy*h*r}};
+M.draw=function(){dr0.call(this);if(!B2.on||!on2()||(this.hide&&!B2.wait)||(typeof T!='undefined'&&T.on)||(V.pend.hb&&this.run&&!B2.held&&!B2.mir))return;
+ const[bx,by]=this.toS(B2.S.x,B2.S.y),[cx,cy]=this.toS(0,0);ctx.strokeStyle='#5a7f8a';ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(bx,by);ctx.stroke();
+ if(V.pend.lk>0&&!B2.wait){const[ax,ay]=this.toS(this.S.x,this.S.y),dx=bx-ax,dy=by-ay,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,w=Math.min(8,3+V.pend.lk*4);ctx.strokeStyle='rgba(167,139,250,.9)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(ax,ay);for(let i=1;i<14;i++){const f=i/14,o=(i%2?1:-1)*w;ctx.lineTo(ax+dx*f+nx*o,ay+dy*f+ny*o)}ctx.lineTo(bx,by);ctx.stroke();ctx.lineWidth=1}
+ const g=ctx.createRadialGradient(bx-3,by-3,1,bx,by,11);g.addColorStop(0,'#fff');g.addColorStop(1,'#2aa3d8');ctx.fillStyle=g;ctx.beginPath();ctx.arc(bx,by,11,0,7);ctx.fill();if(B2.wait){const k=(performance.now()%1400)/1400;ctx.strokeStyle='rgba(42,163,216,'+(1-k)+')';ctx.lineWidth=3;ctx.beginPath();ctx.arc(bx,by,14+22*k,0,7);ctx.stroke();ctx.lineWidth=1}};
+window.b2Want=()=>on2()&&B2.on&&B2.wait&&!B2.held&&V.pend.s2==2&&!(typeof T!='undefined'&&T.on)?'Touch the screen<br>to place bob 2<small>'+(M.run?'Drag, then let go to release it':'Drag to aim it. Nothing moves until you press Start')+'</small>':'';
+M.clr=function(){c0.call(this);B2.prev=null;B2.q=null};
+{const p3=D3.pend;D3.pend=function(){p3.apply(this,arguments);if(!B2.on||!on2()||M.hide||(V.pend.hb&&M.run&&!B2.held&&!B2.mir))return;
+ const Lp=V.pend.L*M.sc()*M.z,L2=V.p2.L*M.sc()*M.z,hov=.1*Lp,[ox,oy]=M.toS(0,0),[bx,by]=M.toS(B2.S.x,B2.S.y),r=Math.hypot(bx-ox,by-oy),zp=L2+hov,zb=hov+L2-Math.sqrt(Math.max(0,L2*L2-r*r)),P0=pj(ox,oy,zp),B=pj(bx,by,zb),F0=pj(bx,by,0);
+ const zt=Lp*1.1+8;if(zp>zt){const a=pj(ox,oy,zt),b=pj(ox,oy,zp);ctx.strokeStyle='#59596b';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();ctx.lineWidth=1}
+ ctx.strokeStyle=COL.pend=='auto'?'rgba(120,220,255,.7)':COL.pend;ctx.beginPath();ctx.moveTo(B[0],B[1]);ctx.lineTo(F0[0],F0[1]);ctx.stroke();
+ ctx.strokeStyle='#9cc';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(P0[0],P0[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.lineWidth=1;
+ ctx.fillStyle='#8aa';ctx.beginPath();ctx.arc(P0[0],P0[1],4,0,7);ctx.fill();
+ if(V.pend.lk>0&&!B2.wait){const[ax,ay]=M.toS(M.S.x,M.S.y),r1=Math.hypot(ax-ox,ay-oy),z1=hov+Lp-Math.sqrt(Math.max(0,Lp*Lp-r1*r1)),A=pj(ax,ay,z1);ctx.strokeStyle='rgba(167,139,250,.9)';ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.setLineDash([]);ctx.lineWidth=1}
+ const rd=11*B[2],g=ctx.createRadialGradient(B[0]-rd/3,B[1]-rd/3,1,B[0],B[1],rd);g.addColorStop(0,'#fff');g.addColorStop(1,'#2aa3d8');ctx.fillStyle=g;ctx.beginPath();ctx.arc(B[0],B[1],rd,0,7);ctx.fill()}}
+const off=()=>{B2.pre=false;B2.wait=false;B2.hold=false;B2.on=false;B2.held=false;B2.mir=false;B2.prev=null;B2.q=null};
+M.init=function(){off();return i0.apply(this,arguments)};
+M.load=function(){off();return l0.apply(this,arguments)};
+{const a0=IDEAS.pend.apply;IDEAS.pend.apply=function(q){off();const r=a0.apply(this,arguments),x=Array.isArray(q)&&q[5];if(x){const P=V.pend;V.pend.b2=1;V.pend.s2=1;V.pend.lk=x.lk;V.p2=Object.assign({g:P.g,L:P.L,lat:P.lat,om:P.om,dp:P.dp,th:P.th,sp:P.sp},x.p);B2.S={x:x.s[0],y:x.s[1],vx:x.s[2],vy:x.s[3]};B2.on=true;B2.wait=false;B2.pre=true;B2.prev=null;B2.q=null}return r}}
+{const f0=freshStart;freshStart=function(m){if(m=='pend'){V.pend.b2=0;V.pend.s2=1;V.pend.lk=0;off()}return f0.apply(this,arguments)}}
+const CC={1:'#e44',2:'#2aa3d8',3:'#a78bfa'};
+function loadSl(){const e=ed(),src=e==2?V.p2:V.pend,c=on2()?CC[e]:'';SL.forEach(k=>{const i=$(k);if(i){i.value=src[k];i.nextElementSibling.textContent=i.value;i.style.accentColor=c;i.nextElementSibling.style.color=c}})}
+function ui(){const pn=$('panel');if(cur!='pend'||!pn||document.body.classList.contains('simple')||$('xb2'))return;
+ pn.insertAdjacentHTML('beforeend',`<label class="ck"><input type="checkbox" id="xb2"${V.pend.b2?' checked':''}><span>Second bob</span><i class="inf" data-k="b2">i</i></label><div class="info" id="i_b2">${INFO.pend.b2}</div><div id="b2p" style="display:${V.pend.b2?'block':'none'}"><div class="b2row"><span>Touch and sliders apply to:</span><button id="b2a" type="button">Bob 1</button><button id="b2b" type="button">Bob 2</button><button id="b2c" type="button">Both</button><button id="b2r" type="button">Remove bob 2</button></div><div class="row"><span>Link strength<i class="inf" data-k="lk">i</i></span><input id="xlk" type="range" min="0" max="1.5" step="0.05" value="${V.pend.lk}" style="accent-color:#a78bfa"><output style="color:#a78bfa">${V.pend.lk}</output></div><div class="info" id="i_lk">${INFO.pend.lk}</div></div>`);
+ pn.querySelectorAll('.inf').forEach(e=>{if(!e.onclick)e.onclick=()=>{const d=$('i_'+e.dataset.k);if(d)d.style.display=d.style.display=='block'?'none':'block'}});
+ const lk=$('xlk');lk.oninput=()=>{V.pend.lk=+lk.value;lk.nextElementSibling.textContent=lk.value};
+ const sync=()=>{$('b2p').style.display=V.pend.b2?'block':'none';[['b2a',1],['b2b',2],['b2c',3]].forEach(([id,v])=>{const b=$(id);b.style.border='2px solid '+CC[v];b.style.background=V.pend.s2==v?CC[v]:'';b.style.color=V.pend.s2==v?'#000':''});loadSl()};
+ const hint=t=>{const h=$('hint');if(h){h.textContent=t;h.style.opacity=1;clearTimeout(window._hf);window._hf=setTimeout(()=>{h.style.opacity=0},6000)}};
+ const pick=v=>{V.pend.s2=v;if(v==2&&V.pend.b2&&!B2.on){B2.S={x:0,y:V.p2.L*.3,vx:0,vy:0};B2.on=true;B2.wait=true;B2.hold=!!M.run;B2.prev=null;B2.q=null}sync();hint(v==1?'Touch and sliders now change bob 1. Touch pans the screen while it swings.':v==2?'Touch the screen to place bob 2, then let go to release it. The sliders change bob 2.':'Both bobs are placed together and the sliders change both.')};
+ $('xb2').onchange=e=>{V.pend.b2=e.target.checked?1:0;if(V.pend.b2){const P=V.pend;V.p2={g:P.g,L:Math.max(1,Math.round(P.L*.6*10)/10),lat:P.lat,om:P.om,dp:P.dp,th:P.th,sp:P.sp};pick(2)}else{off();pick(1)}};
+ $('b2a').onclick=()=>pick(1);$('b2b').onclick=()=>pick(2);$('b2c').onclick=()=>pick(3);
+ $('b2r').onclick=()=>{off();V.pend.b2=0;$('xb2').checked=false;pick(1)};
+ SL.forEach(id=>{const i=$(id);if(!i)return;const o=i.oninput;i.oninput=function(){const e=ed();if(e==1)return o.apply(this,arguments);const v1=V.pend[id];o.apply(this,arguments);V.p2[id]=+i.value;if(e==2)V.pend[id]=v1}});
+ pn.querySelectorAll('[data-g]').forEach(b=>{const o=b.onclick;b.onclick=function(){const e=ed(),v1=V.pend.g;o.apply(this,arguments);if(e!=1){V.p2.g=+b.dataset.g;if(e==2)V.pend.g=v1;loadSl()}}});
+ sync()}
+{const b0=build;build=function(){const r=b0.apply(this,arguments);try{ui()}catch(e){console.error(e)}return r}}
+})();
+</script>
+<script>
+(function(){const Wv=modes.wav,d0=Wv.draw,dn0=Wv.down,mv0=Wv.move,up0=Wv.up;
+const on=()=>V.wav.rf&&!Wv.run&&Wv.t<=1e-6;
+function sn(x,y){const r=15/(W/400),fx=Math.abs(x)<r,fy=Math.abs(y)<r;return[fx?0:x,fy?0:y,fx,fy]}
+function mark(f){const o=Wv.snp||{},ch=(f[0]&&!o.x)||(f[1]&&!o.y);Wv.snp={x:f[0],y:f[1],live:true,until:0};if(ch)try{buzz(12)}catch(e){}}
+Wv.down=function(x,y){const r=dn0.apply(this,arguments),d=this.drag;if(d&&on()){if(d.i<0){const q=sn(d.x,d.y);if(this.inside(q[0],q[1],10)){d.x=q[0];d.y=q[1];d.sf=[q[2],q[3]]}}}return r};
+Wv.move=function(x,y){const r=mv0.apply(this,arguments),d=this.drag;if(d&&on()&&d.i>=0&&d.moved&&this.src[d.i]){const s=this.src[d.i],q=sn(s.x,s.y);s.x=q[0];s.y=q[1];this.fit(s);mark([q[2]&&s.x===0,q[3]&&s.y===0])}return r};
+Wv.up=function(){const d=this.drag,sf=d&&d.sf,o=this.snp,r=up0.apply(this,arguments);if(sf&&(sf[0]||sf[1]))this.snp={x:sf[0],y:sf[1],live:false,until:performance.now()+800};else if(o&&o.live)this.snp={x:o.x,y:o.y,live:false,until:performance.now()+800};return r};
+Wv.draw=function(){const r=d0.apply(this,arguments);try{if(on()){const k=W/400,LH=H/k,o=this.snp,sh=o&&(o.live||performance.now()<o.until)&&(o.x||o.y);ctx.save();ctx.translate(W/2,H/2);ctx.scale(k,k);
+ if(sh){ctx.save();if(this.eff()!='screen'){this.shapePath();ctx.clip()}ctx.strokeStyle='#fff';ctx.globalAlpha=.28;ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.beginPath();if(o.y){ctx.moveTo(-200,0);ctx.lineTo(200,0)}if(o.x){ctx.moveTo(0,-LH/2);ctx.lineTo(0,LH/2)}ctx.stroke();ctx.restore()}
+ ctx.strokeStyle='#fff';ctx.globalAlpha=sh&&o.x&&o.y?.9:.3;ctx.lineWidth=sh&&o.x&&o.y?2:1.2;ctx.beginPath();ctx.moveTo(-9,0);ctx.lineTo(9,0);ctx.moveTo(0,-9);ctx.lineTo(0,9);ctx.stroke();ctx.restore()}}catch(e){}return r}})();
+</script>
+<script>
+(function(){const Wv=modes.wav,c0=Wv.cross,TAU=Math.PI*2;
+Wv.cross=function(LH){if(!V.wav.rf)return c0.apply(this,arguments);const v=V.wav,CS=8,gx=new Map(),sa=[];let rid=0;
+ for(const rg of this.rings){rid++;if(!rg.rays)continue;const r=v.rv*(this.t-rg.t0)+rg.r0;if(r<4)continue;const Rr=rg.rays,pts=[];
+  for(const ray of Rr){const C=ray.C;let i=0;if(r>C[C.length-1]){pts.push(null);continue}while(i<C.length-2&&C[i+1]<r)i++;const t=(r-C[i])/Math.max(1e-6,C[i+1]-C[i]),P=ray.P;pts.push([P[2*i]+(P[2*i+2]-P[2*i])*t,P[2*i+1]+(P[2*i+3]-P[2*i+1])*t,ray.H?ray.H[i]:0])}
+  const gap=Math.max(14,TAU*r/Rr.length*3),n=pts.length;
+  for(let i=0;i<n;i++){const a=pts[i],b=pts[(i+1)%n];if(!a||!b||(rg.hi?(a[2]!==b[2]&&Math.hypot(a[0]-b[0],a[1]-b[1])>6):Math.hypot(a[0]-b[0],a[1]-b[1])>gap))continue;const id=sa.length;sa.push([a[0],a[1],b[0],b[1],rg.si,rid,i,n]);
+   const x0=Math.floor(Math.min(a[0],b[0])/CS),x1=Math.floor(Math.max(a[0],b[0])/CS),y0=Math.floor(Math.min(a[1],b[1])/CS),y1=Math.floor(Math.max(a[1],b[1])/CS);
+   if((x1-x0+1)*(y1-y0+1)>400){sa.pop();continue}for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const k=(x+256)*1024+(y+256);let l=gx.get(k);if(!l)gx.set(k,l=[]);l.push(id)}}}
+ const out=[];
+ gx.forEach((l,k)=>{const cx=Math.floor(k/1024)-256,cy=k%1024-256;
+  for(let i=0;i<l.length;i++)for(let j=i+1;j<l.length;j++){const A=sa[l[i]],B=sa[l[j]];if(A[5]==B[5]){const dd=Math.abs(A[6]-B[6]);if(dd<=1||dd>=A[7]-1)continue}else if(A[4]==B[4]&&!(this.src[A[4]]&&this.src[A[4]].one))continue;
+   const rx=A[2]-A[0],ry=A[3]-A[1],sx=B[2]-B[0],sy=B[3]-B[1],d=rx*sy-ry*sx;if(Math.abs(d)<1e-9)continue;
+   const qx=B[0]-A[0],qy=B[1]-A[1],t=(qx*sy-qy*sx)/d,u=(qx*ry-qy*rx)/d;if(t<0||t>1||u<0||u>1)continue;
+   const px=A[0]+rx*t,py=A[1]+ry*t;if(Math.floor(px/CS)!==cx||Math.floor(py/CS)!==cy)continue;
+   if(Math.abs(px)>200||Math.abs(py)>LH/2)continue;out.push(px,py)}});
+ ctx.fillStyle='#fff';ctx.globalAlpha=.85;ctx.beginPath();for(let i=0;i<out.length;i+=2){ctx.moveTo(out[i]+1.9,out[i+1]);ctx.arc(out[i],out[i+1],1.9,0,TAU)}ctx.fill();ctx.globalAlpha=1}})();
+</script>
+<script>
+(function(){const Wv=modes.wav,s0=Wv.selUI;
+Wv.selUI=function(){const r=s0.apply(this,arguments);try{const simple=document.body.classList.contains('simple'),host=simple?$('sxw'):$('wsrcA'),s=this.src[this.sel];if(simple){this.src.forEach(q=>{q.one=0;q.nf=0});return r}if(!host||!s)return r;const pre=host.querySelector('.pre');if(!pre||$('wone'))return r;
+ pre.insertAdjacentHTML('beforebegin','<label class="ck"><input type="checkbox" id="wone"'+(s.one?' checked':'')+'><span>Single pulse (sends out just one ring)</span></label><label class="ck" id="wnfl" style="display:'+(s.one?'flex':'none')+'"><input type="checkbox" id="wnf"'+(s.nf?' checked':'')+'><span>Never fade (the ring keeps going)</span></label><div class="pre" id="wfw" style="display:'+(s.one?'flex':'none')+'"><button id="wfire">Fire again</button></div>');
+ const grey=()=>{const e=$('wpi');if(!e)return;const rw=e.closest('.row');e.disabled=!!s.one;if(rw)rw.style.opacity=s.one?'.35':'';if(rw)rw.style.pointerEvents=s.one?'none':''};grey();
+ $('wone').onchange=e=>{s.one=e.target.checked?1:0;if(s.one&&Wv.src.length>1){const oi=Wv.src.indexOf(s);Wv.rings=Wv.rings.filter(q=>q.si==oi);Wv.rings.forEach(q=>q.si=0);Wv.src=[s];Wv.sel=0;try{nbShow('Only one source with Single pulse','The other sources were removed. Untick Single pulse to use more.')}catch(x){}Wv.selUI();return}grey();$('wfw').style.display=s.one?'flex':'none';$('wnfl').style.display=s.one&&V.wav.rf?'flex':'none';if(!s.one)s.f1=false;else if(Wv.run)s.f1=true};
+ $('wnf').onchange=e=>{s.nf=e.target.checked?1:0};
+ $('wfire').onclick=()=>{s.f1=false;s.acc=s.lam/V.wav.rv}}catch(e){console.error(e)}return r};
+setInterval(()=>{const l=document.getElementById('wnfl');if(l){const q=Wv.src[Wv.sel],d=q&&q.one&&V.wav.rf?'flex':'none';if(l.style.display!==d)l.style.display=d}},250)})();
+</script>
+<script>
+(function(){const Wv=modes.wav,u0=Wv.up;
+Wv.up=function(){const d=this.drag;if(d&&d.i<0&&!d.moved&&this.src.some(q=>q.one)){this.drag=null;try{nbShow('Only one source with Single pulse','Untick Single pulse to add more sources.')}catch(e){}return}return u0.apply(this,arguments)}})();
+</script>
+<script>
+/* Simple mode: tell the person when an idea was constructed with Advanced-only options */
+(function(){
+ function need(){
+  if(cur=='pend'&&V.pend.b2)return ['a second bob'];
+  if(cur=='wav'){const a=[];if(V.wav.rf)a.push(V.wav.shp?'Reflect off a shape':'Reflect off the edges');if(V.wav.mv)a.push('moving sources');return a}
+  if(cur=='plt'&&(V.plt.sh|0)==1)return ['the round plate'];
+  return []}
+ const r0=runIdea;
+ runIdea=function(it){
+  const r=r0.apply(this,arguments);
+  if(document.body.classList.contains('simple')){
+   const n=need();
+   if(n.length){
+    const t=n.join(' and ');
+    nbShow('Developed using the controls in the Advanced option','');
+    queueMicrotask(()=>{const d=$('sdesc');if(!d)return;const add=' Developed using the controls in the Advanced option.';
+     if(d.dataset.pre&&d.dataset.pre.indexOf('Developed using the controls')<0)d.dataset.pre+=add;
+     if(d.textContent&&d.textContent.indexOf('Developed using the controls')<0)d.textContent+=add})}}
+  return r}
+})();
+</script>
+</body></html>
