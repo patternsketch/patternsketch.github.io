@@ -37,7 +37,7 @@ input[type=range]{width:100%}
 .box div{display:flex;gap:8px}
 #dlg .box p{margin:8px 0 4px;color:#bbb;font-size:14px;word-break:break-word}
 .box .err{display:block;color:#ff7a7a;font-size:13px;min-height:16px;margin-bottom:6px}
-#nb{position:fixed;left:50%;top:48%;transform:translate(-50%,-50%);width:min(86vw,420px);box-sizing:border-box;background:rgba(0,0,0,.92);border:2px solid #ffe94d;border-radius:18px;padding:18px 20px;text-align:center;color:#fff;opacity:0;transition:opacity .25s;pointer-events:none;z-index:30;box-shadow:0 8px 40px rgba(0,0,0,.7)}#nb b{display:block;font-size:22px;line-height:1.25;color:#ffe94d;margin-bottom:8px}#nb span{display:block;font-size:16px;line-height:1.4;color:#ddd}
+#nbn{position:fixed;left:50%;top:48%;transform:translate(-50%,-50%);width:min(86vw,420px);box-sizing:border-box;background:rgba(0,0,0,.92);border:2px solid #ffe94d;border-radius:18px;padding:18px 20px;text-align:center;color:#fff;opacity:0;transition:opacity .25s;pointer-events:none;z-index:30;box-shadow:0 8px 40px rgba(0,0,0,.7)}#nbn b{display:block;font-size:22px;line-height:1.25;color:#ffe94d;margin-bottom:8px}#nbn span{display:block;font-size:16px;line-height:1.4;color:#ddd}
 #toast{position:fixed;left:50%;bottom:150px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:10}
 #fs{position:absolute;top:8px;right:8px;z-index:4;flex:none;width:40px;height:40px;padding:0;background:rgba(40,40,50,.75);font-size:20px}
 #wc{display:none;position:absolute;top:8px;right:8px;z-index:6;gap:8px}
@@ -143,7 +143,7 @@ body.shintro #shpb{z-index:3}
 .gc .gw{width:100%;margin-top:6px;padding:8px;border-radius:8px;border:0;background:#2a2a33;color:#ffe94d;font-size:12.5px}
 #pp.st,#sp2.st{background:#ffe94d!important;color:#000!important;font-weight:700;animation:stp 1.3s infinite}@keyframes stp{0%,100%{box-shadow:0 0 0 0 rgba(255,233,77,.7)}50%{box-shadow:0 0 0 7px rgba(255,233,77,0)}}
 .sp{flex:1 1 0;min-height:0;animation:none!important}#home{justify-content:flex-start!important}#home.pk{padding-top:calc(64px + env(safe-area-inset-top,0px))}#home .hbk{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:10px;width:44px;height:44px;padding:0;border-radius:12px;background:rgba(40,40,50,.75);color:#eee;z-index:2}body.shintro #shi{position:fixed;left:0;right:0;top:0;bottom:0;max-height:none;border-radius:0;border:0;z-index:40;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;justify-content:center;background:#0b0b10}body.shintro #vid{margin:0 0 10px}body.shintro #vst{width:min(100%,calc((100dvh - 110px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))*300/520));border-radius:12px}body.shintro #shi .r{position:static;background:none;padding:0;justify-content:center}body.shintro #shi .r button{flex:1;padding:12px;font-size:15px}
-.nt{color:#bbb;font-size:12.5px;margin:6px 0}.ex{margin:8px 0 2px;font-size:14px}.pl{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}.pl button{padding:6px 10px;font-size:13px}.pl button[aria-pressed=true]{background:var(--acc);color:#000;font-weight:600}.ck{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px}.ck input{width:20px;height:20px;accent-color:var(--acc);flex:none}body.m-new #s3{display:none}#sx{margin-top:4px}
+.gh{margin:16px 0 8px;padding-top:10px;border-top:2px solid #ffe94d}.gh b{display:block;color:#ffe94d;font-size:16px}.gh span{display:block;color:#bbb;font-size:13px;margin-top:2px}.nt{color:#bbb;font-size:12.5px;margin:6px 0}.ex{margin:8px 0 2px;font-size:14px}.pl{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}.pl button{padding:6px 10px;font-size:13px}.pl button[aria-pressed=true]{background:var(--acc);color:#000;font-weight:600}.ck{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px}.ck input{width:20px;height:20px;accent-color:var(--acc);flex:none}body.m-new #s3{display:none}#sx{margin-top:4px}
 </style></head><body>
 <div id="stage"><canvas id="c" role="img" aria-label="Pattern drawing area"></canvas><div id="hint"></div><div id="ideas"></div><button id="hm" title="Home"></button><button id="fs" title="Full screen"></button><button id="sn" title="Sound on or off"></button><div id="wc"><button id="wr" class="rcb" title="Record"></button><button id="wp" title="Pause or resume"></button><button id="wx" title="Exit full screen"></button></div></div>
 <div id="bar"><button id="pp">Pause</button><button id="cl">Clear</button><button id="sv"></button><button id="cbtn" aria-expanded="false">Controls</button></div>
@@ -152,17 +152,17 @@ body.shintro #shpb{z-index:3}
 <canvas id="hbg"></canvas>
 <div id="home"></div>
 <div id="dlg"><div class="box"><b id="dt"></b><p id="dm"></p><input id="nm" type="text" maxlength="30"><div class="err" id="de"></div><div><button id="dc">Cancel</button><button id="ds">OK</button></div></div></div><div id="toast"></div>
-<nav id="tabs"><button data-m="pend" class="on">Pendulum</button><button data-m="attr">Attractors</button><button data-m="ros">Rosette</button><button data-m="bnc">Bounce</button><button data-m="plt">Chladni plates</button><button data-m="wav">Wave interference</button></nav>
+<nav id="tabs"><button data-m="pend" class="on">Pendulum</button><button data-m="attr">Gravity wells</button><button data-m="ros">Rosette</button><button data-m="bnc">Bounce</button><button data-m="plt">Chladni plates</button><button data-m="wav">Wave interference</button></nav>
 <script>
 const $=id=>document.getElementById(id),cv=$('c'),ctx=cv.getContext('2d');
 let W=0,H=0,dpr=1,cur='pend',hist=[],act=false,last=0;
 const TR={},TC={};['pend','attr','ros','bnc','plt','wav'].forEach(m=>{TR[m]=document.createElement('canvas');TC[m]=TR[m].getContext('2d')});
 const CFG={
 pend:[['g','Gravity (m/s²)',1,30,.01,9.81],['L','Length (m)',1,40,.1,10],['lat','Latitude (°)',-90,90,1,40],['om','Earth spin ×',0,3000,1,1500],['dp','Damping',0,.05,.001,0],['th','Throw strength',0,2,.05,1],['sp','Speed ×',.25,5,.25,1]],
-attr:[['n','Attractors',1,4,1,3],['nb','Balls',1,3,1,1],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['sp','Speed ×',.25,4,.25,1],['dz','Depth spread (3D)',0,1,.05,.6]],
+attr:[['n','Wells',1,4,1,3],['nb','Balls',1,3,1,1],['G','Strength',.2,4,.05,1.5],['s','Softening (px)',5,60,1,20],['sp','Speed ×',.25,4,.25,1],['dz','Depth spread (3D)',0,1,.05,.6]],
 ros:[['n','Circles',6,150,1,60],['tw','Turns',1,6,1,1],['off','Spread',.1,1.6,.05,1.1],['sh','Shrink (%)',0,90,1,0],['sp','Draw speed ×',.25,4,.25,1]],
 bnc:[['n','Balls',1,8,1,3],['e','Bounciness',.5,1,.01,1],['gr','Gravity',0,800,10,0],['sp','Speed ×',.25,4,.25,1]],
-plt:[['p','Pitch',0,35,1,3],['n','Amount of sand',1000,9000,500,5000],['sp','Settle speed',.25,3,.25,1],['gs','Grain size',1,3,.25,1.5],['sk','Shake strength',.5,2,.1,1],['p2','Second pitch',0,35,1,8],['bl','Blend',0,1,.05,0],['asp','Sweep speed',.05,1,.05,.25],['br','Brush size',20,120,5,50]],
+plt:[['p','Pitch',0,35,1,3],['n','Amount of sand',1000,9000,500,5000],['sp','Settle speed',.25,3,.25,1],['gs','Grain size',1,3,.25,1.5],['sk','Shake strength',.5,2,.1,1],['p2','Second pitch',0,35,1,8],['bl','Blend',0,1,.05,0],['asw','Sweep speed',.05,1,.05,.25],['br','Brush size',20,120,5,50]],
 wav:[['rv','Ring speed',20,120,5,55],['fd','Fade distance',150,600,25,300],['lw','Line weight',.6,3,.1,1.1],['ms','Move speed',.1,1.5,.1,.5]]};
 const V={};for(const m in CFG){V[m]={};CFG[m].forEach(p=>V[m][p[0]]=p[5])}
 const HINT={pend:'Drag the bob, then release. Hold still to drop it, or sweep to throw it into an orbit. Pinch with two fingers to zoom and pan',attr:'Tap a ball, or tap empty space to place one, and set its speed on the slider. Drag empty space to move around, and pinch to zoom. Then press Start',ros:'Pick a preset or move the sliders to reshape it. Tap Clear to watch it draw again.',bnc:'Tap to place the first ball, or touch and drag the way you want it to go, then let go'};
@@ -327,7 +327,7 @@ modes.bnc={run:true,balls:[],sub:1/240,R:7,M:10,shape:0,topPad:0,su:false,cb:0,_
 const TH='How much of your finger speed carries over on release. 1 matches your finger; 0 drops it straight; higher values throw it harder.',SP='Playback speed only. It does not change the pattern, just how quickly it is drawn.';
 const INFO={
 pend:{g:'Gravity pulls the bob back to the center. Stronger gravity means a faster swing and tighter, quicker patterns.',L:'String length. Long strings swing slowly and allow wide swings; short strings swing fast and make denser loops.',lat:'Where on Earth the pendulum hangs. The swing turns fastest at the poles (±90°) and not at all at the equator (0°). Negative is southern hemisphere and turns the opposite way.',om:"Multiplies Earth's rotation so you can see it. 1 is real, which is far too slow to notice. 0 means no rotation, so the swing never turns.",dp:'Air friction. Above 0 the swing slowly shrinks and spirals in toward the center.',th:TH,sp:SP},
-attr:{dz:'Only used in 3D. How far the attraction points are pushed apart in depth. 0 puts them all on one level, so the paths stay flat. Higher values stack them above and below each other, so the ball loops through space.',nb:'How many balls travel at once. Each ball draws its own colored path as the attraction points pull on it. Before you press Start, tap a ball (or tap empty space to place the next one) and set its speed with the slider that appears. Drag out from the ball to point it, or press and hold it, then drag, to move it. Drag empty space to move around the screen.',n:'How many attraction points pull on the body. Two give looping orbits around a pair; three give more tangled, chaotic paths; four give the busiest, most woven paths.',G:'How hard the points pull. Strong pull means fast, tight orbits; weak pull lets the body drift wide.',s:'Softening. Stops the pull becoming huge up close. Low values give sharp slingshot turns; high values give smooth, rounded orbits.',th:TH,sp:SP},
+attr:{dz:'Only used in 3D. How far the gravity wells are pushed apart in depth. 0 puts them all on one level, so the paths stay flat. Higher values stack them above and below each other, so the ball loops through space.',nb:'How many balls travel at once. Each ball draws its own colored path as the gravity wells pull on it. Before you press Start, tap a ball (or tap empty space to place the next one) and set its speed with the slider that appears. Drag out from the ball to point it, or press and hold it, then drag, to move it. Drag empty space to move around the screen.',n:'How many gravity wells pull on the body. Two give looping orbits around a pair; three give more tangled, chaotic paths; four give the busiest, most woven paths.',G:'How hard the points pull. Strong pull means fast, tight orbits; weak pull lets the body drift wide.',s:'Softening. Stops the pull becoming huge up close. Low values give sharp slingshot turns; high values give smooth, rounded orbits.',th:TH,sp:SP},
 ros:{n:'How many circles are drawn. More circles make a denser, smoother pattern.',tw:'How many times the circles turn around the centre while they are drawn. 1 gives a closed ring. 2 or more weaves the circles together.',off:'How far each circle sits from the centre compared with its own size. Below 1 every circle covers the middle, so it looks like a dense ball. Around 1 every circle passes through the centre, making a bright core. Above 1 they leave a hollow middle.',sh:'Makes each new circle a little smaller and closer to the centre than the last, so the rings spiral inward like a swirl. 0 keeps them all the same size.',sp:SP},
 bnc:{n:'How many balls. Each one traces its own colored path.',e:'Bounciness. 1 keeps all its energy and bounces forever; lower values lose speed on every hit.',gr:'Gravity pulling balls down. 0 gives straight-line woven paths; higher values give arcs, and the balls eventually settle. In 3D it pulls the balls toward the floor of the cube.',sp:SP}};
 const BASE={g:9.81,L:10,lat:40,om:1500,dp:0,sp:1},BASER={n:60,tw:1,off:1.1,sh:0,sp:1};
@@ -417,9 +417,9 @@ function resize(){const r=$('stage').getBoundingClientRect(),nW=r.width,nH=r.hei
    q.trs.forEach(pl=>{for(let i=0;i<pl.length;i+=3){pl[i]=W/2+(pl[i]-oW/2)*k;pl[i+1]=H/2+(pl[i+1]-oH/2)*k;pl[i+2]*=k}})}
    else{const a=(Mb.topPad||0)+Mb.M,rr=(H-Mb.M-a)/(oH-Mb.M-a),rx=(W-2*Mb.M)/(oW-2*Mb.M),okr=isFinite(rr)&&rr>.15&&rr<6,okx=isFinite(rx)&&rx>.15&&rx<6;q.x=okx?Mb.M+(q.x-Mb.M)*rx:q.x*W/oW;q.vx*=okx?rx:W/oW;q.y=okr?a+(q.y-a)*rr:q.y*H/oH;q.vy*=okr?rr:H/oH;q.trs=[[]];q.p=0}});if(!T.on)Mb.clipTrail&&Mb.clipTrail()}}
 const T={on:false,bv:0,o:false,bd:[1,0,0],th:1,ya:.5,dx:null,dy:null,t0:1,y0:.5},K3=.55;
-const IAS={pend:'Choose how the Pendulum sounds. Pendulum hum: a warm hum that rises with speed, with a tick at the end of each swing. Bell swing: a bell at the end of each swing (big swings ring low, small swings ring high) and a soft low note as it passes the middle. Sweeping pad: a smooth musical tone that swells and fades with each swing. Car engine: it revs up as the bob speeds through the middle and idles down at the ends of each swing. Grandfather clock: a tick and a tock at the end of each swing, with a chime every 16 beats. Ocean swell: a soft wash of waves that swells as the bob speeds up. Playground swing: a whoosh through the middle and a little creak at each end. Tap to switch. Sound turns on if it was off.',attr:'Choose how Attractors sounds. Nervous traveler: silent while the ball slows and turns, then swells as it speeds up toward a point, like someone moving out of danger and back towards it. Soft bells: gentle bell notes, faster when the ball is fast. Singing bowl: a calm, ringing strike each time the pitch steps. Breathy flute: a soft airy tone that rises and falls with speed. Car engine: revs up as the ball speeds up and eases down as it slows. Sonar: a ping with echoes, each time the ball passes close to a point. Flyby: a whoosh and a falling tone as the ball sweeps past a point. Whale song: slow gliding calls that sweep up when the ball speeds up and down when it slows. Slingshot zip: a rising zip as the ball whips around a point. Tap to switch. Sound turns on if it was off.',ros:'Choose how Rosette sounds. Chimes: a rising scale as it draws and a chord at the end. Music box: tinkling notes with a winding click at the start. Harp sweep: soft plucks, then a falling sweep across the strings at the end. Gong: quiet taps as it draws and a deep gong when it finishes. Tap to switch. Sound turns on if it was off.',bnc:'Choose how Bounce sounds. Notes: a musical note on each hit. Pinball: bumper dings, with a bonus bell on every ninth hit. Xylophone: bright wooden notes. Ping-pong: a crisp tock. Rubber ball: a soft boing. Billiards: a sharp click and thunk. Retro blips: little 8-bit bleeps. Sounds pan left and right with the ball. Tap to switch. Sound turns on if it was off.'};
+const IAS={pend:'Choose how the Pendulum sounds. Pendulum hum: a warm hum that rises with speed, with a tick at the end of each swing. Bell swing: a bell at the end of each swing (big swings ring low, small swings ring high) and a soft low note as it passes the middle. Sweeping pad: a smooth musical tone that swells and fades with each swing. Car engine: it revs up as the bob speeds through the middle and idles down at the ends of each swing. Grandfather clock: a tick and a tock at the end of each swing, with a chime every 16 beats. Ocean swell: a soft wash of waves that swells as the bob speeds up. Playground swing: a whoosh through the middle and a little creak at each end. Tap to switch. Sound turns on if it was off.',attr:'Choose how Gravity wells sound. Nervous traveler: silent while the ball slows and turns, then swells as it speeds up toward a point, like someone moving out of danger and back towards it. Soft bells: gentle bell notes, faster when the ball is fast. Singing bowl: a calm, ringing strike each time the pitch steps. Breathy flute: a soft airy tone that rises and falls with speed. Car engine: revs up as the ball speeds up and eases down as it slows. Sonar: a ping with echoes, each time the ball passes close to a point. Flyby: a whoosh and a falling tone as the ball sweeps past a point. Whale song: slow gliding calls that sweep up when the ball speeds up and down when it slows. Slingshot zip: a rising zip as the ball whips around a point. Tap to switch. Sound turns on if it was off.',ros:'Choose how Rosette sounds. Chimes: a rising scale as it draws and a chord at the end. Music box: tinkling notes with a winding click at the start. Harp sweep: soft plucks, then a falling sweep across the strings at the end. Gong: quiet taps as it draws and a deep gong when it finishes. Tap to switch. Sound turns on if it was off.',bnc:'Choose how Bounce sounds. Notes: a musical note on each hit. Pinball: bumper dings, with a bonus bell on every ninth hit. Xylophone: bright wooden notes. Ping-pong: a crisp tock. Rubber ball: a soft boing. Billiards: a sharp click and thunk. Retro blips: little 8-bit bleeps. Sounds pan left and right with the ball. Tap to switch. Sound turns on if it was off.'};
 const IBV='Ball view puts a camera on the first ball, looking where it is heading, so you ride along inside the cube. Tap to cycle: Off, Beside (the outside view and the ball view together, so you can see where the ball is) and Only (full screen from the ball).';
-const I3D='In Attractors, 3D is real: the ball and the attraction points move in three dimensions, and Depth spread pushes the points apart in depth. 3D view tilts the drawing floor like a table seen from an angle. The pendulum hangs above it with a drip line down to the floor, like paint dripping from a swinging can. Drag up or down to tilt the view and left or right to rotate it. In Bounce, the balls bounce around inside a cube and trace their paths in 3D. Placing and throwing are switched off in 3D, so turn it off to set up a new swing.';
+const I3D='In Gravity wells, 3D is real: the ball and the gravity wells move in three dimensions, and Depth spread pushes the points apart in depth. 3D view tilts the drawing floor like a table seen from an angle. The pendulum hangs above it with a drip line down to the floor, like paint dripping from a swinging can. Drag up or down to tilt the view and left or right to rotate it. In Bounce, the balls bounce around inside a cube and trace their paths in 3D. Placing and throwing are switched off in 3D, so turn it off to set up a new swing.';
 const OFF3=()=>cur=='bnc'&&document.body.classList.contains('shp')&&modes.bnc.topPad?modes.bnc.topPad*.4:0;
 function pj(px,py,z){const u0=(px-W/2)*K3,v0=(py-H/2)*K3,zz=z*K3,cy=Math.cos(T.ya),sy=Math.sin(T.ya),u=u0*cy-v0*sy,v=u0*sy+v0*cy,c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[W/2+u*k,H/2+v2*k+H*.06+OFF3(),k*K3]}
 function pjm(){const cy=Math.cos(T.ya),sy=Math.sin(T.ya),c=Math.cos(T.th),s=Math.sin(T.th),F=Math.min(W,H)*3,hx=W/2,hy=H/2;return(px,py,z)=>{const u0=(px-hx)*K3,v0=(py-hy)*K3,zz=z*K3,u=u0*cy-v0*sy,v=u0*sy+v0*cy,v2=v*c-zz*s,z2=v*s+zz*c,k=T.o?1:F/(F-z2);return[hx+u*k,hy+v2*k+H*.06+OFF3(),k*K3]}}
@@ -511,7 +511,7 @@ const EVI={iv:'How often the settings change. At 0 (constant) they glide up and 
 const TG={bnc:-1,wav:-1};function bres(b,bounce){const c=b.col!=null?b.col:COL.bnc;if(c=='auto'){if(b.h==null)b.h=0;if(bounce)b.h=(b.h+47)%360;b.cc=`hsl(${b.h},90%,65%)`;b.cl=`hsla(${b.h},90%,65%,.7)`}else{b.cc=b.cl=c}}function bcl(b){if(!b.p||b.cl==null)bres(b,false);return b.cl}
 const COL={pend:'auto',attr:'auto',ros:'auto',bnc:'auto'},colr=(m,a)=>COL[m]=='auto'?a:COL[m];
 const SW_D=['#ffe94d','#ffffff','#4de8ff','#ff5fd2','#6dff6d','#ff9a3d','#9b7bff'],SW_CB=['#e69f00','#56b4e9','#009e73','#f0e442','#0072b2','#d55e00','#cc79a7'];let SW=SW_D;
-const COLI='Changing: each tab uses its own shifting colors. Pendulum shimmers yellow, Attractors cycle through the rainbow over time, Rosette shifts hue circle by circle, and Bounce gives every ball its own color that changes at every bounce. Chladni plates colors the sand and Wave interference gives every source its own ring color. Pick a solid color for a single-color trace, or use the last circle for any color you like. You can change color while it draws: earlier lines keep their color, and in Bounce the new color starts at the next bounce. In Bounce and Wave you can choose All or one ball or source under the colors.';
+const COLI='Changing: each tab uses its own shifting colors. Pendulum shimmers yellow, Gravity wells cycle through the rainbow over time, Rosette shifts hue circle by circle, and Bounce gives every ball its own color that changes at every bounce. Chladni plates colors the sand and Wave interference gives every source its own ring color. Pick a solid color for a single-color trace, or use the last circle for any color you like. You can change color while it draws: earlier lines keep their color, and in Bounce the new color starts at the next bounce. In Bounce and Wave you can choose All or one ball or source under the colors.';
 const CN={auto:'Changing','#ffe94d':'Yellow','#ffffff':'White','#4de8ff':'Cyan','#ff5fd2':'Pink','#6dff6d':'Green','#ff9a3d':'Orange','#9b7bff':'Violet','#e69f00':'Orange','#56b4e9':'Sky blue','#009e73':'Green','#f0e442':'Yellow','#0072b2':'Blue','#d55e00':'Vermilion','#cc79a7':'Pink'},colName=v=>CN[v]||'Custom';
 function setCol(v){const tg=TG[cur],its=cur=='bnc'?modes.bnc.balls:cur=='wav'?modes.wav.src:null;if(its&&tg>=0&&its[tg])its[tg].col=v;else{COL[cur]=v;if(its){TG[cur]=-1;its.forEach(i=>{delete i.col})}}try{refreshTg()}catch(e){}document.querySelectorAll('.sw button').forEach(b=>b.classList.toggle('sel',(b.dataset.c||'auto')==v));
  const cu=v!='auto'&&!SW.includes(v);document.querySelectorAll('.cus').forEach(l=>{l.classList.toggle('sel',cu);l.style.background=cu?v:''});
@@ -521,7 +521,7 @@ function colUI(){return `<div style="margin:8px 0"><span>Pattern color: <b class
 function runIdea(it){IDEAS[cur].apply(it);evoSet(cur,it[2]==='RNDE');TC[cur].clearRect(0,0,W,H);build()}
 const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',full:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',play:'<path d="M7 4l13 8-13 8z"/>',x:'<path d="M5 5l14 14M19 5L5 19"/>',share:'<path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/>',rec:'<circle cx="12" cy="12" r="7"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',snd:'<path d="M4 9v6h4l5 4V5L8 9zM16 8a5 5 0 0 1 0 8"/>',mute:'<path d="M4 9v6h4l5 4V5L8 9zM17 9l5 6M22 9l-5 6"/>',cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5"/>',bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',folder:'<path d="M3 6a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',save:'<path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',trash:'<path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/>'};
 const svg=n=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`,setI=(id,n,t)=>{const e=$(id);if(e)e.innerHTML=svg(n)+(t?'<span>'+t+'</span>':'')};
-const PF={snd:false,hap:true,big:false,cb:false,calm:false,soft:false,as:0,ps:0,rs:0,bs:0,th:0,pan:true};let AC=null,lastB=0,LAST=null,REC=null;
+const PF={snd:false,hap:true,big:false,cb:false,calm:false,soft:false,as:0,ps:0,rs:0,bs:0,ws:0,wp:false,th:0,pan:true};let AC=null,lastB=0,LAST=null,REC=null;
 const G={on:false,t:0,fd:false,n:0};
 function ac(){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});if(AC.state=='suspended')AC.resume()}catch(e){}return AC}
 let BUS=null,APPH=false;
@@ -535,7 +535,7 @@ const nzb=a=>NZ||(NZ=(()=>{const b=a.createBuffer(1,a.sampleRate*2,a.sampleRate)
 function dest(a,pan){const o=out(a);if(!pan||!a.createStereoPanner||!PF.pan)return o;const q=a.createStereoPanner();q.pan.value=Math.max(-1,Math.min(1,pan));q.connect(o);return q}
 function tone(f,v,d,ty,o){o=o||{};if(!PF.snd)return;const a=ac();if(!a)return;const t=a.currentTime+(o.at||0),os=a.createOscillator(),g=a.createGain();os.type=ty||'sine';os.frequency.setValueAtTime(f,t);if(o.f2)os.frequency.exponentialRampToValueAtTime(o.f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+(o.att||.004));g.gain.exponentialRampToValueAtTime(.0001,t+d);os.connect(g);g.connect(dest(a,o.pan));os.start(t);os.stop(t+d+.03)}
 function burst(v,d,fc,q,o){o=o||{};if(!PF.snd)return;const a=ac();if(!a)return;const t=a.currentTime+(o.at||0),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=nzb(a);f.type=o.ty||'bandpass';f.frequency.setValueAtTime(fc,t);if(o.fc2)f.frequency.exponentialRampToValueAtTime(o.fc2,t+d);f.Q.value=q||1;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+(o.att||.003));g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(dest(a,o.pan));s.start(t,Math.random());s.stop(t+d+.03)}
-function buzz(ms){if(PF.hap&&navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
+function buzz(ms){if(!PF.hap)return;try{if(window.AndroidBridge&&AndroidBridge.buzz&&typeof ms=='number'){AndroidBridge.buzz(Math.round(ms));return}}catch(e){}if(navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
 const PS=[0,2,4,7,9],pent=i=>196*Math.pow(2,(PS[((i%5)+5)%5]+12*Math.floor(i/5))/12);
 function hit(b,w){if(b.pre&&performance.now()-b.pt<400){b.pre=0;return}hitSnd(b,w)}
 function look(){if(!AC)return .055;const L=(AC.baseLatency||0)+(AC.outputLatency||0);return Math.max(0,Math.min(.2,(L>0?L:.08)-.025))}
@@ -569,8 +569,8 @@ function pad(on,f,v){if(!PF.snd||!on){if(PAD&&AC)PAD.m.gain.setTargetAtTime(0,AC
  if(!PAD){const m=a.createGain(),br=a.createGain(),fl=a.createBiquadFilter(),lf=a.createOscillator(),lg=a.createGain(),vs=[[1,'sine',1],[2,'triangle',.3],[1.5,'sine',.22],[.5,'sine',.45]].map(([r,ty,gv])=>{const o=a.createOscillator(),g=a.createGain();o.type=ty;o.frequency.value=f*r;g.gain.value=gv;o.connect(g);g.connect(fl);o.start();return{o,r}});
   fl.type='lowpass';fl.frequency.value=1500;fl.Q.value=.4;m.gain.value=0;br.gain.value=.8;fl.connect(br);br.connect(m);m.connect(out(a));lf.frequency.value=.17;lg.gain.value=.2;lf.connect(lg);lg.connect(br.gain);lf.start();PAD={m,vs}}
  PAD.vs.forEach(q=>q.o.frequency.setTargetAtTime(f*q.r,a.currentTime,.2));PAD.m.gain.setTargetAtTime(v,a.currentTime,.3)}
-const ASN={pend:['Pendulum hum','Bell swing','Sweeping pad','Car engine','Grandfather clock','Ocean swell','Playground swing'],attr:['Nervous traveler','Soft bells','Singing bowl','Breathy flute','Car engine','Sonar','Flyby','Whale song','Slingshot zip'],ros:['Chimes','Music box','Harp sweep','Gong'],bnc:['Notes','Pinball','Xylophone','Ping-pong','Rubber ball','Billiards','Retro blips']},SK={pend:'ps',attr:'as',ros:'rs',bnc:'bs'};
-const THN=['Custom','Retro','Space','Nature','Orchestral'],THM=[null,{ps:0,as:8,rs:1,bs:6},{ps:2,as:6,rs:3,bs:1},{ps:5,as:7,rs:0,bs:2},{ps:4,as:3,rs:2,bs:2}];
+const ASN={pend:['Pendulum hum','Bell swing','Sweeping pad','Car engine','Grandfather clock','Ocean swell','Playground swing'],attr:['Nervous traveler','Soft bells','Singing bowl','Breathy flute','Car engine','Sonar','Flyby','Whale song','Slingshot zip'],ros:['Chimes','Music box','Harp sweep','Gong'],bnc:['Notes','Pinball','Xylophone','Ping-pong','Rubber ball','Billiards','Retro blips'],wav:['Ping','Soft bell','Water drip','Marimba','Sonar','Glass','Retro blip']},SK={pend:'ps',attr:'as',ros:'rs',bnc:'bs',wav:'ws'};
+const THN=['Custom','Retro','Space','Nature','Orchestral'],THM=[null,{ps:0,as:8,rs:1,bs:6,ws:6},{ps:2,as:6,rs:3,bs:1,ws:4},{ps:5,as:7,rs:0,bs:2,ws:2},{ps:4,as:3,rs:2,bs:2,ws:1}];
 function bell(f,v,pan,at){const a=ac();if(!a||!PF.snd)return;const t=a.currentTime+(at||0),dd=dest(a,pan);[[1,1,2.2],[2,.35,3.2],[2.76,.25,4.2],[5.4,.1,6]].forEach(([m,g,r])=>{const o=a.createOscillator(),e=a.createGain(),d=9/r;o.frequency.value=f*m;e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(v*g,t+.004);e.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(e);e.connect(dd);o.start(t);o.stop(t+d+.05)})}
 function bowl(f,v,pan){const a=ac();if(!a||!PF.snd)return;const t=a.currentTime,dd=dest(a,pan);[[1,1,.9],[1.003,.8,1],[2.71,.4,1.6],[5.1,.15,2.6]].forEach(([m,g,r])=>{const o=a.createOscillator(),e=a.createGain(),d=Math.min(9/r,6);o.frequency.value=f*m;e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(v*g,t+.06);e.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(e);e.connect(dd);o.start(t);o.stop(t+d+.05)})}
 function gong(v,pan){const a=ac();if(!a||!PF.snd)return;const t=a.currentTime,dd=dest(a,pan);[[1,1,1.1],[1.47,.6,1.3],[2.09,.5,1.6],[2.56,.35,1.9],[3.8,.2,2.6]].forEach(([m,g,r])=>{const o=a.createOscillator(),e=a.createGain(),d=6/r;o.frequency.value=98*m;e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(v*g,t+.012);e.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(e);e.connect(dd);o.start(t);o.stop(t+d+.05)});burst(v*.5,.25,900,.6,{pan})}
@@ -675,12 +675,18 @@ function sndFrame(){sndGate();if(!PF.snd){offAll();return}
  setPan(px)}
 function applyPF(){document.body.classList.toggle('big',PF.big);document.body.classList.toggle('calm',PF.calm);SW=PF.cb?SW_CB:SW_D;setI('sn',PF.snd?'snd':'mute')}
 function savePrefs(){try{localStorage.setItem('tracelab.prefs',JSON.stringify({V,COL,PF,LAST}))}catch(e){}}
-function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('tracelab.prefs')||'null');if(!p)return;for(const m in p.V||{})if(V[m])Object.assign(V[m],p.V[m]);Object.assign(COL,p.COL||{});Object.assign(PF,p.PF||{});[['ps','pend'],['as','attr'],['rs','ros'],['bs','bnc']].forEach(([k,m])=>{if(!(PF[k]>=0&&PF[k]<ASN[m].length))PF[k]=0});LAST=p.LAST||null}catch(e){}}
+function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('tracelab.prefs')||'null');if(!p)return;for(const m in p.V||{})if(V[m])Object.assign(V[m],p.V[m]);Object.assign(COL,p.COL||{});Object.assign(PF,p.PF||{});[['ps','pend'],['as','attr'],['rs','ros'],['bs','bnc'],['ws','wav']].forEach(([k,m])=>{if(!(PF[k]>=0&&PF[k]<ASN[m].length))PF[k]=0});LAST=p.LAST||null}catch(e){}}
 setInterval(savePrefs,3000);
 async function shareBlob(blob,name,mime){
  try{if(window.AndroidBridge&&AndroidBridge.shareFile){const r=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(fr.result.split(',')[1]);fr.readAsDataURL(blob)});AndroidBridge.shareFile(name,mime,r);return}}catch(e){}
  try{const f=new File([blob],name,{type:mime});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Pattern Sketch'});return}}catch(e){if(e&&e.name=='AbortError')return}
  const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Saved '+name)}
+async function saveBlob(blob,name,mime){
+ const d=new Date(),p=n=>String(n).padStart(2,'0'),st='-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds()),nm=name.replace(/(\.[a-z0-9]+)$/i,st+'$1');
+ if(window.AndroidBridge){
+  try{if(AndroidBridge.saveImage){const r=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(fr.result.split(',')[1]);fr.readAsDataURL(blob)});if(AndroidBridge.saveImage(nm,mime,r))return}}catch(e){}
+  return shareBlob(blob,nm,mime)}
+ const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=nm;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Saved '+nm)}
 function shareImage(){const o=document.createElement('canvas');o.width=cv.width;o.height=cv.height;const k=o.getContext('2d');k.fillStyle='#000';k.fillRect(0,0,o.width,o.height);k.drawImage(T.on?cv:TR[cur],0,0);
  k.fillStyle='rgba(255,255,255,.35)';k.font=(12*dpr)+'px system-ui';k.fillText('Pattern Sketch',12*dpr,o.height-12*dpr);o.toBlob(b=>b&&shareBlob(b,'pattern-sketch.png','image/png'),'image/png')}
 function toggleRec(){if(REC){REC.stop();return}
@@ -691,7 +697,7 @@ function toggleRec(){if(REC){REC.stop();return}
   mr.start();REC=mr;recUI();toast(PF.snd?'Recording with sound. Tap again to stop.':'Recording (sound is off, so the video is silent). Tap again to stop.')}catch(e){REC=null;toast('Recording failed')}}
 function recUI(){document.querySelectorAll('.rcb').forEach(b=>{b.classList.toggle('on',!!REC);b.innerHTML=svg(REC?'stop':'rec')+(b.id=='wr'?'':'<span>'+(REC?'Stop':'Record')+'</span>')})}
 function wireShare(){document.querySelectorAll('.shb').forEach(b=>{b.innerHTML=svg('share')+'<span>Share</span>';b.onclick=shareImage});document.querySelectorAll('.rcb').forEach(b=>b.onclick=toggleRec);recUI()}
-const TOUR=[['Welcome to Pattern Sketch','Watch moving things draw patterns. Pick a pattern, give it a push, and it leaves a trail behind. Each one works a little differently.'],['Choose how to start','Pattern of the day shows you a new pattern to watch. Simple gives you a few preset examples to try. Advanced gives you every pattern with full controls.'],['Place, then press Start','Most patterns start paused. Touch the screen to place or drag things, then press Start. In Bounce, tap to place each ball and drag to aim it. In Attractors, tap a ball to set its speed, drag out from it to point it, or press and hold it to move it.'],['The bar at the bottom','Start and Pause run the pattern, Clear wipes it, and Save keeps it. Controls opens the options, such as presets, colors and sliders. Hide controls for more room.'],['Share what you make','Save a pattern to find it again, share a picture or video, or use it as your wallpaper. You can pinch to zoom on a phone, or use the mouse wheel on a computer.']];
+const TOUR=[['Welcome to Pattern Sketch','Watch moving things draw patterns. Pick a pattern, give it a push, and it leaves a trail behind. Each one works a little differently.'],['Choose how to start','Pattern of the day shows you a new pattern to watch. Simple gives you a few preset examples to try. Advanced gives you every pattern with full controls.'],['Place, then press Start','Most patterns start paused. Touch the screen to place or drag things, then press Start. In Bounce, tap to place each ball and drag to aim it. In Gravity wells, tap a ball to set its speed, drag out from it to point it, or press and hold it to move it.'],['The bar at the bottom','Start and Pause run the pattern, Clear wipes it, and Save keeps it. Controls opens the options, such as presets, colors and sliders. Hide controls for more room.'],['Share what you make','Save a pattern to find it again, share a picture or video, or use it as your wallpaper. You can pinch to zoom on a phone, or use the mouse wheel on a computer.']];
 function showTour(i=0){let t=$('tour');if(!t){t=document.createElement('div');t.id='tour';document.body.appendChild(t)}t.style.display='flex';
  t.innerHTML=`<div class="box"><div class="td">${TOUR.map((_,k)=>`<i class="${k==i?'on':''}"></i>`).join('')}</div><b>${TOUR[i][0]}</b><p>${TOUR[i][1]}</p><div><button id="tk">Skip</button><button id="tn" style="background:#ffe94d;color:#000;font-weight:600">${i<TOUR.length-1?'Next':'Got it'}</button></div></div>`;
  $('tk').onclick=endTour;$('tn').onclick=()=>i<TOUR.length-1?showTour(i+1):endTour()}
@@ -744,14 +750,16 @@ const ONWEB=/^https?:/.test(location.protocol),ISAPP=(window.matchMedia&&matchMe
 function copyTxt(t){try{if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(()=>1,()=>cpOld(t))}catch(e){}return Promise.resolve(cpOld(t))}
 function cpOld(t){try{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-999px;top:0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e){return 0}}
 let HV='home',HO=false;
+const SIT={snd:'Turns sound on for all the patterns. You can also tap the speaker on any pattern to switch just that one.',hap:'Gives a short buzz from your phone when something happens, such as a ball bouncing. It only works on phones that can vibrate.',big:'Makes the text and descriptions bigger so they are easier to read.',cb:'Swaps the colour choices for ones that are easy to tell apart if you have colour blindness.',calm:'Switches off the fading and sliding movement in the menus and buttons. The patterns still draw as normal.',soft:'Keeps only the soft hums and chimes and leaves out the sharper sounds.',pan:'Moves the sound left and right to follow the ball. It works best with headphones.',th:'Sets the sound style for every pattern at once, including the pings in Wave interference. Tap the option to move to the next theme.',tour:'Shows the quick introduction again, with how to drag, throw and explore.',fb:'Opens a short form to send us a message or an idea by email. An email address is only included if you type one.'};
+const SI=k=>'<i class="inf sinf" data-s="'+k+'">i</i>',SB=k=>'<div class="info sinfo" id="si_'+k+'" style="width:min(360px,100%);box-sizing:border-box;padding:0 6px;color:#e6e6e6;font-size:13.5px">'+SIT[k]+'</div>';
 function hideHome(){HO=false;const h=$('home');h.classList.add('out');setTimeout(()=>{if(!HO)h.style.display='none'},300);hbOff()}
 function showHome(v){gameOff(0,1);hideCard();HV=v;HO=true;const h=$('home');h.classList.remove('out');h.style.display='flex';$('ideas').style.display='none';hbOn();
  const back='<button id="hb" class="hbk" aria-label="Home" title="Home">'+svg('home')+'</button>';
  if(v=='pick'||v=='pickadv'){const ad=v=='pickadv';h.innerHTML=(ad?'<h1>Advanced</h1><p>Choose a pattern and use the advanced controls.</p>':'<h1>Simple</h1><p>Choose a pattern with some simple controls and preset patterns.</p>')+['pend','attr','ros','bnc','plt','wav'].map(m=>`<button class="hc" data-m="${m}"><b>${MN[m]}</b><span>${MD[m].replace('Tune in','<span class="ty">Tune in</span>')}</span></button>`).join('')+back;
   h.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;freshStart(m);if(ad){cur=m;startAdv()}else startSimple(m);if(m=='bnc'&&window.bncFresh&&!(window.STARTED&&window.STARTED.bnc))window.bncFresh()});$('hb').onclick=()=>showHome('home')}
  else if(v=='settings'){const L=[['snd','Sound effects'],['hap','Vibration'],['big','Larger text'],['cb','Color-blind-safe colors'],['calm','Reduce motion'],['soft','Calm sound'],['pan','Stereo panning']];
-  h.innerHTML='<h1>Settings</h1>'+L.map(([k,t])=>`<button class="hc tg" data-k="${k}"><b>${t}</b><span>${PF[k]?'On':'Off'}</span></button>`).join('')+`<button class="hc" id="hth"><b>Sound theme</b><span>${THN[PF.th|0]}. Tap to change. Sets the sound for every pattern at once.</span></button>`+'<button class="hc" id="ht"><b>Show the tour again</b><span>A quick reminder of how to drag, throw and explore.</span></button><button class="hc" id="hfb"><b>Contact and feedback</b><span>Send us a message or an idea by email.</span></button><p style="max-width:340px;font-size:13px">Sound: tap the speaker on a pattern to turn it on. Pendulum hums and ticks at the end of each swing. Every pattern has several sound styles. Tap the sound button on a pattern to switch, or pick a Sound theme to set them all at once. Stereo panning moves the sound left and right with the ball. Recordings include the sound when it is on. Calm sound keeps only the soft hums and chimes.</p><p style="max-width:340px;font-size:13px">Privacy: your patterns and settings are stored only on this device. The app has no accounts and no tracking, and it works offline. The internet is used only if you choose to send feedback, and an email address is included only if you type one.</p>'+back;
-  h.querySelectorAll('.tg').forEach(b=>b.onclick=()=>{PF[b.dataset.k]=!PF[b.dataset.k];applyPF();savePrefs();showHome('settings')});$('hth').onclick=()=>{PF.th=((PF.th|0)+1)%THN.length;if(PF.th){Object.assign(PF,THM[PF.th]);PF.snd=true;applyPF();ac()}savePrefs();showHome('settings')};$('ht').onclick=()=>showTour();$('hfb').onclick=()=>showFeedback();$('hb').onclick=()=>showHome('home')}
+  h.innerHTML='<h1>Settings</h1>'+L.map(([k,t])=>`<button class="hc tg" data-k="${k}"><b>${t}${SI(k)}</b><span>${PF[k]?'On':'Off'}</span></button>${SB(k)}`).join('')+'<button class="hc" id="ht"><b>Show the tour again'+SI('tour')+'</b><span>A quick reminder of how to drag, throw and explore.</span></button>'+SB('tour')+'<button class="hc" id="hfb"><b>Contact and feedback'+SI('fb')+'</b><span>Send us a message or an idea by email.</span></button>'+SB('fb')+'<p style="max-width:340px;font-size:13px">Sound: tap the speaker on a pattern to turn it on. Pendulum hums and ticks at the end of each swing. Every pattern has several sound styles. Tap the sound button on a pattern to switch. Stereo panning moves the sound left and right with the ball. Recordings include the sound when it is on. Calm sound keeps only the soft hums and chimes.</p><p style="max-width:340px;font-size:13px">Privacy: your patterns and settings are stored only on this device. The app has no accounts and no tracking, and it works offline. The internet is used only if you choose to send feedback, and an email address is included only if you type one.</p>'+back;
+  h.querySelectorAll('.sinf').forEach(e=>e.onclick=ev=>{ev.stopPropagation();ev.preventDefault();const d=$('si_'+e.dataset.s);if(d)d.style.display=d.style.display=='block'?'none':'block'});h.querySelectorAll('.tg').forEach(b=>b.onclick=()=>{PF[b.dataset.k]=!PF[b.dataset.k];applyPF();savePrefs();showHome('settings')});$('ht').onclick=()=>showTour();$('hfb').onclick=()=>showFeedback();$('hb').onclick=()=>showHome('home')}
  else if(v=='computer'){const st=(t,b)=>`<div class="hc" style="cursor:default"><b>${t}</b><span>${b}</span></div>`;
   h.innerHTML='<h1>Also on a computer</h1><p>Pattern Sketch also runs on a computer, where you get a much bigger screen.</p>'
   +(ONWEB?(window.IP?'<button class="hc" id="hin"><b>Install now</b><span>Adds Pattern Sketch to this computer as an app, with its own window.</span></button>':''):
@@ -775,9 +783,12 @@ function startAdv(){off3();hideHome();document.body.classList.remove('simple');L
 function startSimple(m){off3();hideHome();document.body.classList.add('simple');LAST={ui:'simple',m};const kp=!!(window.STARTED&&window.STARTED[m]);if(!kp)EVO[m].on=false;setMode(m);if(window.setCtl)setCtl(false);resize();buildSimple(kp);pulseCtl();if(kp)$('sdesc').textContent='Your sketch is here, paused. Press Resume to carry on, or Clear to start again.'}
 function mul(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function daily(){const d=new Date(),seed=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(),m=['pend','attr','ros','bnc','plt','wav'][seed%6];startSimple(m);
- const old=Math.random;let it;Math.random=mul(seed);try{it=RND[m]()}finally{Math.random=old}
+ const go=()=>{const old=Math.random;let it;Math.random=mul(seed);try{it=RND[m]()}finally{Math.random=old}
  it[0]='Pattern of the day';IDEAS[m].apply(it);evoSet(m,false);TC[m].clearRect(0,0,W,H);build();
- $('chips').querySelectorAll('button').forEach(b=>b.classList.remove('sel'));$('sdesc').textContent="Today's pattern is a "+MN[m]+" pattern. Come back tomorrow for a new one."}
+ try{window.shapeIntroHide&&window.shapeIntroHide()}catch(e){}
+ $('chips').querySelectorAll('button').forEach(b=>b.classList.remove('sel'));$('sdesc').textContent="Today's pattern is a "+MN[m]+" pattern. Come back tomorrow for a new one.";
+ const rd="Today's pattern is ready. Just press Start.",hh=$('hint'),ph=$('pih');if(hh){hh.textContent=rd;hh.style.opacity=1}if(ph)ph.textContent=rd;const sp=$('sp2');if(sp)sp.addEventListener('click',()=>{if(hh){hh.style.opacity=0;hh.textContent=HINT[cur]}if(ph)ph.textContent=''},{once:true})};
+ if(m=='bnc')queueMicrotask(()=>queueMicrotask(go));else go()}
 function buildSimple(keep){$('chips').classList.remove('cust');delete $('sdesc').dataset.pre;const items=IDEAS[cur].list.filter(q=>q[2]!=='RNDE');
  $('chips').innerHTML=items.map((q,i)=>`<button data-i="${i}">${q[0]}</button>`).join('');$('ssw').innerHTML=`<div class="ch">Pattern color: <b class="cn">${colName(COL[cur])}</b> <small style="color:#888">(tap a circle)</small></div><div class="sw">${swHTML('cCus2')}</div><div class="tgw"></div>`;
  if(!$('pib')){const pb0=document.createElement('button');pb0.id='pib';pb0.textContent='Preset examples';pb0.onclick=()=>{const o=document.body.classList.toggle('pre');pb0.textContent=o?'Hide preset examples':'Preset examples';const d=$('sdesc'),pt=d.dataset.pre;if(pt){if(!o&&d.textContent===pt)d.textContent='';else if(o&&d.textContent==='')d.textContent=pt}};$('chips').parentNode.insertBefore(pb0,$('chips'));const ph0=document.createElement('span');ph0.id='pih';pb0.after(ph0)}$('pih').textContent=({pend:'Touch the bob and throw it on the screen.',attr:'Tap a ball to set its speed, drag out to point it, then press Start.',bnc:'Touch balls to change their path.',plt:'Swipe the screen to move the sand.',wav:'Tap the screen to place a source.'})[cur]||'';document.body.classList.remove('pre');$('pib').textContent='Preset examples';$('chips').onclickcapture=null;$('chips').addEventListener('click',()=>$('chips').classList.remove('cust'),true);
@@ -803,9 +814,9 @@ window.exitWatch=()=>{const f=$('fb');if(f&&f.style.display=='flex'){f.style.dis
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&WATCH)setWatch(false)});
 let SAVED=[];try{SAVED=JSON.parse(localStorage.getItem('tracelab.saved')||'[]')}catch(e){}
 function persist(){try{localStorage.setItem('tracelab.saved',JSON.stringify(SAVED));return true}catch(e){return false}}
-function nbShow(a,b){let e=$('nb');if(!e){e=document.createElement('div');e.id='nb';document.body.appendChild(e)}e.innerHTML='<b>'+a+'</b><span>'+b+'</span>';e.style.opacity=1;clearTimeout(nbShow.t);nbShow.t=setTimeout(()=>{e.style.opacity=0},3500)}
+function nbShow(a,b){let e=document.getElementById('nbn');if(!e){e=document.createElement('div');e.id='nbn';document.body.appendChild(e)}e.innerHTML='<b>'+a+'</b><span>'+b+'</span>';e.style.opacity=1;clearTimeout(nbShow.t);nbShow.t=setTimeout(()=>{e.style.opacity=0},3500)}
 function toast(t,act,fn){const e=$('toast');e.textContent=t;if(act){const b=document.createElement('button');b.textContent=act;b.onclick=()=>{fn();e.style.opacity=0;e.style.pointerEvents='none'};e.appendChild(b);e.style.pointerEvents='auto'}else e.style.pointerEvents='none';e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>{e.style.opacity=0;e.style.pointerEvents='none'},act?5000:2200)}
-const MN={pend:'Pendulum',attr:'Attractors',ros:'Rosette',bnc:'Bounce'},esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MN={pend:'Pendulum',attr:'Gravity wells',ros:'Rosette',bnc:'Bounce'},esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let dOk=null;
 function ask(o){$('dt').textContent=o.title;$('dm').textContent=o.msg||'';$('dm').style.display=o.msg?'block':'none';const i=$('nm');i.style.display=o.input?'block':'none';i.value=o.val||'';$('de').textContent='';
  $('ds').textContent=o.ok||'OK';$('ds').style.background=o.danger?'#e55':'#ffe94d';$('ds').style.color=o.danger?'#fff':'#000';dOk=o.onOk;$('dlg').style.display='flex';if(o.input)setTimeout(()=>i.select(),60)}
@@ -869,11 +880,11 @@ const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clien
 const ptrs=new Map();let pinch=null,pd=null;
 function commitPd(){if(!pd)return;clearTimeout(pd.t);const{x,y}=pd;pd=null;act=true;$('hint').style.opacity=0;modes[cur].down(x,y)}
 function pinfo(){const p=[...ptrs.values()],r=cv.getBoundingClientRect();return{d:Math.max(1,Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])),x:(p[0][0]+p[1][0])/2-r.left,y:(p[0][1]+p[1][1])/2-r.top}}
-cv.addEventListener('wheel',e=>{if(T.on||G.on||(cur!='attr'&&cur!='pend'))return;e.preventDefault();const M=modes[cur],r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,wx=M.wx(px),wy=M.wy(py),d=e.deltaY*(e.deltaMode==1?16:1),z=Math.min(20,Math.max(.05,M.z*Math.exp(-d*.0015)));M.view(z,wx-(px-W/2)/(z*M.ps()),wy-(py-H/2)/(z*M.ps()))},{passive:false});
+cv.addEventListener('wheel',e=>{if(T.on||G.on||(cur!='attr'&&cur!='pend'&&cur!='wav'))return;e.preventDefault();const M=modes[cur],r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,wx=M.wx(px),wy=M.wy(py),d=e.deltaY*(e.deltaMode==1?16:1),z=Math.min(20,Math.max(.05,(M.z||1)*Math.exp(-d*.0015)));M.view(z,wx-(px-W/2)/(z*M.ps()),wy-(py-H/2)/(z*M.ps()))},{passive:false});
 cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);
  if(G.on&&cur=='bnc'&&!T.on){if(ptrs.size==1){const[a,b]=pos(e);gameTap(a,b)}return}
  if(ptrs.size==2&&cur=='bnc'&&!T.on){if(pd){clearTimeout(pd.t);pd=null;modes.bnc.sv=null}modes.bnc.beginPinch();act=false;pinch={none:1};return}
- if(ptrs.size==2&&(cur=='attr'||cur=='pend')&&!T.on){if(pd){clearTimeout(pd.t);pd=null;modes[cur].sv=null}const M=modes[cur],i=pinfo();M.beginPinch();act=false;pinch={d:i.d,z:M.z,wx:M.wx(i.x),wy:M.wy(i.y)};return}
+ if(ptrs.size==2&&(cur=='attr'||cur=='pend'||cur=='wav')&&!T.on){if(pd){clearTimeout(pd.t);pd=null;modes[cur].sv=null}const M=modes[cur],i=pinfo();M.beginPinch();act=false;pinch={d:i.d,z:M.z||1,wx:M.wx(i.x),wy:M.wy(i.y)};return}
  if(T.on){T.dy=e.clientY;T.dx=e.clientX;T.t0=T.th;T.y0=T.ya;return}if(ptrs.size>1)return;
  hist=[];{const[a,b]=pos(e);hist.push([e.timeStamp,a,b]);pd={x:a,y:b,t:setTimeout(commitPd,(cur=='pend'||cur=='attr')?220:120)}}};
 cv.onpointermove=e=>{if(ptrs.has(e.pointerId))ptrs.set(e.pointerId,[e.clientX,e.clientY]);
@@ -907,7 +918,7 @@ const bJ=(m,x)=>{let s=0;const N=48;for(let k=0;k<N;k++){const t=(k+.5)*PI/N;s+=
 const bz=(m,n)=>{let c=0,x=.1,f0=bJ(m,x);const h=.05;for(let g=0;g<2000;g++){const x1=x+h,f1=bJ(m,x1);if(f0*f1<0){c++;if(c==n){let a=x,b=x1;for(let i=0;i<40;i++){const q=(a+b)/2;if(bJ(m,a)*bJ(m,q)<=0)b=q;else a=q}return(a+b)/2}}x=x1;f0=f1}return 99};
 const MC=[];for(let m=0;m<=8;m++)for(let n=1;n<=4;n++){const L=bz(m,n);if(L<=10.5){const tab=new Float32Array(258);let mx=0;for(let i=0;i<258;i++){tab[i]=bJ(m,L*i/256);mx=Math.max(mx,Math.abs(tab[i]))}for(let i=0;i<258;i++)tab[i]*=1.6/mx;MC.push({t:1,m,n,L,tab})}}
 MC.sort((a,b)=>a.L-b.L);
-const PBASE={n:5000,sp:1,gs:1.5,sk:1,bl:0,asp:.25,br:50,au:0,nd:0,sf:0,vw:0};
+const PBASE={n:5000,sp:1,gs:1.5,sk:1,bl:0,asw:.25,br:50,au:0,nd:0,sf:0,vw:0};
 const P=modes.plt={run:false,sub:1/20,P:null,np:0,pf:3,lp:3,acc:0,vib:0,drag:null,
  get st(){return this.snap()},set st(v){},
  M(){return V.plt.sh?MC:MQ},nm(){return this.M().length},
@@ -927,7 +938,7 @@ const P=modes.plt={run:false,sub:1/20,P:null,np:0,pf:3,lp:3,acc:0,vib:0,drag:nul
  fld(x,y,T){const f=this.val(T.a,x,y);if(!T.b)return f;return f*(1-T.w)+this.val(T.b,x,y)*T.w},
  hzOf(i){const m=this.M()[clamp(i|0,0,this.nm()-1)];return m.t?Math.round(55*m.L):Math.round(40*Math.sqrt(m[0]**2+m[1]**2))},
  step(h){const v=V.plt;this.vib+=h*9;
-  if(v.au){if(v.p!==this.lp)this.pf=v.p;this.pf=(this.pf+h*v.asp)%this.nm();const i=Math.floor(this.pf);if(i!==v.p){v.p=i;const sl=cur=='plt'?$('p'):null;if(sl){sl.value=i;sl.nextElementSibling.textContent=this.hzOf(i)+' Hz'}document.querySelectorAll('#sxp').forEach(e=>{e.value=i;e.nextElementSibling.textContent=this.hzOf(i)+' Hz'})}this.lp=v.p}
+  if(v.au){if(v.p!==this.lp)this.pf=v.p;this.pf=(this.pf+h*v.asw)%this.nm();const i=Math.floor(this.pf);if(i!==v.p){v.p=i;const sl=cur=='plt'?$('p'):null;if(sl){sl.value=i;sl.nextElementSibling.textContent=this.hzOf(i)+' Hz'}document.querySelectorAll('#sxp').forEach(e=>{e.value=i;e.nextElementSibling.textContent=this.hzOf(i)+' Hz'})}this.lp=v.p}
   else{this.pf=v.p;this.lp=v.p}
   this.acc+=h*60;const circ=!!v.sh,P=this.P,k=.016*v.sk,T=this.terms(),G=v.sf==1?-.004:v.sf==2?.004:0,np=this.np;
   while(this.acc>=1){this.acc-=1;for(let i=0;i<np;i++){const x=P[2*i],y=P[2*i+1],a=Math.abs(this.fld(x,y,T)),gm=Math.min(1,a*2.5);let nx=x+(rnd()-.5)*k*a+G*gm*(x-.5),ny=y+(rnd()-.5)*k*a+G*gm*(y-.5);
@@ -973,7 +984,7 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
  wipe(){this.src=[];this.sel=null;this.t=0;this.rings=[];this.selUI()},
  clr(){this.wipe()},again(){this.wipe()},ps(){return 1},home(){},onN(){},
  snap(){return{src:this.src.map(s=>({x:Math.round(s.x*10)/10,y:Math.round(s.y*10)/10,lam:Math.round(s.lam*100)/100,ph:s.ph||0,amp:s.amp==null?1:s.amp,col:s.col,one:s.one?1:0,nf:s.nf?1:0}))}},
- load(st){this.src=((st&&st.src)||[]).map(s=>({x:s.x,y:s.y,lam:s.lam,ph:s.ph||0,amp:s.amp==null?1:s.amp,col:s.col,one:s.one?1:0,nf:s.nf?1:0}));this._g=null;this.src.forEach(s=>this.fit(s));this.sel=null;this.t=0;this.rings=[];this.selUI()},
+ load(st){this.src=((st&&st.src)||[]).map(s=>({x:s.x,y:s.y,lam:s.lam,ph:s.ph||0,amp:s.amp==null?1:s.amp,col:s.col,one:s.one?1:0,nf:s.nf?1:0}));this._g=null;this.src.forEach(s=>this.fit(s));this.sel=null;this.z=1;this.cx=0;this.cy=0;this.t=0;this.rings=[];this.selUI()},
  reshape(){this._g=null;this.src.forEach(s=>this.fit(s));this.rings=[];this.t=0;this.run=false},
  geom(){const k=this.eff(),LH=Math.round(this.LH());if(this._g&&this._g.k==k&&this._g.LH==LH)return this._g;let g;const Rm=Math.min(190,LH/2-8);
   if(k=='circle')g={k,LH,circle:true,R:Rm};
@@ -1001,11 +1012,13 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
    else if(v.mv==2){const a=e*v.ms*.8,c=Math.cos(a),sn=Math.sin(a),dx=s.x,dy=s.y;s.x=dx*c-dy*sn;s.y=dx*sn+dy*c}
    if(this.eff()!='screen'&&this.fit(s)&&s.vx!=null){s.vx*=-1;s.vy*=-1}
    const iv=s.lam/v.rv;if(s.acc==null)s.acc=iv*(1-((s.ph||0)%TAU)/TAU);s.acc+=e;
-   while(s.acc>=iv){s.acc-=iv;if(s.one&&s.f1)continue;s.f1=true;this.rings.push({x:s.x,y:s.y,r0:v.rv*s.acc,t0:this.t,si:this.src.indexOf(s),c:this.col(this.src.indexOf(s)),amp:s.amp==null?1:s.amp,nf:!!(s.one&&s.nf&&v.rf),hi:!!s.one,rays:v.rf?this.trace(s.x,s.y,s.one&&s.nf,!!s.one):null})}}
+   while(s.acc>=iv){s.acc-=iv;if(s.one&&s.f1)continue;s.f1=true;this.rings.push({x:s.x,y:s.y,r0:v.rv*s.acc,t0:this.t,si:this.src.indexOf(s),c:this.col(this.src.indexOf(s)),amp:s.amp==null?1:s.amp,nf:!!(s.one&&s.nf&&v.rf),hi:!!s.one,rays:v.rf?this.trace(s.x,s.y,s.one&&s.nf,!!s.one):null});this.ping&&this.ping(s)}}
   const lim=v.fd*(v.rf?1.4:1)+30;this.rings=this.rings.filter(r=>v.rv*(this.t-r.t0)+r.r0<(r.nf?(v.rf?60000:900):lim))},
- toL(x,y){const k=W/400;return[(x-W/2)/k,(y-H/2)/k]},
+ toL(x,y){const k=W/400,z=this.z||1;return[(x-W/2)/(k*z)+(this.cx||0),(y-H/2)/(k*z)+(this.cy||0)]},
+ ps(){return W/400},wx(x){return this.toL(x,0)[0]},wy(y){return this.toL(0,y)[1]},beginPinch(){this.drag=null},
+ view(z,cx,cy){z=Math.min(8,Math.max(.5,z));const LH=this.LH(),mx=200,my=LH/2;this.z=z;this.cx=Math.max(-mx,Math.min(mx,cx));this.cy=Math.max(-my,Math.min(my,cy))},
  down(x,y){if(V.wav.hs){toast('Please untick the Hide sources option to place a source.');return}const[lx,ly]=this.toL(x,y),i=this.src.findIndex(s=>Math.hypot(s.x-lx,s.y-ly)<18);this.drag={i,moved:false,x:lx,y:ly,was:i>=0&&this.sel===i};if(i>=0){this.sel=i;this.selUI()}},
- move(x,y){const d=this.drag;if(!d)return;const[lx,ly]=this.toL(x,y);if(Math.hypot(lx-d.x,ly-d.y)>6)d.moved=true;if(d.i>=0&&d.moved){const s=this.src[d.i];s.x=lx;s.y=ly;this.fit(s)}},
+ move(x,y){const d=this.drag;if(!d)return;const[lx,ly]=this.toL(x,y);if(Math.hypot(lx-d.x,ly-d.y)>6)d.moved=true;if(d.i>=0&&d.moved){const s=this.src[d.i];s.x=lx;s.y=ly;this.fit(s)}else if(d.i<0&&d.moved){const k=W/400,z=this.z||1;this.view(z,d.x-(x-W/2)/(k*z),d.y-(y-H/2)/(k*z))}},
  up(){const d=this.drag;this.drag=null;if(!d)return;if(d.i>=0&&!d.moved&&this.src[d.i]){const sc=this.src[d.i],nw=performance.now();if(this.lt&&this.lt.s===sc&&nw-this.lt.t<700){this.src.splice(d.i,1);this.sel=null;this.lt=null;this.selUI();toast('Source removed');return}this.lt={s:sc,t:nw};return}if(d.i<0&&!d.moved){if(this.src.length>=6){toast('You can have up to 6 sources. Double-tap a source to remove it.');return}if(this.inside(d.x,d.y,10)){const ns={x:d.x,y:d.y,lam:pl(6)};this.src.push(ns);this.sel=this.src.length-1;this.lt={s:ns,t:performance.now()};this.selUI()}}},
  ring(ix,iy,r,si,amp,cc,nf){const v=V.wav,fd=v.fd*(v.rf?1.4:1),a=(nf?.9:Math.max(.06,.95-r/fd))*amp*Math.min(1,r/16)*.85;ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=cc||this.col(si);ctx.beginPath();ctx.arc(ix,iy,r,0,TAU);ctx.stroke()},
  rayRing(rg,r){const R=rg.rays,pts=[];for(const ray of R){const C=ray.C;let i=0;if(r>C[C.length-1]){pts.push(null);continue}while(i<C.length-2&&C[i+1]<r)i++;const t=(r-C[i])/Math.max(1e-6,C[i+1]-C[i]),P=ray.P;pts.push([P[2*i]+(P[2*i+2]-P[2*i])*t,P[2*i+1]+(P[2*i+3]-P[2*i+1])*t,ray.H?ray.H[i]:0])}
@@ -1016,7 +1029,7 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
    const q=(A.r*A.r-B.r*B.r+d*d)/(2*d),hh=Math.sqrt(Math.max(0,A.r*A.r-q*q)),mx=A.x+dx*q/d,my=A.y+dy*q/d;
    for(const sg of[1,-1]){const px=mx+sg*hh*dy/d,py=my-sg*hh*dx/d;if(Math.abs(px)>200||Math.abs(py)>LH/2)continue;ctx.beginPath();ctx.arc(px,py,1.9,0,TAU);ctx.fill()}}
   ctx.globalAlpha=1},
- draw(){const k=W/400,LH=H/k,v=V.wav,clip=this.eff()!='screen';ctx.save();ctx.translate(W/2,H/2);ctx.scale(k,k);ctx.fillStyle='#000';ctx.fillRect(-200,-LH/2,400,LH);ctx.lineWidth=v.lw;
+ draw(){const k=W/400,LH=H/k,v=V.wav,clip=this.eff()!='screen';ctx.save();ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);ctx.translate(W/2,H/2);ctx.scale(k*(this.z||1),k*(this.z||1));ctx.translate(-(this.cx||0),-(this.cy||0));ctx.fillStyle='#000';ctx.fillRect(-200,-LH/2,400,LH);ctx.lineWidth=v.lw;
   if(clip){ctx.save();this.shapePath();ctx.clip()}
   for(const rg of this.rings){const r=v.rv*(this.t-rg.t0)+rg.r0;if(r<1)continue;if(rg.rays)this.rayRing(rg,r);else this.ring(rg.x,rg.y,r,rg.si,rg.amp,rg.c,rg.nf)}
   ctx.globalAlpha=1;if(clip)ctx.restore();
@@ -1027,25 +1040,25 @@ const Wv=modes.wav={run:false,sub:1/30,src:[],sel:null,t:0,rings:[],drag:null,_g
  selUI(){const simple=document.body.classList.contains('simple'),A=$('wsrcA'),S=$('sxw'),host=simple?S:A;if(A&&A!==host)A.innerHTML='';if(S&&S!==host)S.innerHTML='';if(!host)return;
   const s=this.src[this.sel];if(!s){host.innerHTML='<p class="nt">Tap empty space to add a source (up to 6). Tap a source to set its pitch, and double-tap it to remove it.</p>';return}
   const p=Math.round((s.lam>=16?(64-s.lam)/4.8:10+(16-s.lam))*2)/2,adv=!simple,inf=k=>adv?k:null;
-  host.innerHTML=`<p class="nt">Source ${this.sel+1} of ${this.src.length}. Drag it to move it.</p>`+rowH('wpi','Pitch',1,20,.5,p,null,inf('wpi'))+(adv?rowH('wph','Phase',0,345,15,Math.round((s.ph||0)/TAU*360),v=>v+'°','wph')+rowH('wam','Strength',.2,1,.1,s.amp==null?1:s.amp,v=>(+v).toFixed(1),'wam'):'')+`<div class="pre"><button id="wrm">Remove this source</button></div>`;
+  host.innerHTML=`<p class="nt">Source ${this.sel+1} of ${this.src.length}. Drag it to move it.</p>`+rowH('wpi','Pitch',1,20,.5,p,null,inf('wpi'))+(adv?rowH('wph','Phase',0,345,15,Math.round((s.ph||0)/TAU*360),v=>v+'°','wph')+rowH('wam','Brightness',.2,1,.1,s.amp==null?1:s.amp,v=>(+v).toFixed(1),'wam'):'')+`<div class="pre"><button id="wrm">Remove currently selected source</button></div>`;
   const bindR=(id,fn,fmt)=>{const e=$(id);if(!e)return;e.oninput=()=>{e.nextElementSibling.textContent=fmt?fmt(+e.value):e.value;fn(+e.value)}};
   bindR('wpi',v=>{s.lam=pl(v)});bindR('wph',v=>{s.ph=v/360*TAU;s.acc=null},v=>v+'°');bindR('wam',v=>{s.amp=v},v=>(+v).toFixed(1));
   $('wrm').onclick=()=>{this.src.splice(this.sel,1);this.sel=null;this.selUI()};wireInf(host)}};
 
 /* ---------- shared data ---------- */
-Object.assign(V.plt,{sh:0,au:0,nd:0,sf:0,vw:0});Object.assign(V.wav,{sp:1,rf:0,hs:0,shp:0,ed:1,mv:0,ov:0});
+Object.assign(V.plt,{sh:0,au:0,nd:0,sf:0,vw:0});Object.assign(V.wav,{sp:1,rf:0,hs:0,shp:0,ed:1,mv:0,ov:0,ovm:0});
 COL.plt='auto';COL.wav='auto';EVO.plt=mk();EVO.wav=mk();EVS.plt={};EVS.wav={};
 MN.plt='Chladni plates';MN.wav='Wave interference';
 MD.plt='Sand on a vibrating plate jumps away from the moving parts and settles into lines. It includes a sound you can hear.';
 MD.wav='Rings spread out from sources you place. Where they cross they strengthen and cancel, weaving a pattern.';
 HINT.plt='Press Start to shake the plate. Drag a finger across it to sweep the sand aside.';
-HINT.wav='Tap the screen to add a source, or open Preset examples. Then press Start. Drag a source to move it.';
+HINT.wav='Tap the screen to add a source, or open Preset examples. Then press Start. Drag a source to move it. Drag empty space to move the view, and pinch to zoom. Tap Reset view to come back.';
 const HZ_I='Pitch. The note the plate is shaking at. A low pitch gives a few big lines of sand. A high pitch gives a finer, busier pattern.';
-INFO.plt={p:HZ_I,n:'Amount of sand. Fewer grains give a delicate, dusty pattern. More grains fill the nodal lines in solidly but need more from your device.',sp:'Settle speed. How fast the sand moves toward the nodal lines. Lower is slower, so you can watch the pattern form. It does not change the final pattern.',gs:'Grain size. How big each grain of sand is drawn.',sk:'Shake strength. How hard the sand is thrown about. A strong shake spreads the sand wider around the nodal lines. A gentle shake packs it tightly onto them.',p2:'Second pitch. The pitch that is mixed in when Blend is above zero.',bl:'Blend. Mixes the second pitch into the first. At zero you only get the first pitch. In between you get patterns neither pitch makes on its own.',asp:'Sweep speed. How fast the pitch climbs when Auto sweep is on.',br:'Brush size. How wide an area your finger sweeps clear when you drag across the plate.',
+INFO.plt={p:HZ_I,n:'Amount of sand. Fewer grains give a delicate, dusty pattern. More grains fill the nodal lines in solidly but need more from your device.',sp:'Settle speed. How fast the sand moves toward the nodal lines. Lower is slower, so you can watch the pattern form. It does not change the final pattern.',gs:'Grain size. How big each grain of sand is drawn.',sk:'Shake strength. How hard the sand is thrown about. A strong shake spreads the sand wider around the nodal lines. A gentle shake packs it tightly onto them.',p2:'Second pitch. The pitch that is mixed in when Blend is above zero.',bl:'Blend. Mixes the second pitch into the first. At zero you only get the first pitch. In between you get patterns neither pitch makes on its own.',asw:'Sweep speed. How fast the pitch climbs when Auto sweep is on.',br:'Brush size. How wide an area your finger sweeps clear when you drag across the plate.',
  xsa:'Shake again. Scatters the sand evenly over the plate so you can watch the pattern form again.',xsh:'Plate shape. A square plate and a round plate shake in different patterns, so the Pitch list changes when you switch. The round plate makes rings and spokes, the square plate makes grids and crosses. Changing the shape scatters the sand again.',xau:'Auto sweep. The pitch rises slowly by itself and the pattern changes from one into the next. The Pitch slider follows along.',xsf:'Surface. Flat is a normal plate. Bowl curves up at the edges so the sand drifts toward the middle. Dome curves up in the middle so the sand drifts outward. The shake still pulls the sand to the nodal lines.',xvw:'View. Flat looks straight down at the plate. 3D tilts the plate so you can see its surface, including a bowl or dome, and the sand sitting on it.',xnl:'Show nodal lines. Draws the nodal lines, the parts of the plate that stay still, so you can see where the sand is heading.'};
-INFO.wav={rv:'Ring speed. How fast the rings travel outward.',fd:'Fade distance. How far a ring travels before it fades away. A longer distance gives a busier pattern.',lw:'Line weight. How thick the ring lines are.',ms:'Move speed. How fast the sources move when Move sources is on.',
- wpi:'Pitch. A high pitch gives tight, close rings. A low pitch gives wide rings. Each source has its own pitch.',wph:'Phase. Where in its swing the selected source starts. It shifts when this source sends out rings compared with the others.',wam:'Strength. How bright the selected source\'s rings are. A weak source fades into the background.',
- xrf:'Reflect off the edges. Rings bounce back from the edge of the space instead of leaving it.',xhs:'Hide sources. Removes the dots so you can just watch the pattern. Untick it to place or move a source.',xshp:'Shape. The shape of the space the rings bounce inside. Changing it clears the waves.',xed:'Show edges. Draws the outline of the shape so you can see where the rings will bounce.',xmv:'Move sources. Drift around: sources wander and bounce off the edges. Orbit the centre: sources circle the middle. Tap again to turn it off. Rings already sent out stay where they were made.',xov:'Show where rings cross. Draws a dot where rings from different sources meet.'};
+INFO.wav={rv:'Ring speed. How fast the rings travel outward.',fd:'Fade distance. How far a ring travels before it fades away. A longer distance gives a busier pattern.',lw:'Line weight. How thick the ring lines are.',ms:'Move speed. How fast the sources move when the sources are set to drift or orbit.',
+ wpi:'Pitch. A high pitch gives tight, close rings. A low pitch gives wide rings. Each source has its own pitch.',wph:'Phase. Where in its swing the selected source starts. It shifts when this source sends out rings compared with the others.',wam:'Brightness. How bright the selected source\'s rings are. A dim source fades into the background.',
+ xrf:'Reflect waves inside a shape. The rings bounce back from the edge of a shape instead of spreading out of sight. Tick it, then choose the shape you want the waves to reflect in.',xwp:'Ping when a ring is sent out. Plays a short sound each time a source sends out a ring. The sound style is the one chosen with the speaker button, and the pitch follows the source pitch. With a high pitch or several sources it can get busy and messy, so untick this if you want the picture without the pings. Sound effects must be on in Settings, or tap the speaker on the picture.',sxq:'Ping when a ring is sent out. Plays a short sound each time a source sends out a ring. The sound style is the one chosen with the speaker button, and the pitch follows the source pitch. With a high pitch or several sources it can get busy and messy, so untick this if you want the picture without the pings. Sound effects must be on in Settings, or tap the speaker on the picture.',xhs:'Hide sources. Removes the dots so you can just watch the pattern. Untick it to place or move a source.',xshp:'Shape. The shape the waves reflect inside. Pick the screen or any of the shapes. Changing it clears the waves.',xed:'Hide edges. The outline of the shape is shown by default so you can see where the rings will bounce. Tick this to hide the outline and see only the waves.',xmv:'Watch the sources move. Drift around: sources wander and bounce off the edges. Orbit the centre: sources circle the middle. Tap again to turn it off. Rings already sent out stay where they were made.',xov:'Show where rings cross. Marks where rings from different sources meet. Choose Dots to see each crossing point, or Lines to join the crossings into the curved lines of the interference pattern.'};
 IAS.plt='';IAS.wav='';
 
 /* ---------- ideas ---------- */
@@ -1076,23 +1089,23 @@ IDEAS.wav={tip:'Each preset places the sources and sometimes sets Reflect. The r
  ['Mixed pitches','One tight source and one wide source. The rings cross at different spacing.',{s:[[-70,0,3],[70,0,8]]}],
  ['Triangle','Three sources at the corners of a triangle. A weave of triple crossings.',{s:ringSrc(70,3,6,-1.57)}],
  ['Line of five','Five sources in a row. Their rings merge into a nearly flat wave front.',{s:[0,1,2,3,4].map(i=>[-140+i*70,0,7])}],
- ['Four corners','Four sources with Reflect on. The rings bounce off the edges and cross the middle.',{s:[[-120,-105,5],[120,-105,5],[-120,105,5],[120,105,5]],rf:1}],
+ ['Four corners','Four sources with the waves reflecting inside the screen. The rings bounce off the edges and cross the middle.',{s:[[-120,-105,5],[120,-105,5],[-120,105,5],[120,105,5]],rf:1}],
  ['Close pair','Two high-pitch sources almost touching. Very fine curved lines.',{s:[[-18,0,8],[18,0,8]]}],
  ['Spiral of six','Six sources winding outward, each at a different pitch.',{s:Array.from({length:6},(_,i)=>[Math.round((25+i*22)*Math.cos(i*1.05)),Math.round((25+i*22)*Math.sin(i*1.05)),3.5+i*.9])}],
  ['Drifting pair','Two sources wander across the screen, leaving a trail of rings that weave together.',{s:[[-60,-30,6],[60,30,6]],mv:1}],
  ['Drifting trio','Three sources at different pitches drift about. Wide and tight rings cross as they move.',{s:[[0,-60,4],[-60,50,7],[60,50,10]],mv:1}],
  ['Orbiting pair','Two sources circle the centre. Their rings sweep out a spinning, spiral weave.',{s:[[-70,0,6],[70,0,6]],mv:2}],
  ['Orbiting five','Five sources circle the centre together and swirl into a flower.',{s:ringSrc(70,5,6,-1.57),mv:2}],
- ['Drifting in a hexagon','Two sources drift inside a hexagon with Reflect on. The rings bounce off the walls as they move.',{s:[[-40,0,6],[40,0,6]],mv:1,rf:1,shp:4}]],
+ ['Drifting in a hexagon','Two sources drift inside a hexagon with the waves reflecting inside it. The rings bounce off the walls as they move.',{s:[[-40,0,6],[40,0,6]],mv:1,rf:1,shp:4}]],
  apply(q){if(q[2]==='RND'||q[2]==='RNDE')q=RND.wav();const o=q[2];Object.assign(V.wav,WBASE,{rf:o.rf?1:0,mv:o.mv|0,shp:o.rf?(o.shp|0):0});Wv._g=null;Wv.src=o.s.map(([x,y,p])=>({x,y,lam:pl(p)}));Wv.src.forEach(s=>Wv.fit(s));Wv.sel=null;Wv.t=0;Wv.rings=[];Wv.run=false}};
 
 /* ---------- UI ---------- */
 const halt=m=>{modes[m].run=false;if(window.STARTED)window.STARTED[m]=false};
 const hzFix=()=>{const m=(id,f)=>{const e=$(id);if(e)e.nextElementSibling.textContent=f(+e.value)};
- m('p',v=>P.hzOf(v)+' Hz');m('p2',v=>P.hzOf(v)+' Hz');m('bl',v=>Math.round(v*100)+'%');m('sp',v=>v.toFixed(2)+'x');m('gs',v=>v.toFixed(2));m('sk',v=>v.toFixed(1));m('asp',v=>v.toFixed(2));
+ m('p',v=>P.hzOf(v)+' Hz');m('p2',v=>P.hzOf(v)+' Hz');m('bl',v=>Math.round(v*100)+'%');m('sp',v=>v.toFixed(2)+'x');m('gs',v=>v.toFixed(2));m('sk',v=>v.toFixed(1));m('asw',v=>v.toFixed(2));
  const l=$('lw');if(l)l.nextElementSibling.textContent=(+l.value).toFixed(1);const ms=$('ms');if(ms)ms.nextElementSibling.textContent=(+ms.value).toFixed(1)};
 const shakeAgain=()=>{P.scatter(V.plt.n);P.acc=0;halt('plt');hintSet('Sand scattered. Press Start to shake the plate.')};
-const setRf=on=>{V.wav.rf=on?1:0;Wv.reshape();halt('wav');const x=$('xshw');if(x)x.style.display=on?'block':'none';['xrf','sxr'].forEach(i=>{const e=$(i);if(e)e.checked=!!on});
+const setRf=on=>{V.wav.rf=on?1:0;Wv.reshape();halt('wav');['xrf','sxr'].forEach(i=>{const e=$(i);if(e)e.checked=!!on});
  hintSet(on?'Rings will bounce off the '+(V.wav.shp?SHN[V.wav.shp].toLowerCase()+' ':'screen ')+'edges. Press Start.':'Rings will spread past the edges. Press Start.')};
 const setHs=on=>{V.wav.hs=on?1:0;['xhs','sxh'].forEach(i=>{const e=$(i);if(e)e.checked=!!on})};
 const pillsWire=root=>root.querySelectorAll('.pl').forEach(g=>{const k=g.dataset.k;g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=+b.dataset.v;
@@ -1100,24 +1113,24 @@ const pillsWire=root=>root.querySelectorAll('.pl').forEach(g=>{const k=g.dataset
  if(k=='sh'){if(v===(V.plt.sh|0))return;V.plt.sh=v;V.plt.p=3;V.plt.p2=8;V.plt.au=0;V.plt.bl=0;P.fixP();P.init();halt('plt');build();hintSet((v?'Round plate.':'Square plate.')+' Press Start to shake it.');return}
  if(k=='sf'){V.plt.sf=v;mark()}else if(k=='vw'){V.plt.vw=v;mark()}
  else if(k=='shp'){V.wav.shp=v;mark();Wv.reshape();halt('wav');hintSet(v?'Rings will bounce off the '+SHN[v].toLowerCase()+' edges. Press Start.':'Rings will bounce off the screen edges. Press Start.')}
- else if(k=='mv'){V.wav.mv=v;Wv.src.forEach(s=>{delete s.vx});mark()}})});
+ else if(k=='ovm'){V.wav.ovm=v;mark()}else if(k=='mv'){V.wav.mv=v;Wv.src.forEach(s=>{delete s.vx});mark()}})});
 function extras(){const pn=$('panel'),b3=$('b3');if(b3&&b3.parentElement)b3.parentElement.style.display='none';const first=pn.querySelector('.row'),vp=V.plt,vw=V.wav;
  if(cur=='plt'){
   first.insertAdjacentHTML('beforebegin',`<div class="pre"><button id="xsa">Shake again</button><i class="inf" data-k="xsa" style="align-self:center">i</i></div>${infoBox('xsa')}${infoH('Plate shape','xsh')}${pillsH('sh',[[0,'Square'],[1,'Circle']],vp.sh|0)}${infoBox('xsh')}`);
   pn.insertAdjacentHTML('beforeend',ckH('xau','Auto sweep the pitch','xau',vp.au)+infoH('Surface','xsf')+pillsH('sf',[[0,'Flat'],[1,'Bowl'],[2,'Dome']],vp.sf|0)+infoBox('xsf')+infoH('View','xvw')+pillsH('vw',[[0,'Flat'],[1,'3D']],vp.vw|0)+infoBox('xvw')+ckH('xnl','Show nodal lines','xnl',vp.nd)+'<p class="nt">Sound: tap the speaker on the picture to hear the pitch while the plate is shaking.</p>');
   $('xsa').onclick=shakeAgain;$('xau').onchange=e=>{vp.au=e.target.checked?1:0;P.pf=vp.p;P.lp=vp.p};$('xnl').onchange=e=>{vp.nd=e.target.checked?1:0};
-  hzFix();['p','p2','bl','sp','gs','sk','asp'].forEach(id=>{const e=$(id);if(e)e.addEventListener('input',hzFix)})}
+  hzFix();['p','p2','bl','sp','gs','sk','asw'].forEach(id=>{const e=$(id);if(e)e.addEventListener('input',hzFix)})}
  else{
-  first.insertAdjacentHTML('beforebegin',ckH('xhs','Hide sources','xhs',vw.hs)+ckH('xrf','Reflect off the edges','xrf',vw.rf)+`<div id="xshw" style="display:${vw.rf?'block':'none'}">${infoH('Bounce the rings inside this shape','xshp')}${pillsH('shp',SHN.map((n,i)=>[i,n]),vw.shp|0)}${infoBox('xshp')}${ckH('xed','Show edges','xed',vw.ed)}</div><div id="wsrcA"></div>`);
-  pn.insertAdjacentHTML('beforeend',infoH('Move sources','xmv')+pillsH('mv',[[0,'Off'],[1,'Drift around'],[2,'Orbit the centre']],vw.mv|0)+infoBox('xmv')+ckH('xov','Show where rings cross','xov',vw.ov));
-  $('xrf').onchange=e=>setRf(e.target.checked);$('xhs').onchange=e=>setHs(e.target.checked);$('xed').onchange=e=>{vw.ed=e.target.checked?1:0};$('xov').onchange=e=>{vw.ov=e.target.checked?1:0};
+  first.insertAdjacentHTML('beforebegin','<div class="gh"><b>Controls for all sources</b><span>These controls change every source at once.</span></div>'+ckH('xhs','Hide sources','xhs',vw.hs)+ckH('xrf','Reflect waves inside a shape','xrf',vw.rf)+`<div id="xshw" style="display:block">${infoH('What shape would you like the waves to reflect in?','xshp')}${pillsH('shp',SHN.map((n,i)=>[i,n]),vw.shp|0)}${infoBox('xshp')}${ckH('xed','Hide edges','xed',!vw.ed)}</div>`);
+  pn.insertAdjacentHTML('beforeend',infoH('Watch the sources move','xmv')+pillsH('mv',[[0,'Off'],[1,'Drift around'],[2,'Orbit the centre']],vw.mv|0)+infoBox('xmv')+ckH('xov','Show where rings cross','xov',vw.ov)+'<div id="xovm">'+pillsH('ovm',[[0,'Dots'],[1,'Lines']],vw.ovm|0)+'</div>'+ckH('xwp','Ping when a ring is sent out','xwp',!!PF.wp)+'<div class="gh"><b>Controls for the selected source</b><span>These controls change only the source you select. Tap a source on the picture to select it.</span></div><div id="wsrcA"></div>');
+  $('xrf').onchange=e=>setRf(e.target.checked);$('xhs').onchange=e=>setHs(e.target.checked);$('xed').onchange=e=>{vw.ed=e.target.checked?0:1};$('xov').onchange=e=>{vw.ov=e.target.checked?1:0};$('xwp').onchange=e=>{PF.wp=e.target.checked;savePrefs()};{const mr=$('ms')&&$('ms').closest('.row'),at=$('i_xmv');if(mr&&at){const mi=mr.nextElementSibling&&mr.nextElementSibling.id=='i_ms'?mr.nextElementSibling:null;at.after(mr);if(mi)mr.after(mi)}}
   hzFix();Wv.selUI()}
  pillsWire(pn);wireInf(pn)}
 function simpleX(){const ssw=$('ssw');if(!ssw)return;let x=$('sx');if(!x){x=document.createElement('div');x.id='sx';ssw.after(x)}
  if(cur=='plt'){const v=V.plt;x.innerHTML=rowH('sxp','Pitch',0,P.nm()-1,1,v.p,i=>P.hzOf(+i)+' Hz')+'<div class="pre"><button id="sxs">Shake again</button></div>';
   $('sxp').oninput=e=>{v.p=+e.target.value;e.target.nextElementSibling.textContent=P.hzOf(v.p)+' Hz';P.pf=v.p;P.lp=v.p};$('sxs').onclick=shakeAgain}
- else if(cur=='wav'){x.innerHTML='<div id="sxw"></div>'+ckH('sxh','Hide sources',null,V.wav.hs);
-  $('sxh').onchange=e=>setHs(e.target.checked);Wv.selUI()}
+ else if(cur=='wav'){x.innerHTML='<div id="sxw"></div>'+ckH('sxh','Hide sources',null,V.wav.hs)+ckH('sxq','Ping when a ring is sent out','sxq',!!PF.wp);
+  $('sxh').onchange=e=>setHs(e.target.checked);$('sxq').onchange=e=>{PF.wp=e.target.checked;savePrefs()};wireInf(x);Wv.selUI()}
  else x.innerHTML=''}
 
 /* ---------- hooks into the app ---------- */
@@ -1308,7 +1321,7 @@ requestAnimationFrame(frame);
 })();
 
 (function(){
- const bx=document.createElement('div');bx.id='wpc';bx.innerHTML='<div class="box"><b id="wpt">Make this my wallpaper</b><img id="wpi" alt=""><small id="wpm">This is how it will look on your screen.</small><div id="wpb"></div></div>';document.body.appendChild(bx);
+ const bx=document.createElement('div');bx.id='wpc';bx.innerHTML='<div class="box"><b id="wpt">Make this my wallpaper</b><img id="wpimg" alt=""><small id="wpm">This is how it will look on your screen.</small><div id="wpb"></div></div>';document.body.appendChild(bx);
  const nat=!!(window.AndroidBridge&&typeof AndroidBridge.setWallpaper=='function');
  function compose(x){return new Promise(res=>{const src=(x.rs&&x.rs.im)||x.img,im=new Image();im.onload=()=>{const dp=Math.min(3,window.devicePixelRatio||2);let SW=Math.round((screen.width||393)*dp),SH=Math.round((screen.height||800)*dp);const k=Math.min(1,2600/Math.max(SW,SH));SW=Math.round(SW*k);SH=Math.round(SH*k);
    const c=document.createElement('canvas');c.width=SW;c.height=SH;const g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,SW,SH);g.imageSmoothingQuality='high';
@@ -1317,12 +1330,12 @@ requestAnimationFrame(frame);
    res(c)};im.onerror=()=>res(null);im.src=src})}
  const close=()=>{bx.style.display='none'};
  const bt=(t,f,cls)=>{const b=document.createElement('button');b.textContent=t;b.onclick=f;if(cls)b.className=cls;$('wpb').appendChild(b)};
- window.savePic=x=>{const src=(x.rs&&x.rs.im)||x.img,im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0);c.toBlob(async b=>{if(!b){toast('Could not save the picture');return}await shareBlob(b,(String(x.name||'pattern').replace(/[^\w\- ]+/g,'').trim().replace(/\s+/g,'-')||'pattern')+'.png','image/png');setTimeout(()=>toast('Picture is about '+im.width+' × '+im.height+' pixels. For a higher resolution, tap Share on the pattern screen.'),900)},'image/png')};im.onerror=()=>toast('Could not save the picture');im.src=src};
+ window.savePic=x=>{const src=(x.rs&&x.rs.im)||x.img,im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0);c.toBlob(async b=>{if(!b){toast('Could not save the picture');return}await saveBlob(b,(String(x.name||'pattern').replace(/[^\w\- ]+/g,'').trim().replace(/\s+/g,'-')||'pattern')+'.png','image/png');setTimeout(()=>{try{window.__nbOk('Picture saved','This saved picture is about '+im.width+' × '+im.height+' pixels. For the best quality, tap Share on the pattern screen while you are drawing it.')}catch(e){toast('Picture saved')}},700)},'image/png')};im.onerror=()=>toast('Could not save the picture');im.src=src};
  window.wallpaperFor=async x=>{const c=await compose(x);if(!c){toast('Could not make the wallpaper');return}$('wpt').textContent='Make this my wallpaper';
-  $('wpi').src=c.toDataURL('image/jpeg',.6);$('wpb').innerHTML='';
+  $('wpimg').src=c.toDataURL('image/jpeg',.6);$('wpb').innerHTML='';
   const send=w=>{c.toBlob(b=>{if(!b)return;const r=new FileReader();r.onload=()=>{try{AndroidBridge.setWallpaper(r.result.split(',')[1],w);close()}catch(e){toast('Could not set the wallpaper')}};r.readAsDataURL(b)},'image/jpeg',.93)};
   if(nat){$('wpm').textContent='This is how it will look. Where should it go?';bt('Home screen',()=>send(1),'g');bt('Lock screen',()=>send(2));bt('Home and lock screens',()=>send(3))}
-  else{$('wpm').textContent=PCW()?'This is how it will look on your screen. Save the picture, then find it in your Downloads folder, right-click it and choose Set as desktop background.':'Your device cannot set the wallpaper from here. Save the picture, then choose it as your wallpaper from your photos.';bt('Save the picture',()=>{c.toBlob(b=>b&&shareBlob(b,'pattern-sketch-wallpaper.jpg','image/jpeg'),'image/jpeg',.93);close()},'g')}
+  else{$('wpm').textContent=PCW()?'This is how it will look on your screen. Save the picture, then find it in your Downloads folder, right-click it and choose Set as desktop background.':'Your device cannot set the wallpaper from here. Save the picture, then choose it as your wallpaper from your photos.';bt('Save the picture',()=>{c.toBlob(b=>b&&saveBlob(b,'pattern-sketch-wallpaper.jpg','image/jpeg'),'image/jpeg',.93);close()},'g')}
   bt('Cancel',close,'x');bx.style.display='flex';$('ix')&&0}
 })();
 
@@ -1437,21 +1450,23 @@ body.watch #asp{display:none!important}
  const cm=setMode;setMode=function(){FF.left=0;return cm.apply(this,arguments)};
 })();
 </script>
-<style>#upm{position:absolute;left:16px;right:16px;top:70%;transform:translateY(-50%);z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}#upm[hidden]{display:none!important}#upm b{font:700 26px/1.25 system-ui,sans-serif;color:#ffe94d;text-shadow:0 2px 14px #000,0 0 24px rgba(255,233,77,.35);background:rgba(10,10,16,.72);padding:14px 22px;border-radius:16px;border:1px solid rgba(255,233,77,.4)}#upm small{display:block;margin-top:6px;font:500 15px/1.3 system-ui,sans-serif;color:#fff}#upm .rg{width:46px;height:46px;border-radius:50%;border:3px solid #ffe94d;animation:upmp 1.6s ease-out infinite}@keyframes upmp{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.8);opacity:0}}body.watch #upm{display:none!important}</style>
+<style>#upm{position:absolute;left:16px;right:16px;top:70%;transform:translateY(-50%);z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}#upm[hidden]{display:none!important}#upm b{font:700 26px/1.25 system-ui,sans-serif;color:#ffe94d;text-shadow:0 2px 14px #000,0 0 24px rgba(255,233,77,.35);background:rgba(10,10,16,.72);padding:14px 22px;border-radius:16px;border:1px solid rgba(255,233,77,.4)}#upm small{display:block;margin-top:6px;font:500 15px/1.3 system-ui,sans-serif;color:#fff}#upm .rg{width:46px;height:46px;border-radius:50%;border:3px solid #ffe94d;animation:upmp 1.6s ease-out infinite}@keyframes upmp{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.8);opacity:0}}body.watch #upm{display:none!important}#upm.bn{top:auto;bottom:6px;transform:none;gap:0}#upm.bn .rg{display:none}#upm.bn b{font-size:16px;padding:8px 14px;background:rgba(10,10,16,.6)}#upm.bn small{font-size:12px;margin-top:3px}</style>
 <script>
 (function(){
  const st=document.getElementById('stage');if(!st)return;
  const el=document.createElement('div');el.id='upm';el.hidden=true;el.innerHTML='<div class="rg"></div><b></b>';st.appendChild(el);const tx=el.querySelector('b');let cur0='';
- function want(){if(T.on||G.on||(window.rdOn&&window.rdOn()))return '';
+ function want(){if(window.__tch||T.on||G.on||(window.rdOn&&window.rdOn()))return '';
   if(cur=='wav'){const M=modes.wav;if(!M.run&&M.src.length==0&&!V.wav.hs)return 'Tap the screen<br>to place a source'}
   else if(cur=='bnc'){const M=modes.bnc;if(M.su&&M.cb<M.balls.length){const n=M.balls.length;return n>1?`Touch the screen to place ball ${M.cb+1} of ${n}<small>Drag to aim it, then let go</small>`:'Touch the screen to place your ball<small>Drag to aim it, then let go</small>'}}
   else if(cur=='pend'){const M=modes.pend;if(window.b2Want&&window.b2Want())return window.b2Want();if(M.hide&&!M.run)return 'Swipe the screen<br>to start a swing'}
   return ''}
  function sync(){try{const m=want(),hn=document.getElementById('hint');
   if(m!==cur0){cur0=m;if(m)tx.innerHTML=m}
+  el.classList.toggle('bn',cur=='bnc');
   if(el.hidden===!!m)el.hidden=!m;
   if(m&&!hn.dataset.pm){hn.dataset.pm='1';hn.style.visibility='hidden'}else if(!m&&hn.dataset.pm){delete hn.dataset.pm;if(!hn.dataset.np)hn.style.visibility=''}}catch(e){}
   requestAnimationFrame(sync)}
+ const dn=()=>{window.__tch=true},up=()=>{window.__tch=false};st.addEventListener('pointerdown',dn,true);st.addEventListener('touchstart',dn,{capture:true,passive:true});['pointerup','pointercancel','touchend','touchcancel'].forEach(n=>window.addEventListener(n,up,true));
  requestAnimationFrame(sync);
 })();
 </script>
@@ -1500,7 +1515,7 @@ body.watch #asp{display:none!important}
    const g=ctx.createRadialGradient(p[0]-r/3,p[1]-r/3,1,p[0],p[1],r*1.2);g.addColorStop(0,'#fff');g.addColorStop(1,it.col);ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],r*1.2,0,7);ctx.fill()});
   ctx.lineWidth=1}finally{T.th=th0;T.ya=ya0}};
  {const t0=toggle3;toggle3=function(){const was=T.on;const r=t0.apply(this,arguments);if(cur=='attr'){if(T.on&&!was)M.enter3();else if(!T.on&&was)M.leave3()}return r}}
- {const b0=build;build=function(){const r=b0.apply(this,arguments);try{const i=$('dz');if(i){const row=i.closest('.row'),inf=$('i_dz');if(row)row.style.display=(T.on&&cur=='attr')?'':'none';if(inf&&!(T.on&&cur=='attr'))inf.style.display='none'}}catch(e){}return r}}
+ {const b0=build;build=function(){const r=b0.apply(this,arguments);try{const i=$('dz');if(i){const row=i.closest('.row'),inf=$('i_dz');if(row)row.style.display='';if(inf&&!(T.on&&cur=='attr'))inf.style.display='none'}}catch(e){}return r}}
  {const m0=setMode;setMode=function(){M.in3=false;return m0.apply(this,arguments)}}
  {const s3=document.getElementById('s3');if(s3)s3.onclick=()=>toggle3()}
 })();
@@ -1555,10 +1570,10 @@ M.load=function(){off();return l0.apply(this,arguments)};
 const CC={1:'#e44',2:'#2aa3d8',3:'#a78bfa'};
 function loadSl(){const e=ed(),src=e==2?V.p2:V.pend,c=on2()?CC[e]:'';SL.forEach(k=>{const i=$(k);if(i){i.value=src[k];i.nextElementSibling.textContent=i.value;i.style.accentColor=c;i.nextElementSibling.style.color=c}})}
 function ui(){const pn=$('panel');if(cur!='pend'||!pn||document.body.classList.contains('simple')||$('xb2'))return;
- pn.insertAdjacentHTML('beforeend',`<label class="ck"><input type="checkbox" id="xb2"${V.pend.b2?' checked':''}><span>Second bob</span><i class="inf" data-k="b2">i</i></label><div class="info" id="i_b2">${INFO.pend.b2}</div><div id="b2p" style="display:${V.pend.b2?'block':'none'}"><div class="b2row"><span>Touch and sliders apply to:</span><button id="b2a" type="button">Bob 1</button><button id="b2b" type="button">Bob 2</button><button id="b2c" type="button">Both</button><button id="b2r" type="button">Remove bob 2</button></div><div class="row"><span>Link strength<i class="inf" data-k="lk">i</i></span><input id="xlk" type="range" min="0" max="1.5" step="0.05" value="${V.pend.lk}" style="accent-color:#a78bfa"><output style="color:#a78bfa">${V.pend.lk}</output></div><div class="info" id="i_lk">${INFO.pend.lk}</div></div>`);
+ pn.insertAdjacentHTML('beforeend',`<label class="ck"><input type="checkbox" id="xb2"${V.pend.b2?' checked':''}><span>Second bob</span><i class="inf" data-k="b2">i</i></label><div class="info" id="i_b2">${INFO.pend.b2}</div><div id="b2p" style="display:block"><div class="b2row"><span>Touch and sliders apply to:</span><button id="b2a" type="button">Bob 1</button><button id="b2b" type="button">Bob 2</button><button id="b2c" type="button">Both</button><button id="b2r" type="button">Remove bob 2</button></div><div class="row"><span>Link strength<i class="inf" data-k="lk">i</i></span><input id="xlk" type="range" min="0" max="1.5" step="0.05" value="${V.pend.lk}" style="accent-color:#a78bfa"><output style="color:#a78bfa">${V.pend.lk}</output></div><div class="info" id="i_lk">${INFO.pend.lk}</div></div>`);
  pn.querySelectorAll('.inf').forEach(e=>{if(!e.onclick)e.onclick=()=>{const d=$('i_'+e.dataset.k);if(d)d.style.display=d.style.display=='block'?'none':'block'}});
  const lk=$('xlk');lk.oninput=()=>{V.pend.lk=+lk.value;lk.nextElementSibling.textContent=lk.value};
- const sync=()=>{$('b2p').style.display=V.pend.b2?'block':'none';[['b2a',1],['b2b',2],['b2c',3]].forEach(([id,v])=>{const b=$(id);b.style.border='2px solid '+CC[v];b.style.background=V.pend.s2==v?CC[v]:'';b.style.color=V.pend.s2==v?'#000':''});loadSl()};
+ const sync=()=>{[['b2a',1],['b2b',2],['b2c',3]].forEach(([id,v])=>{const b=$(id);b.style.border='2px solid '+CC[v];b.style.background=V.pend.s2==v?CC[v]:'';b.style.color=V.pend.s2==v?'#000':''});loadSl()};
  const hint=t=>{const h=$('hint');if(h){h.textContent=t;h.style.opacity=1;clearTimeout(window._hf);window._hf=setTimeout(()=>{h.style.opacity=0},6000)}};
  const pick=v=>{V.pend.s2=v;if(v==2&&V.pend.b2&&!B2.on){B2.S={x:0,y:V.p2.L*.3,vx:0,vy:0};B2.on=true;B2.wait=true;B2.hold=!!M.run;B2.prev=null;B2.q=null}sync();hint(v==1?'Touch and sliders now change bob 1. Touch pans the screen while it swings.':v==2?'Touch the screen to place bob 2, then let go to release it. The sliders change bob 2.':'Both bobs are placed together and the sliders change both.')};
  $('xb2').onchange=e=>{V.pend.b2=e.target.checked?1:0;if(V.pend.b2){const P=V.pend;V.p2={g:P.g,L:Math.max(1,Math.round(P.L*.6*10)/10),lat:P.lat,om:P.om,dp:P.dp,th:P.th,sp:P.sp};pick(2)}else{off();pick(1)}};
@@ -1574,8 +1589,8 @@ function ui(){const pn=$('panel');if(cur!='pend'||!pn||document.body.classList.c
 (function(){const Wv=modes.wav,d0=Wv.draw,dn0=Wv.down,mv0=Wv.move,up0=Wv.up;
 const on=()=>V.wav.rf&&!Wv.run&&Wv.t<=1e-6;
 function sn(x,y){const r=15/(W/400),fx=Math.abs(x)<r,fy=Math.abs(y)<r;return[fx?0:x,fy?0:y,fx,fy]}
-function mark(f){const o=Wv.snp||{},ch=(f[0]&&!o.x)||(f[1]&&!o.y);Wv.snp={x:f[0],y:f[1],live:true,until:0};if(ch)try{buzz(12)}catch(e){}}
-Wv.down=function(x,y){const r=dn0.apply(this,arguments),d=this.drag;if(d&&on()){if(d.i<0){const q=sn(d.x,d.y);if(this.inside(q[0],q[1],10)){d.x=q[0];d.y=q[1];d.sf=[q[2],q[3]]}}}return r};
+function mark(f){const o=Wv.snp||{},ch=(f[0]&&!o.x)||(f[1]&&!o.y);Wv.snp={x:f[0],y:f[1],live:true,until:0};if(ch)try{buzz(40)}catch(e){}}
+Wv.down=function(x,y){const r=dn0.apply(this,arguments),d=this.drag;if(d&&on()){if(d.i<0){const q=sn(d.x,d.y);if(this.inside(q[0],q[1],10)){d.x=q[0];d.y=q[1];d.sf=[q[2],q[3]];if(q[2]||q[3])try{buzz(40)}catch(e){}}}}return r};
 Wv.move=function(x,y){const r=mv0.apply(this,arguments),d=this.drag;if(d&&on()&&d.i>=0&&d.moved&&this.src[d.i]){const s=this.src[d.i],q=sn(s.x,s.y);s.x=q[0];s.y=q[1];this.fit(s);mark([q[2]&&s.x===0,q[3]&&s.y===0])}return r};
 Wv.up=function(){const d=this.drag,sf=d&&d.sf,o=this.snp,r=up0.apply(this,arguments);if(sf&&(sf[0]||sf[1]))this.snp={x:sf[0],y:sf[1],live:false,until:performance.now()+800};else if(o&&o.live)this.snp={x:o.x,y:o.y,live:false,until:performance.now()+800};return r};
 Wv.draw=function(){const r=d0.apply(this,arguments);try{if(on()){const k=W/400,LH=H/k,o=this.snp,sh=o&&(o.live||performance.now()<o.until)&&(o.x||o.y);ctx.save();ctx.translate(W/2,H/2);ctx.scale(k,k);
@@ -1597,18 +1612,19 @@ Wv.cross=function(LH){if(!V.wav.rf)return c0.apply(this,arguments);const v=V.wav
    const rx=A[2]-A[0],ry=A[3]-A[1],sx=B[2]-B[0],sy=B[3]-B[1],d=rx*sy-ry*sx;if(Math.abs(d)<1e-9)continue;
    const qx=B[0]-A[0],qy=B[1]-A[1],t=(qx*sy-qy*sx)/d,u=(qx*ry-qy*rx)/d;if(t<0||t>1||u<0||u>1)continue;
    const px=A[0]+rx*t,py=A[1]+ry*t;if(Math.floor(px/CS)!==cx||Math.floor(py/CS)!==cy)continue;
-   if(Math.abs(px)>200||Math.abs(py)>LH/2)continue;out.push(px,py)}});
- ctx.fillStyle='#fff';ctx.globalAlpha=.85;ctx.beginPath();for(let i=0;i<out.length;i+=2){ctx.moveTo(out[i]+1.9,out[i+1]);ctx.arc(out[i],out[i+1],1.9,0,TAU)}ctx.fill();ctx.globalAlpha=1}})();
+   if(Math.abs(px)>200||Math.abs(py)>LH/2)continue;out.push(px,py,A[5]-1,B[5]-1)}});
+ if(v.ovm==1){window.__xLines(out,this.rings,v,ctx);return}
+ ctx.fillStyle='#fff';ctx.globalAlpha=.85;ctx.beginPath();for(let i=0;i<out.length;i+=4){ctx.moveTo(out[i]+1.9,out[i+1]);ctx.arc(out[i],out[i+1],1.9,0,TAU)}ctx.fill();ctx.globalAlpha=1}})();
 </script>
 <script>
 (function(){const Wv=modes.wav,s0=Wv.selUI;
 Wv.selUI=function(){const r=s0.apply(this,arguments);try{const simple=document.body.classList.contains('simple'),host=simple?$('sxw'):$('wsrcA'),s=this.src[this.sel];if(simple){this.src.forEach(q=>{q.one=0;q.nf=0});return r}if(!host||!s)return r;const pre=host.querySelector('.pre');if(!pre||$('wone'))return r;
- pre.insertAdjacentHTML('beforebegin','<label class="ck"><input type="checkbox" id="wone"'+(s.one?' checked':'')+'><span>Single pulse (sends out just one ring)</span></label><label class="ck" id="wnfl" style="display:'+(s.one?'flex':'none')+'"><input type="checkbox" id="wnf"'+(s.nf?' checked':'')+'><span>Never fade (the ring keeps going)</span></label><div class="pre" id="wfw" style="display:'+(s.one?'flex':'none')+'"><button id="wfire">Fire again</button></div>');
- const grey=()=>{const e=$('wpi');if(!e)return;const rw=e.closest('.row');e.disabled=!!s.one;if(rw)rw.style.opacity=s.one?'.35':'';if(rw)rw.style.pointerEvents=s.one?'none':''};grey();
- $('wone').onchange=e=>{s.one=e.target.checked?1:0;if(s.one&&Wv.src.length>1){const oi=Wv.src.indexOf(s);Wv.rings=Wv.rings.filter(q=>q.si==oi);Wv.rings.forEach(q=>q.si=0);Wv.src=[s];Wv.sel=0;try{nbShow('Only one source with Single pulse','The other sources were removed. Untick Single pulse to use more.')}catch(x){}Wv.selUI();return}grey();$('wfw').style.display=s.one?'flex':'none';$('wnfl').style.display=s.one&&V.wav.rf?'flex':'none';if(!s.one)s.f1=false;else if(Wv.run)s.f1=true};
+ const pr=$('wpi')&&$('wpi').closest('.row'),an=pr&&(pr.nextElementSibling&&pr.nextElementSibling.id==='i_wpi'?pr.nextElementSibling:pr);(an||pre).insertAdjacentHTML(an?'afterend':'beforebegin','<label class="ck"><input type="checkbox" id="wone"'+(s.one?' checked':'')+'><span>Single pulse (sends out just one ring)</span></label><label class="ck" id="wnfl" style="display:flex"><input type="checkbox" id="wnf"'+(s.nf?' checked':'')+'><span>Never fade (the ring keeps going)</span></label><div class="pre" id="wfw" style="display:flex"><button id="wfire">Fire again</button></div>');
+ 
+ $('wone').onchange=e=>{s.one=e.target.checked?1:0;if(s.one&&Wv.src.length>1){const oi=Wv.src.indexOf(s);Wv.rings=Wv.rings.filter(q=>q.si==oi);Wv.rings.forEach(q=>q.si=0);Wv.src=[s];Wv.sel=0;try{nbShow('Only one source with Single pulse','The other sources were removed. Untick Single pulse to use more.')}catch(x){}Wv.selUI();return}if(!s.one)s.f1=false;else if(Wv.run)s.f1=true};
  $('wnf').onchange=e=>{s.nf=e.target.checked?1:0};
  $('wfire').onclick=()=>{s.f1=false;s.acc=s.lam/V.wav.rv}}catch(e){console.error(e)}return r};
-setInterval(()=>{const l=document.getElementById('wnfl');if(l){const q=Wv.src[Wv.sel],d=q&&q.one&&V.wav.rf?'flex':'none';if(l.style.display!==d)l.style.display=d}},250)})();
+})();
 </script>
 <script>
 (function(){const Wv=modes.wav,u0=Wv.up;
@@ -1635,5 +1651,97 @@ Wv.up=function(){const d=this.drag;if(d&&d.i<0&&!d.moved&&this.src.some(q=>q.one
      if(d.textContent&&d.textContent.indexOf('Developed using the controls')<0)d.textContent+=add})}}
   return r}
 })();
+</script>
+<script>
+/* Hide sources: grey out the source panel so nothing can be changed or removed unseen */
+(function(){
+ const hosts=()=>['wsrcA','sxw'].map(i=>$(i)).filter(Boolean);
+ function apply(){
+  const on=!!(V.wav&&V.wav.hs);
+  hosts().forEach(h=>{
+   let n=h.querySelector('.hsn');
+   [...h.children].forEach(c=>{if(c.classList.contains('hsn'))return;if(window.__gate)window.__gate(c,on,['Sources are hidden','Untick Hide sources to change or remove them.'],'h')});
+   if(on&&!n){n=document.createElement('div');n.className='hsn';n.style.cssText='margin:6px 0;padding:8px 10px;border:2px solid #ffe94d;border-radius:10px;color:#ffe94d;font-weight:600;font-size:13.5px';n.textContent='Sources are hidden. Untick Hide sources to change or remove them.';h.insertBefore(n,h.firstChild)}
+   if(!on&&n)n.remove()})}
+ const W0=modes.wav,s0=W0.selUI;
+ W0.selUI=function(){const r=s0.apply(this,arguments);try{apply()}catch(e){}return r};
+ document.addEventListener('change',e=>{if(e.target&&(e.target.id=='xhs'||e.target.id=='sxh'))setTimeout(apply,0)},true);
+ setInterval(()=>{try{if(cur=='wav')apply()}catch(e){}},400);
+})();
+</script>
+<script>
+/* Options stay on screen; unavailable ones grey out and explain why when tapped. Dots/Lines for crossings. */
+(function(){
+ const st=document.createElement('style');st.textContent='.gtd{position:relative!important;opacity:.4}.gtov{position:absolute;left:0;top:0;right:0;bottom:0;z-index:4;cursor:not-allowed;background:transparent}';document.head.appendChild(st);
+ function gate(el,on,msg,key){if(!el)return;key=key||'d';let o=null;for(const c of el.children)if(c.classList&&c.classList.contains('gtov')){o=c;break}
+  const g=el.__gs||(el.__gs={});if(on)g[key]=msg;else delete g[key];
+  if(!g.h&&!g.d){if(el.classList.contains('gtd'))el.classList.remove('gtd');if(o)o.remove();return}
+  if(!el.classList.contains('gtd'))el.classList.add('gtd');
+  const pick=()=>g.h||g.d;
+  if(o){o.__m=pick;return}
+  o=document.createElement('div');o.className='gtov';o.__m=pick;
+  o.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();let m=o.__m();if(typeof m=='function')m=m();try{window.__nbOk(m[0],m[1])}catch(x){}},true);
+  o.addEventListener('pointerdown',e=>e.stopPropagation());o.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+  el.appendChild(o)}
+ window.__gate=gate;
+ const ks=document.createElement('style');ks.textContent='#nbkb{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:40;display:none}#nbk{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);width:min(86vw,420px);box-sizing:border-box;background:rgba(0,0,0,.95);border:2px solid #ffe94d;border-radius:18px;padding:18px 20px 16px;text-align:center;color:#fff;z-index:41;box-shadow:0 8px 40px rgba(0,0,0,.7);display:none}#nbk b{display:block;font-size:22px;line-height:1.25;color:#ffe94d;margin-bottom:8px}#nbk span{display:block;font-size:16px;line-height:1.4;color:#ddd}#nbk button{margin-top:14px;min-width:120px;padding:10px 24px;border-radius:12px;border:0;background:#ffe94d;color:#000;font-size:17px;font-weight:700}';document.head.appendChild(ks);
+ window.__nbOk=function(t,m){let bd=document.getElementById('nbkb'),bx=document.getElementById('nbk');
+  if(!bd){bd=document.createElement('div');bd.id='nbkb';bx=document.createElement('div');bx.id='nbk';bx.setAttribute('role','alertdialog');document.body.appendChild(bd);document.body.appendChild(bx)}
+  bx.innerHTML='<b></b><span></span><button type="button">OK</button>';bx.querySelector('b').textContent=t;bx.querySelector('span').textContent=m;
+  const close=()=>{bd.style.display='none';bx.style.display='none'};bx.querySelector('button').onclick=close;bd.onclick=e=>e.stopPropagation();
+  bd.style.display='block';bx.style.display='block';try{bx.querySelector('button').focus()}catch(e){}};
+ const sel=()=>{const W=modes.wav;return W.src&&W.src[W.sel]};
+ const defs=[
+  ['#xshw>.ex',()=>!V.wav.rf,['Shape options need Reflect','Tick Reflect waves inside a shape to choose the shape you want the waves to reflect in.']],
+  ['#xshw>.pl',()=>!V.wav.rf,['Shape options need Reflect','Tick Reflect waves inside a shape to choose the shape you want the waves to reflect in.']],
+  ['#xed',()=>!V.wav.rf,['Hide edges needs Reflect','Hide edges is for the shape the waves reflect inside. Tick Reflect waves inside a shape to see the shape options.'],'label'],
+  ['#xovm',()=>!V.wav.ov,['Show where rings cross is off','Tick Show where rings cross first, then choose dots or lines.']],
+  ['#wpi',()=>{const s=sel();return !!(s&&s.one)},['Pitch is not used with Single pulse','Single pulse sends out one ring only. Untick Single pulse to change the pitch.'],'.row'],
+  ['#wfw',()=>{const s=sel();return !(s&&s.one)},['Fire again needs Single pulse','Tick Single pulse first.']],
+  ['#wnfl',()=>{const s=sel();return !(s&&s.one&&V.wav.rf)},()=>{const s=sel();return s&&s.one?['Never fade needs a shape to reflect in','Tick Reflect waves inside a shape and choose a shape, so the ring has walls to bounce off.']:['Never fade needs Single pulse','Tick Single pulse first. It also needs Reflect waves inside a shape.']}],
+  ['#ms',()=>!(V.wav&&V.wav.mv),['Move speed needs movement','Choose Drift around or Orbit the centre under Watch the sources move first. Move speed sets how fast the sources travel.'],'.row'],
+  ['#b2p',()=>!(V.pend&&V.pend.b2),['Second bob is off','Tick Second bob first to use these controls.']],
+  ['#dz',()=>!T.on,['3D depth needs 3D','Turn on 3D first. This sets how far the points spread in depth.'],'.row']];
+ setInterval(()=>{try{for(const [q,off,msg,up] of defs){document.querySelectorAll(q).forEach(el=>{const t=up?el.closest(up):el;if(t)gate(t,!!off(),msg)})}}catch(e){}},120);
+ /* joined crossing lines */
+ window.__xLines=function(pts,rings,v,ctx){const TAU=Math.PI*2,G=new Map();
+  for(let i=0;i<pts.length;i+=4){let ia=pts[i+2],ib=pts[i+3],a=rings[ia],b=rings[ib];if(!a||!b)continue;if(a.si>b.si||(a.si==b.si&&ia>ib)){const t=a;a=b;b=t}
+   const ea=a.t0-a.r0/v.rv,eb=b.t0-b.r0/v.rv,key=a.si+'_'+b.si+'_'+Math.round(v.rv*(eb-ea)/2);let g=G.get(key);if(!g){g={p:[]};G.set(key,g)}
+   const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);const c=d>1?((pts[i]-a.x)*-dy+(pts[i+1]-a.y)*dx)/d:Math.atan2(pts[i+1]-a.y,pts[i]-a.x)*40;g.p.push([c,pts[i],pts[i+1]])}
+  ctx.strokeStyle='#fff';ctx.globalAlpha=.85;ctx.lineWidth=1.2;ctx.beginPath();
+  G.forEach(g=>{const p=g.p.sort((u,w)=>u[0]-w[0]);for(let i=1;i<p.length;i++){if(Math.hypot(p[i][1]-p[i-1][1],p[i][2]-p[i-1][2])<70){ctx.moveTo(p[i-1][1],p[i-1][2]);ctx.lineTo(p[i][1],p[i][2])}}});
+  ctx.stroke();ctx.globalAlpha=1};
+ const W0=modes.wav,prev=W0.cross;
+ W0.cross=function(LH){const v=V.wav;if(v.ovm!=1||v.rf)return prev.apply(this,arguments);
+  const R=this.rings.map((g,i)=>({x:g.x,y:g.y,r:v.rv*(this.t-g.t0)+g.r0,si:g.si,i})).filter(g=>g.r>4),out=[];
+  for(let a=0;a<R.length;a++)for(let b=a+1;b<R.length;b++){const A=R[a],B=R[b];if(A.si==B.si)continue;const dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy);if(d<1||A.r+B.r<d||Math.abs(A.r-B.r)>d)continue;
+   const q=(A.r*A.r-B.r*B.r+d*d)/(2*d),hh=Math.sqrt(Math.max(0,A.r*A.r-q*q)),mx=A.x+dx*q/d,my=A.y+dy*q/d;
+   for(const sg of[1,-1]){const px=mx+sg*hh*dy/d,py=my-sg*hh*dx/d;if(Math.abs(px)>200||Math.abs(py)>LH/2)continue;out.push(px,py,A.i,B.i)}}
+  window.__xLines(out,this.rings,v,ctx)};
+})();
+</script>
+<script>
+/* Wave interference: a sound each time a source sends out a ring */
+(function(){
+ const W=modes.wav;let last=0;
+ W.ping=function(s){try{
+  if(!PF.snd||!PF.wp||cur!='wav'||HO||window.FFING||document.hidden||APPH)return;
+  const t=performance.now();if(t-last<80)return;last=t;
+  const n=Math.max(1,this.src.length),v=.085/Math.sqrt(n),ix=Math.max(5,Math.min(18,Math.round(14-((s.lam||30)-6)/4.5)+3)),f=pent(ix),pan=Math.max(-1,Math.min(1,(s.x||0)/200)),o=PF.ws|0;
+  if(o==0)tone(f,v,.5,'sine',{pan});
+  else if(o==1)bell(f,v*1.3,pan);
+  else if(o==2)tone(f*1.5,v,.3,'sine',{f2:f*3,att:.005,pan});
+  else if(o==3)tone(f,v,.35,'triangle',{pan});
+  else if(o==4)tone(f,v*1.2,.9,'sine',{att:.01,pan});
+  else if(o==5)tone(f*2,v*.8,.8,'sine',{pan});
+  else blip(f,v*.8,.1,'square',pan)}catch(e){}};
+})();
+</script>
+<script>
+/* Wave: Reset view button when the view has been moved or zoomed */
+(function(){const b=document.createElement('button');b.id='rvw';b.textContent='Reset view';b.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:9;padding:8px 16px;border-radius:12px;border:2px solid #ffe94d;background:rgba(0,0,0,.85);color:#ffe94d;font-weight:700;font-size:15px;display:none';
+ b.onclick=e=>{e.stopPropagation();const M=modes.wav;M.z=1;M.cx=0;M.cy=0};document.body.appendChild(b);
+ ['pointerdown','touchstart'].forEach(t=>b.addEventListener(t,e=>e.stopPropagation()));
+ setInterval(()=>{try{const M=modes.wav,on=cur=='wav'&&!HO&&((M.z||1)!=1||M.cx||M.cy);b.style.display=on?'block':'none'}catch(e){}},200)})();
 </script>
 </body></html>
