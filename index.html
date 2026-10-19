@@ -254,7 +254,7 @@ canvas{display:block;width:100%;aspect-ratio:1;touch-action:none}
 <div id="intro"><div class="in"><h1>How Cog Curves Works</h1>
 <p>A small <b>wheel</b> rolls round the inside of a big <b>ring</b> (or the outside, if you choose that). A <b>pen</b> is fixed in the wheel, and as the wheel rolls the pen draws the curve.</p>
 <p class="vars">Cog Curves need you to set three basic controls: <b>Ring size</b>, <b>Wheel size</b> and <b>Pen hole</b>. The picture shows each one. You set them after tapping Got it.</p>
-<div id="advintro" hidden><p class="vars" style="margin-top:0">Advanced adds more to play with, below the basic controls: a <b>Ring shape</b> (oval, egg or dumbbell), an odd-shaped <b>wheel</b>, a <b>second wheel</b> rolling inside the first, up to <b>four pens</b>, and a <b>colour and weight</b> for each pen. Tap the i buttons for examples.</p></div>
+<div id="advintro" hidden><p class="vars" style="margin-top:0">Advanced adds more to play with, below the basic controls: a <b>Ring shape</b> (oval, egg or dumbbell), an odd-shaped <b>wheel</b>, a <b>second wheel</b> rolling inside the first, up to <b>four pens</b>, and a <b>colour and weight</b> for each pen, and <b>Layer patterns</b> to draw one pattern over another. Tap the i buttons for examples.</p></div>
 <div class="go" style="margin-top:4px;margin-bottom:8px"><button id="hwb" type="button">How these controls affect the pattern</button></div>
 <div id="dg"><svg id="dsv" viewBox="-200 -200 400 430" role="img" aria-label="Diagram of a small wheel rolling inside a ring with a pen fixed in the wheel"></svg></div>
 <div class="go"><button id="dgo" class="pri" type="button">See how it works</button><button id="igo" type="button">Got it</button></div>
@@ -305,6 +305,10 @@ canvas{display:block;width:100%;aspect-ratio:1;touch-action:none}
 <label class="check"><input id="hw" type="checkbox"> Hide cog machinery while it draws <button class="inf" data-h="hhw" type="button" aria-label="About hiding the cog machinery">i</button></label>
 <p class="help" id="hhw" hidden>The cog machinery is the ring, the rolling wheel and the pen hole. By default you see it while the pattern draws, so you can follow how the pen makes each curve. Tick this to hide them and watch only the pattern build. The labelled layout still shows before you start drawing. Example: with it off you can see the wheel turn as a point forms; with it on, the same pattern appears as a clean line on a black background, good for a picture to save.</p>
 </div>
+<div id="kpb" hidden><label class="check"><input id="kpc" type="checkbox"> Layer patterns (keep what is drawn) <button class="inf" data-h="hkp" type="button" aria-label="About layering patterns">i</button></label>
+<p class="help" id="hkp" hidden>Normally each new drawing starts on a clean screen. With this ticked, a finished pattern stays. Press Back to layout, change the ring, wheel, pen hole or colours, then draw the next one over it, and do it again for a third. Example: draw a gold five-point star, then change the colour to white and the pen hole and draw a flower over it. Not happy with the layer you are drawing? Press Back to layout while it is still drawing and it is removed, leaving your earlier layers. Change the settings and try again. Clear last layer removes the layer you have just drawn, or the last one kept. If it is the only layer, the screen is cleared. Save keeps the whole picture as an image.</p>
+<button id="kpu" type="button" hidden style="min-height:44px;margin:6px 8px 8px 0;padding:0 16px;border-radius:10px;border:1px solid #3a3b48;background:#262731;color:#ececf1;font:inherit">Clear last layer</button><button id="kpx" type="button" hidden style="min-height:44px;margin:6px 0 8px;padding:0 16px;border-radius:10px;border:1px solid #3a3b48;background:#262731;color:#ececf1;font:inherit">Clear all layers</button></div>
+<div id="kpm" hidden role="alertdialog" aria-modal="true" aria-labelledby="kpmt" style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px"><div style="max-width:420px;background:#1d1e26;border:1px solid #3a3b48;border-radius:14px;padding:18px"><h3 id="kpmt" style="margin:0 0 8px;font-size:17px;color:#ffe94d">Layer patterns is ticked</h3><p style="margin:0 0 14px;color:#ececf1;font-size:15px;line-height:1.45">The layers option is selected, so your drawn pattern is not cleared. To clear the screen for a fresh pattern, untick Layer patterns.</p><button id="kpok" type="button" style="width:100%;min-height:48px;border:0;border-radius:12px;background:#ffe94d;color:#000;font:inherit;font-weight:600">OK</button></div></div>
 <div id="foot" class="sec" style="color:var(--mut);font-size:13px">Cog Curves</div>
 </div>
 <script>
@@ -312,7 +316,7 @@ canvas{display:block;width:100%;aspect-ratio:1;touch-action:none}
 'use strict';
 var $=function(i){return document.getElementById(i)},cv=$('c'),x=cv.getContext('2d'),W=cv.width;
 var ADV=!!window.COG_ADV,EMB=!!window.COG_EMBED;
-var ADEF={sh:0,e:40,w2:false,r2:12,m2:2,pn:1,ps:0,rs:0,rk:100,pc2:'',pc3:'',pc4:'',pw1:2,pw2:2,pw3:2,pw4:2};
+var ADEF={fx:0,sh:0,e:40,w2:false,r2:12,m2:2,pn:1,ps:0,rs:0,rk:100,pc2:'',pc3:'',pc4:'',pw1:2,pw2:2,pw3:2,pw4:2};
 var P=Object.assign({R:96,r:36,d:70,m:'in',col:'auto',s:3,hide:false},ADEF),acc=0;
 var SHK=[0,2,3,4,5],PENC=['#5ac8fa','#ff6b9d','#7be0a0','#ffe94d'];
 var PRE=[
@@ -339,6 +343,11 @@ PRE=PRE.concat([
  {n:'Oval ring duet',t:'Two pens in different colours rolling inside an oval ring.',p:{R:96,r:12,d:80,m:'in',rs:1,pn:2,col:'#7be0a0',pc2:'#ff6b9d',pw1:4,pw2:2}},
  {n:'Dumbbell twins',t:'Blue and pink pens in a dumbbell ring: two woven clusters joined by a thin band.',p:{R:100,r:12,d:90,m:'in',rs:3,pn:2,col:'#5ac8fa',pc2:'#ff6b9d',pw1:3,pw2:3}},
  {n:'Dumbbell lace',t:'A fine lace in each bulb of the dumbbell, linked by a thin woven band.',p:{R:100,r:12,d:100,m:'in',rs:3}}
+]);
+PRE=PRE.concat([
+ {n:'Wobbly rings',t:'Three wobbly circles, one inside the next, none touching. Each layer uses a different ring and wheel so it has its own number of wobbles.',L:[{R:100,r:10,d:50,m:'in',fx:100,col:'#5ac8fa'},{R:80,r:16,d:50,m:'in',fx:100,col:'#ffe94d'},{R:48,r:12,d:60,m:'in',fx:100,col:'#ff6b9d'}],p:{R:100,r:10,d:50,m:'in',fx:100,col:'#5ac8fa'}},
+ {n:'Garland',t:'A green garland rolled round the outside, then two wavy circles drawn inside it, so nothing crosses. Outside and inside patterns cannot be drawn together.',L:[{R:60,r:20,d:60,m:'out',fx:100,col:'#7be0a0'},{R:60,r:12,d:60,m:'in',fx:100,col:'#ffffff'},{R:32,r:8,d:60,m:'in',fx:100,col:'#ff6b9d'}],p:{R:60,r:20,d:60,m:'out',fx:100,col:'#7be0a0'}},
+ {n:'Ripples',t:'Four wavy circles, from eight wobbles on the outside down to three in the middle, like ripples spreading in a pond.',L:[{R:96,r:12,d:40,m:'in',fx:100,col:'#5ac8fa'},{R:72,r:12,d:50,m:'in',fx:100,col:'#ffffff'},{R:48,r:12,d:50,m:'in',fx:100,col:'#ffe94d'},{R:24,r:8,d:50,m:'in',fx:100,col:'#ff6b9d'}],p:{R:96,r:12,d:40,m:'in',fx:100,col:'#5ac8fa'}}
 ]);
 var COLS=[['auto','Changing'],['#ffffff','White'],['#ffe94d','Yellow'],['#5ac8fa','Blue'],['#ff6b9d','Pink'],['#7be0a0','Green']];
 function gcd(a,b){return b?gcd(b,a%b):a}
@@ -403,6 +412,8 @@ function geo(G,g){
   return o}
 function bnd(G,th){var kk=G.kk,hh=G.r,hp=0;if(kk){var f=1/(1-kk*kk);hh=G.r*(1+G.e*f*Math.cos(kk*th));hp=-G.r*G.e*f*kk*Math.sin(kk*th)}var n=Math.cos(th),m=Math.sin(th);return[hh*n-hp*m,hh*m+hp*n]}
 function build(){
+  if(!inChain)chain=null;
+  var wasDone=k>0&&k>=total-1;
   var R=P.R,r=Math.min(P.r,P.m==='in'?R-1:100),rnote='',i;
   if(P.rs>0){P.m='in';var rmx=ringMax(P.rs,R,P.rk);if(r>rmx){r=rmx;P.r=rmx;$('r').value=rmx;$('vr').textContent=rmx;rnote=' The wheel was made smaller, to size '+rmx+', so it fits inside this ring.'}}
   var d=P.d/100*r,g=gcd(R,r),turns=r/g,a=[],mx=0;
@@ -413,7 +424,7 @@ function build(){
       if(P.m==='in'){var q=(R-r)/r;px=(R-r)*Math.cos(t)+d*Math.cos(q*t);py=(R-r)*Math.sin(t)-d*Math.sin(q*t)}
       else{var q2=(R+r)/r;px=(R+r)*Math.cos(t)-d*Math.cos(q2*t);py=(R+r)*Math.sin(t)-d*Math.sin(q2*t)}
       a.push([px,py]);mx=Math.max(mx,Math.hypot(px,py))}
-    var ext=P.m==='in'?Math.max(R,mx):Math.max(R+2*r,mx),sc=W*.46/ext;LAY={R:R,r:r,d:d,sc:sc,turns:turns,m:P.m,adv:false};
+    var ext=P.m==='in'?Math.max(R,mx):Math.max(R+2*r,mx),sc=W*.46/(P.fx||ext);LAY={R:R,r:r,d:d,sc:sc,turns:turns,m:P.m,adv:false};
     pts=a.map(function(p){return [W/2+p[0]*sc,W/2+p[1]*sc]});PTS=[pts];
   }else{
     var kk=SHK[P.sh]||0,e=kk?P.e/100:0;if(kk&&P.m==='in')e=Math.min(e,Math.max(0,R/r-1-.001));
@@ -423,10 +434,10 @@ function build(){
     var laps=turns;if(w2){var L=r2/gcd(r2,G.m2*turns*r);if(turns*L>80)L=Math.max(1,Math.floor(80/turns));laps=turns*L}
     var N2=Math.min(30000,Math.max(1200,Math.round(laps*2*Math.PI*70))),all=[],pp;for(i=0;i<G.pn;i++)all.push([]);
     for(i=0;i<=N2;i++){var gg=2*Math.PI*laps*i/N2,o=geo(G,gg);for(pp=0;pp<G.pn;pp++){all[pp].push(o.pens[pp]);mx=Math.max(mx,Math.hypot(o.pens[pp][0],o.pens[pp][1]))}}
-    var rm=r*(1+e),ext2=P.m==='in'?Math.max(G.tb?G.tb.ext:R,mx):Math.max(R+2*rm,mx),sc2=W*.46/ext2;
+    var rm=r*(1+e),ext2=P.m==='in'?Math.max(G.tb?G.tb.ext:R,mx):Math.max(R+2*rm,mx),sc2=W*.46/(P.fx||ext2);
     LAY={R:R,r:r,d:d,sc:sc2,turns:laps,m:P.m,adv:true,G:G,N:N2};
     PTS=all.map(function(arr){return arr.map(function(p){return [W/2+p[0]*sc2,W/2+p[1]*sc2]})});pts=PTS[0]}
-  total=pts.length;k=0;run=false;ffLeft=0;$('ffb').classList.remove('on');clear();dBuild();dText();$('play').textContent='Start drawing';ovDraw();
+  total=pts.length;if(wasDone)commitL();k=0;run=false;ffLeft=0;$('ffb').classList.remove('on');clear();dBuild();dText();$('play').textContent='Start drawing';ovDraw();
   var petals=R/g;$('info').textContent=LAY.adv?('This pattern uses '+LAY.G.pn+' pen'+(LAY.G.pn>1?'s':'')+(LAY.G.w2?' on a second wheel':'')+(LAY.G.kk?' and an odd-shaped wheel':'')+(LAY.G.tb?' rolling inside '+['','an oval','an egg-shaped','a dumbbell-shaped'][P.rs]+' ring':'')+'. It is drawn in '+(Math.round(LAY.turns)>1?Math.round(LAY.turns)+' trips':'one trip')+' round the ring.'+rnote):('Current settings will give a pattern with '+petals+' points or petals and the wheel going round the ring '+(turns>1?turns+' times':'once')+'.');
 }
 
@@ -540,7 +551,11 @@ function ovAdv(){
   ov.fillStyle='#5ac8fa';ov.beginPath();ov.arc(cc[0],cc[1],5,0,7);ov.fill();
   if(G.w2){ov.fillStyle='#7be0a0';ov.beginPath();ov.arc(ctr[0],ctr[1],5,0,7);ov.fill()}
 }
-function clear(){x.fillStyle='#000';x.fillRect(0,0,W,W)}
+var chain=null,inChain=false,keepL=false,baseC=document.createElement('canvas');baseC.width=baseC.height=W;var bx=baseC.getContext('2d');
+function clear(){x.fillStyle='#000';x.fillRect(0,0,W,W);if(keepL)x.drawImage(baseC,0,0)}
+var stackL=[];
+function commitL(){if(keepL){var sn=document.createElement('canvas');sn.width=sn.height=W;sn.getContext('2d').drawImage(baseC,0,0);stackL.push(sn);if(stackL.length>8)stackL.shift();bx.clearRect(0,0,W,W);bx.drawImage(cv,0,0)}}
+function undoL(){chain=null;ffLeft=0;$('ffb').classList.remove('on');if(k>0){k=0;run=false;clear()}else if(stackL.length){var sn=stackL.pop();bx.clearRect(0,0,W,W);bx.drawImage(sn,0,0);run=false;clear()}else{run=false;clear()}$('play').textContent='Start drawing';ovDraw()}
 function pcOf(p){if(p===0)return P.col;return P['pc'+(p+1)]||(P.col==='auto'?'auto':PENC[(p-1)%4])}
 function penCol(p,i){var c=pcOf(p);if(c==='auto')return 'hsl('+((270+300*i/total+p*75)%360)+',85%,65%)';return c}
 function step(n){
@@ -553,9 +568,11 @@ function step(n){
   k=end}
 var ffLeft=0;
 function frame(ts){
-  try{if(run){acc+=P.s*13/60;var n=Math.floor(acc);acc-=n;if(ffLeft>0){ffLeft-=1/60;n+=Math.max(40,Math.ceil(total/180));if(ffLeft<=0){ffLeft=0;$('ffb').classList.remove('on')}}if(n>0){step(n);ovDraw()}if(k>=total-1){run=false;ffLeft=0;$('ffb').classList.remove('on');$('play').textContent='Draw again';ovDraw()}}
+  try{if(run){acc+=P.s*13/60;var n=Math.floor(acc);acc-=n;if(ffLeft>0){ffLeft-=1/60;n+=Math.max(40,Math.ceil(total/180));if(ffLeft<=0){ffLeft=0;$('ffb').classList.remove('on')}}if(n>0){step(n);ovDraw()}if(k>=total-1){run=false;ffLeft=0;$('ffb').classList.remove('on');$('play').textContent='Draw again';ovDraw();if(chain)setTimeout(nextLayer,700)}}
   dFrame()}catch(err){}
   requestAnimationFrame(frame)}
+function nextLayer(){var c=chain;if(!c)return;if(c.i+1>=c.q.L.length){chain=null;return}c.i++;inChain=true;Object.assign(P,ADEF,c.q.L[c.i]);sync();build();inChain=false;run=true;acc=0;$('play').textContent='Pause';ovDraw()}
+function startChain(q,b){keepL=true;$('kpc').checked=true;$('kpx').hidden=false;$('kpu').hidden=false;stackL=[];bx.clearRect(0,0,W,W);k=0;chain={q:q,i:0};inChain=true;Object.assign(P,ADEF,q.L[0]);sync();build();inChain=false;clearChip();b.classList.add('sel');closeM('presBox');$('hint').textContent=q.t+' It draws '+q.L.length+' layers one after another.';run=true;acc=0;$('play').textContent='Pause';ovDraw()}
 function syncAdv(){
   if(!ADV)return;
   ['e','r2','m2','ps','rk'].forEach(function(id){$(id).value=P[id];$('v'+id).textContent=P[id]+(id==='e'||id==='ps'||id==='rk'?'%':'')});
@@ -608,8 +625,8 @@ if(ADV){
   $('w2').onchange=function(ev){P.w2=ev.target.checked;sync();build();clearChip()};
   $('advsec').hidden=false}
 function clearChip(){[].forEach.call($('chips').children,function(b){b.classList.remove('sel')})}
-PRE.forEach(function(q,i){var b=document.createElement('button');b.className='ldb';b.innerHTML='<b>'+q.n+(presAdv(q.p)?' <em class="gtag">Made using Advanced</em>':'')+'</b><small>'+q.t+'</small>';b.type='button';
-  b.onclick=function(){Object.assign(P,ADEF,q.p);sync();build();clearChip();b.classList.add('sel');closeM('presBox');$('hint').textContent=q.t+(presAdv(q.p)&&!ADV?' This one was made using the Advanced controls.':'')+' Press Start drawing to watch it.'};
+PRE.forEach(function(q,i){if(q.L&&!ADV)return;var b=document.createElement('button');b.className='ldb';b.innerHTML='<b>'+q.n+(q.L?' <em class="gtag">Layered, made using Advanced</em>':presAdv(q.p)?' <em class="gtag">Made using Advanced</em>':'')+'</b><small>'+q.t+'</small>';b.type='button';
+  b.onclick=function(){if(q.L){startChain(q,b);return}Object.assign(P,ADEF,q.p);sync();build();clearChip();b.classList.add('sel');closeM('presBox');$('hint').textContent=q.t+(presAdv(q.p)&&!ADV?' This one was made using the Advanced controls.':'')+' Press Start drawing to watch it.'};
   $('chips').appendChild(b)});
 [].forEach.call(document.querySelectorAll('[data-m]'),function(b){b.onclick=function(){P.m=b.dataset.m;if(P.m==='out')P.rs=0;sync();build();clearChip()}});
 COLS.forEach(function(c){var b=document.createElement('button');b.className='sw';b.type='button';b.dataset.c=c[0];b.setAttribute('aria-label',c[1]);
@@ -620,8 +637,10 @@ $('cust').addEventListener('input',function(e){P.col=e.target.value;sync();if(!(
 [].forEach.call(document.querySelectorAll('.inf'),function(b){b.onclick=function(){var h=$(b.dataset.h);h.hidden=!h.hidden}});
 $('dgo').onclick=function(){if(dt>=dEnd-1e-9||dt===0&&false){}if(dt>=dEnd){dt=0;trail=[]}drun=!drun;$('dgo').textContent=drun?'Pause':(dt>0?'Resume':'See how it works')};
 
-$('play').onclick=function(){ffLeft=0;$('ffb').classList.remove('on');if(k>=total-1){k=0;clear();run=true}else run=!run;$('play').textContent=run?'Pause':(k>0?'Resume':'Start drawing');ovDraw()};
-$('restart').onclick=function(){ffLeft=0;$('ffb').classList.remove('on');k=0;clear();run=false;$('play').textContent='Start drawing';ovDraw()};
+$('play').onclick=function(){ffLeft=0;$('ffb').classList.remove('on');if(k>=total-1){commitL();k=0;clear();run=true}else run=!run;$('play').textContent=run?'Pause':(k>0?'Resume':'Start drawing');ovDraw()};
+function doRestart(){chain=null;ffLeft=0;$('ffb').classList.remove('on');if(k>0&&k>=total-1)commitL();k=0;clear();run=false;$('play').textContent='Start drawing';ovDraw()}
+$('restart').onclick=function(){if(keepL&&(k>0||stackL.length>0)){$('kpm').hidden=false;$('kpok').focus()}else doRestart()};
+$('kpok').onclick=function(){$('kpm').hidden=true;doRestart()};
 var fsOn=false;function setFs(on){fsOn=on;document.documentElement.classList.toggle('fs',on);$('fsb').innerHTML=on?'&#10005;':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';$('fsb').setAttribute('aria-label',on?'Exit full screen':'Full screen');window.scrollTo(0,0);try{if(on){var d=document.documentElement;if(d.requestFullscreen&&!document.fullscreenElement)d.requestFullscreen().catch(function(){})}else if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(function(){})}catch(e){}}
 $('fsb').onclick=function(){setFs(!fsOn)};
 $('ffb').onclick=function(){if(!run){toast('Press Start drawing first, then fast-forward');return}ffLeft=Math.min(30,ffLeft+4);$('ffb').classList.add('on');toast('Fast-forwarding. Tap again to add more.')};
@@ -647,11 +666,14 @@ function snap(){var c=document.createElement('canvas');c.width=c.height=640;var 
 $('savb').onclick=function(){
   if(k<=0){toast('Start drawing first, then save the pattern');return}
   ask({title:'Name your pattern',input:1,val:defName(),ok:'Save',onOk:function(n){var e=chk(n);if(e)return e;doSave(n);return ''}})};
-function doSave(n){var a=loadSaved(),rec={id:Date.now(),n:n,P:{R:P.R,r:P.r,d:P.d,m:P.m,col:P.col,hide:P.hide,sh:P.sh,e:P.e,w2:P.w2,r2:P.r2,m2:P.m2,pn:P.pn,ps:P.ps,rs:P.rs,rk:P.rk,pc2:P.pc2,pc3:P.pc3,pc4:P.pc4,pw1:P.pw1,pw2:P.pw2,pw3:P.pw3,pw4:P.pw4},k:k,img:snap()};
+function doSave(n){var a=loadSaved(),rec={id:Date.now(),n:n,P:{R:P.R,r:P.r,d:P.d,m:P.m,col:P.col,hide:P.hide,sh:P.sh,e:P.e,w2:P.w2,r2:P.r2,m2:P.m2,pn:P.pn,ps:P.ps,rs:P.rs,rk:P.rk,pc2:P.pc2,pc3:P.pc3,pc4:P.pc4,pw1:P.pw1,pw2:P.pw2,pw3:P.pw3,pw4:P.pw4,fx:P.fx||0},k:k,img:snap(),base:(keepL&&stackL.length>0)?baseC.toDataURL('image/png'):''};
   a.unshift(rec);var ok=persist(a);toast(ok?'Saved ✓':'Saved for this session only')}
 function applyRec(q){var pp=Object.assign({},q.P);delete pp.s;Object.assign(P,ADEF,pp);$('hw').checked=!!P.hide;sync();build();clearChip()}
-function loadRedraw(q){applyRec(q);run=true;acc=0;$('play').textContent='Pause';ovDraw();closeM('mineBox')}
-function loadContinue(q){applyRec(q);step(q.k);run=false;$('play').textContent=k>=total-1?'Draw again':'Resume';ovDraw();closeM('mineBox');toast('Loaded "'+q.n+'" as you left it, and paused. Press Resume to carry on.')}
+function withBase(q,fn){if(!q.base){fn();return}var im=new Image();im.onload=function(){keepL=true;$('kpc').checked=true;$('kpx').hidden=false;$('kpu').hidden=false;chain=null;k=0;run=false;bx.clearRect(0,0,W,W);bx.drawImage(im,0,0);var sn=document.createElement('canvas');sn.width=sn.height=W;stackL=[sn];fn()};im.src=q.base}
+function loadRedraw(q){withBase(q,function(){loadRedraw0(q)})}
+function loadContinue(q){withBase(q,function(){loadContinue0(q)})}
+function loadRedraw0(q){applyRec(q);run=true;acc=0;$('play').textContent='Pause';ovDraw();closeM('mineBox')}
+function loadContinue0(q){applyRec(q);step(q.k);run=false;$('play').textContent=k>=total-1?'Draw again':'Resume';ovDraw();closeM('mineBox');toast('Loaded "'+q.n+'" as you left it, and paused. Press Resume to carry on.')}
 function loadChoice(q){ldX=q;$('ldt').textContent='Load “'+q.n+'”';$('ldi').src=q.img||'';$('ldi').style.display=q.img?'block':'none';openM('ldBox')}
 $('ldA').onclick=function(){closeM('ldBox');if(ldX)loadContinue(ldX)};
 $('ldB').onclick=function(){closeM('ldBox');if(ldX){loadRedraw(ldX);toast('Redrawing "'+ldX.n+'" from the start.')}};
@@ -677,8 +699,12 @@ $('presb').onclick=function(){openM('presBox')};$('presX').onclick=function(){cl
 var ctlHid=false;$('ff').onclick=function(){ctlHid=!ctlHid;['ctlsec','setqw'].forEach(function(i){$(i).style.display=ctlHid?'none':''});document.documentElement.classList.toggle('hc',ctlHid);window.scrollTo(0,0);$('ff').textContent=ctlHid?'Show controls':'Hide controls'};
 PRE[0].p&&Object.assign(P,PRE[0].p);sync();build();$('chips').firstChild.classList.add('sel');$('hint').textContent=PRE[0].t+' Press Start drawing to watch it.';
 
-$('hw').onchange=function(e){P.hide=e.target.checked;hrSync();ovDraw()};
-if(ADV){$('advintro').hidden=false;$('colName').parentNode.hidden=true;$('hc').hidden=true;$('sw').hidden=true}
+$('kpb').hidden=!ADV;
+ $('kpc').onchange=function(e){keepL=e.target.checked;$('kpx').hidden=!keepL;$('kpu').hidden=!keepL;stackL=[];if(keepL){bx.clearRect(0,0,W,W)}else{bx.clearRect(0,0,W,W);if(k===0)clear()}};
+ $('kpx').onclick=function(){stackL=[];bx.clearRect(0,0,W,W);chain=null;k=0;run=false;clear();$('play').textContent='Start drawing';ovDraw()};
+ $('kpu').onclick=undoL;
+ $('hw').onchange=function(e){P.hide=e.target.checked;hrSync();ovDraw()};
+if(ADV){var ip=$('intro').querySelectorAll('.in>p');$('intro').querySelector('h1').textContent='How Cog Curves Advanced Works';ip[0].innerHTML='<b>Advanced</b> builds on Simple. It uses the same <b>ring</b>, <b>wheel</b> and <b>pen</b>, and the same Ring size, Wheel size and Pen hole controls. The Simple version explains these with a diagram.';ip[1].hidden=true;$('hwb').parentNode.hidden=true;$('dg').hidden=true;$('dgo').hidden=true;$('advintro').hidden=false;$('colName').parentNode.hidden=true;$('hc').hidden=true;$('sw').hidden=true}
 $('pws').addEventListener('input',function(e){P['pw'+(selPen+1)]=+e.target.value;$('vpws').textContent=e.target.value;if(!(run||k>0))build()});
 $('hrc').onchange=function(e){P.hide=e.target.checked;$('hw').checked=P.hide;ovDraw()};
 $('hwb').onclick=function(){var c=$('dsv').cloneNode(true);c.removeAttribute('id');c.querySelectorAll('*').forEach(function(e){if(e.style&&e.style.display==='none'&&(e.getAttribute('stroke')==='#ffe94d'||e.getAttribute('fill')==='#ffe94d'))e.style.display=''});$('hpic').innerHTML='';$('hpic').appendChild(c);$('how').hidden=false;$('how').scrollTop=0};$('hok').onclick=function(){$('how').hidden=true};
@@ -4659,7 +4685,7 @@ setInterval(()=>{try{const M=modes.wav,v=V.wav;if(M.src.some(q=>q.one))v.so=1;if
 /* Cog Curves: a seventh pattern, under both Simple and Advanced. The pattern page runs in its own frame, like the paint-can pendulum. */
 (function(){
  MN.cog='Cog Curves';
- const DS='A small wheel rolls round the inside or outside of a ring, with a pen fixed in it. The pen draws flowers, stars and lace.',DA='A small wheel rolls round a ring and a pen draws flowers, stars and lace. Advanced adds odd-shaped wheels, a second wheel on the first, and up to four pens.';
+ const DS='A small wheel rolls round the inside or outside of a ring, with a pen fixed in it. The pen draws flowers, stars and lace.',DA='A small wheel rolls round a ring and a pen draws flowers, stars and lace. Advanced adds odd-shaped wheels, a second wheel on the first, up to four pens, and layering one pattern over another.';
  MD.cog=DS;
  let CGO=false;
  function cogOpen(adv){
