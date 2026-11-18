@@ -10226,7 +10226,7 @@ var ew=window.exitWatch,last=0;
 window.exitWatch=function(){var r=ew?ew.apply(this,arguments):false;if(r)return r;var n=Date.now();if(n-last>2200){last=n;try{toast('Press back again to exit')}catch(e){}return true}return false};
 })();</script>
 <script>/* About screen */(function(){
-var VER=(function(){try{return String(AndroidBridge.versionName()||'5.7')}catch(e){return '5.7'}})(),box=null;
+var VER=(function(){try{return String(AndroidBridge.versionName()||'5.11')}catch(e){return '5.11'}})(),box=null;
 function close(){if(box){box.remove();box=null}}
 function link(u){try{if(window.AndroidBridge&&AndroidBridge.openUrl){AndroidBridge.openUrl(u);return}}catch(e){}window.open(u,'_blank','noopener')}
 window.showAbout=function(){close();var AD=false;try{AD=!!(window.AndroidBridge&&AndroidBridge.hasAds&&AndroidBridge.hasAds())}catch(e){}
